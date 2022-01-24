@@ -1,13 +1,13 @@
 import Foundation
 
 struct Connector {
-    let ROOT = "https://market-training.yagom-academy.kr/"
+    let root = "https://market-training.yagom-academy.kr/"
     static let shared = Connector()
     
     private init() {}
     
     func check() {
-        var request = URLRequest(url: URL(string: ROOT + "healthChecker")!)
+        var request = URLRequest(url: URL(string: root + "healthChecker")!)
         request.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: request) { _, response, error in
             if let error = error {
@@ -22,7 +22,7 @@ struct Connector {
     }
     
     func get<T: Decodable> (from: String, type: T.Type) {
-        var request = URLRequest(url: URL(string: ROOT + from)!)
+        var request = URLRequest(url: URL(string: root + from)!)
         request.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {
