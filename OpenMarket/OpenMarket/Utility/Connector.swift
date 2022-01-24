@@ -1,12 +1,12 @@
 import Foundation
 
-class Connector {
+struct Connector {
     let ROOT = "https://market-training.yagom-academy.kr/"
     static let shared = Connector()
     
     private init() {}
     
-    func get(from: String) {
+    func get<T: Decodable> (from: String, type: T.Type) {
         var request = URLRequest(url: URL(string: ROOT + from)!)
         request.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -14,11 +14,11 @@ class Connector {
                 print(error)
                 return
             }
-            guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-                return
+            if let data = data {
+                guard let parsedData = Decoder.decodeJSONData(type: type, from: data) else { return }
+                print(parsedData)
             }
-            print(String(data: data!, encoding: .utf8)!)
+            
         }
         task.resume()
         sleep(2000)

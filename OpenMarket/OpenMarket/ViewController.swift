@@ -10,10 +10,8 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        Connector.shared.get(from: "api/products?page_no=1&items_per_page=10")
-        // Do any additional setup after loading the view.
+        Server.shared.getProductList(numberOfPage: 1, itemsPerPage: 10)
+//        Server.shared.getDetailOfProduct(productId: 1004)
     }
-
-
 }
 
