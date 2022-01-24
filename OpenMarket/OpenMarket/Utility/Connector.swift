@@ -2,9 +2,6 @@ import Foundation
 
 struct Connector {
     let root = "https://market-training.yagom-academy.kr/"
-    static let shared = Connector()
-    
-    private init() {}
     
     func check() {
         var request = URLRequest(url: URL(string: root + "healthChecker")!)
