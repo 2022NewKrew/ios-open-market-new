@@ -1,7 +1,11 @@
 import Foundation
 
 struct Connector {
-    let root = "https://market-training.yagom-academy.kr/"
+    let root: String
+    
+    init(root: String) {
+        self.root = root
+    }
     
     func check() {
         var request = URLRequest(url: URL(string: root + "healthChecker")!)
