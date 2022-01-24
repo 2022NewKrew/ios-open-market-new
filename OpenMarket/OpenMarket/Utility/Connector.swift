@@ -6,10 +6,25 @@ struct Connector {
     
     private init() {}
     
+    func check() {
+        var request = URLRequest(url: URL(string: ROOT + "healthChecker")!)
+        request.httpMethod = "GET"
+        let task = URLSession.shared.dataTask(with: request) { _, response, error in
+            if let error = error {
+                print("Error:", error)
+                return
+            }
+            if let response = response as? HTTPURLResponse {
+                print("status code:", response.statusCode)
+            }
+        }
+        task.resume()
+    }
+    
     func get<T: Decodable> (from: String, type: T.Type) {
         var request = URLRequest(url: URL(string: ROOT + from)!)
         request.httpMethod = "GET"
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {
                 print(error)
                 return
@@ -21,6 +36,5 @@ struct Connector {
             
         }
         task.resume()
-        sleep(2000)
     }
 }
