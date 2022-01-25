@@ -14,22 +14,24 @@ class APIManager {
     
     private init() { }
     
-    func checkServer(completion: @escaping (Bool) -> Void) {
+    func checkServer(completion: @escaping (Result<Bool,Error>) -> Void) {
         guard let url = URL(string: apiHost + "healthChecker") else { return }
         
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+            }
             guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-                completion(false)
+                  (200...299).contains(httpResponse.statusCode) else {
                 return
             }
-            completion(true)
+            completion(.success(true))
         }
         
         task.resume()
     }
     
-    func fetchProductList(pageNo: Int, itemsPerPage: Int, completion: @escaping (Page) -> Void) {
+    func fetchProductList(pageNo: Int, itemsPerPage: Int, completion: @escaping (Result<Page,Error>) -> Void) {
         var urlComponents = URLComponents(string: apiHost + "api/products")
         let queryItems :[URLQueryItem] = [
             URLQueryItem(name: "page_no", value: String(pageNo)),
@@ -42,33 +44,34 @@ class APIManager {
         
         let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             if let error = error {
-                print(error.localizedDescription)
+                completion(.failure(error))
             }
             guard let data = data else { return }
             do {
                 let page = try JSONDecoder.isoSnakeJSONDecoder().decode(Page.self, from: data)
-                completion(page)
+                completion(.success(page))
             } catch {
-                print(String(describing: error))
+                completion(.failure(error))
             }
         }
         
         task.resume()
     }
     
-    func fetchProduct(productId: Int, completion: @escaping (Product) -> Void) {
+    func fetchProduct(productId: Int, completion: @escaping (Result<Product,Error>) -> Void) {
         guard let url = URL(string: apiHost + "api/products/\(productId)") else { return }
         
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
-                print(error.localizedDescription)
+                completion(.failure(error))
             }
             guard let data = data else { return }
             do {
                 let product = try JSONDecoder.isoSnakeJSONDecoder().decode(Product.self, from: data)
-                completion(product)
+                completion(.success(product))
             } catch {
                 print(String(describing: error))
+                completion(.failure(error))
             }
         }
         
