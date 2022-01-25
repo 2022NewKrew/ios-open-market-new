@@ -9,12 +9,12 @@ import Foundation
 
 struct OpenMarketAPIManager {
     
-    init(urlSession: URLSessionType = URLSession.shared) {
+    init(urlSession: URLSession = URLSession.shared) {
         self.urlSession = urlSession
     }
     
     var decoder: JSONDecoder = JSONDecoder()
-    var urlSession: URLSessionType
+    var urlSession: URLSession
     
     func getOpenMarketProductList(pageNumber: Int, itemsPerPage: Int, completion: @escaping (Result<GetOpenMarketProudctListResponse, Error>) -> Void) {
         guard let request = OpenMarketAPIRouter
