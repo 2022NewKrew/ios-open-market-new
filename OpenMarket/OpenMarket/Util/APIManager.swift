@@ -23,6 +23,7 @@ class APIManager {
             }
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode) else {
+                completion(.failure(APIError.responseError))
                 return
             }
             completion(.success(true))
@@ -46,7 +47,10 @@ class APIManager {
             if let error = error {
                 completion(.failure(error))
             }
-            guard let data = data else { return }
+            guard let data = data else {
+                completion(.failure(APIError.noData))
+                return
+            }
             do {
                 let page = try JSONDecoder.isoSnakeJSONDecoder().decode(Page.self, from: data)
                 completion(.success(page))
@@ -64,8 +68,12 @@ class APIManager {
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
                 completion(.failure(error))
+                return
             }
-            guard let data = data else { return }
+            guard let data = data else {
+                completion(.failure(APIError.noData))
+                return
+            }
             do {
                 let product = try JSONDecoder.isoSnakeJSONDecoder().decode(Product.self, from: data)
                 completion(.success(product))
@@ -76,5 +84,20 @@ class APIManager {
         }
         
         task.resume()
+    }
+                           
+    
+    enum APIError: Error {
+        case noData
+        case responseError
+        
+        var localizedDescription: String {
+            switch self {
+            case .noData:
+                return "Data is empty"
+            case .responseError:
+                return "Response Error occured!"
+            }
+        }
     }
 }
