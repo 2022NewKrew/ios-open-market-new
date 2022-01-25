@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct GetOpenMarketProudctListResponse: Decodable {
+struct GetOpenMarketProudctListResponse: Decodable, Equatable {
+    
     var pageNumber: Int?
     var itemsPerPage: Int?
     var totalCount: Int?
@@ -30,13 +31,13 @@ struct GetOpenMarketProudctListResponse: Decodable {
     }
 }
 
-struct GetDetailOpenMarketProductResponse: Decodable {
+struct GetDetailOpenMarketProductResponse: Decodable, Equatable {
     var id: Int?
     var vendorId: Int?
     var name: String?
     var description: String?
     var thumbnail: String?
-    var currency: String?
+    var currency: OpenMarketProduct.Currency?
     var price: Float?
     var bargainPrice: Float?
     var discountedPrice: Float?

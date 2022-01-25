@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Vendor: Codable {
+struct Vendor: Codable, Equatable {
     var name: String?
     var id: Int?
     var createdAt: String?

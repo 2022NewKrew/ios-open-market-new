@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OpenMarketProduct: Codable {
+struct OpenMarketProduct: Codable, Equatable {
     var id: Int?
     var vendorId: Int?
     var name: String?
@@ -32,12 +32,12 @@ struct OpenMarketProduct: Codable {
         case issuedAt = "issued_at"
     }
     
-    enum Currency: String, Codable {
+    enum Currency: String, Codable, Equatable {
         case krw = "KRW"
         case usd = "USD"
     }
     
-    struct ProductImage: Codable {
+    struct ProductImage: Codable, Equatable {
         var id: Int?
         var urlString: String?
         var thumbnailURLString: String?
