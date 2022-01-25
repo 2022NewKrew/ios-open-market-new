@@ -10,13 +10,14 @@ import XCTest
 
 class OpenMarketTests: XCTestCase {
 
-    let repository = OpenMarketRepositoryInjection.injectOpenMarketRepository()
+    let projectListRepository = RepositoryInjection.injectProductListRepository()
+    let projectRepository = RepositoryInjection.injectProductRepository()
 
     func test_상품리스트_받아오기_성공() {
         let pageNumber = 1
         let itemPerPage = 10
 
-        self.repository.productList(pageNumber: pageNumber, itemPerPage: itemPerPage) { result in
+        self.projectListRepository.productList(pageNumber: pageNumber, itemPerPage: itemPerPage) { result in
             switch result {
             case .success(let productList):
                 var result = true
@@ -34,7 +35,7 @@ class OpenMarketTests: XCTestCase {
     func test_상품_받아오기_성공() {
         let productId = 522
 
-        self.repository.product(productId: productId) { result in
+        self.projectRepository.product(productId: productId) { result in
             switch result {
             case .success(let product):
                 var result = true

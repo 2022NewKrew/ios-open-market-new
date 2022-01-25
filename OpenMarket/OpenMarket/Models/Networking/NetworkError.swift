@@ -5,6 +5,8 @@
 //  Created by 이승주 on 2022/01/25.
 //
 
+import Foundation
+
 enum NetworkError: Error {
     case invalidURL
     case transportError
@@ -12,8 +14,10 @@ enum NetworkError: Error {
     case networkFailure(statusCode: Int)
     case missingData
     case decodingError
+}
 
-    var description: String {
+extension NetworkError: LocalizedError {
+    var errorDescription: String? {
         switch self {
         case .invalidURL:
             return "잘못된 URL입니다"

@@ -1,12 +1,12 @@
 //
-//  ProductDetailViewModel.swift
+//  ProductViewModel.swift
 //  OpenMarket
 //
 //  Created by 이승주 on 2022/01/24.
 //
 
-class ProductDetailViewModel {
-    private let repository: OpenMarketRepository = OpenMarketRepositoryInjection.injectOpenMarketRepository()
+class ProductViewModel {
+    private let repository: ProductRepository = RepositoryInjection.injectProductRepository()
     var updateView: () -> Void = {}
 
     var product: Product? {
@@ -21,7 +21,7 @@ class ProductDetailViewModel {
             case .success(let product):
                 self.product = product
             case .failure(let error):
-                print(error.description)
+                print(error.errorDescription)
             }
         }
     }

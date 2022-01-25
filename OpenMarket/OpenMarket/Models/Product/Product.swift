@@ -17,7 +17,7 @@ struct Product: Codable {
     let discountedPrice: Int
     let stock: Int
     let images: [ProductImage]?
-    let vendors: Vendor?
+    let vendor: Vendor?
     let createdAt: String
     let issuedAt: String
 
@@ -27,6 +27,7 @@ struct Product: Codable {
         case discountedPrice = "discounted_price"
         case createdAt = "created_at"
         case issuedAt = "issued_at"
-        case id, name, description, thumbnail, currency, price, stock, images, vendors
+        case vendor = "vendors"
+        case id, name, description, thumbnail, currency, price, stock, images
     }
 }

@@ -9,8 +9,8 @@ import Foundation
 
 enum OpenMarketURL {
     static let baseURL = "https://market-training.yagom-academy.kr/"
-    case productList(Int, Int)
-    case product(Int)
+    case productList(pageNumber: Int, itemPerPage: Int)
+    case product(productId: Int)
 
     var url: URL? {
         switch self {

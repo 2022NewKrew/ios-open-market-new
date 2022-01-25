@@ -34,7 +34,7 @@ struct NetworkManager {
                 return
             }
 
-            guard let decodedData = JSONFileDecoder.decodeJson(T.self, from: data) else {
+            guard let decodedData = JSONConverter.decode(T.self, from: data) else {
                 completion(.failure(.decodingError))
               return
             }

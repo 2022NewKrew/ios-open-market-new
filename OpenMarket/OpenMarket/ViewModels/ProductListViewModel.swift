@@ -6,7 +6,7 @@
 //
 
 class ProductListViewModel {
-    private let repository: OpenMarketRepository = OpenMarketRepositoryInjection.injectOpenMarketRepository()
+    private let repository: ProductListRepository = RepositoryInjection.injectProductListRepository()
     var updateView: () -> Void = {}
 
     var productList: ProductList? {
@@ -21,7 +21,7 @@ class ProductListViewModel {
             case .success(let productList):
                 self.productList = productList
             case .failure(let error):
-                print(error.description)
+                print(error.errorDescription)
             }
         }
     }

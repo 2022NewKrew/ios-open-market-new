@@ -10,12 +10,12 @@ import Foundation
 struct ProductImage: Codable {
     let id: Int
     let url: String
-    let thumbnailUrl: String
+    let thumbnailUrlString: String
     let succeed: Bool
     let issuedAt: String
 
     enum CodingKeys: String, CodingKey {
-        case thumbnailUrl = "thumbnail_url"
+        case thumbnailUrlString = "thumbnail_url"
         case issuedAt = "issued_at"
         case id, url, succeed
     }
