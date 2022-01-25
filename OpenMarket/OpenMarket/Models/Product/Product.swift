@@ -9,15 +9,15 @@ struct Product: Codable {
     let id: Int
     let vendorId: Int
     let name: String
-    let description: String
+    let description: String?
     let thumbnail: String
     let currency: String
     let price: Int
     let bargainPrice: Int
     let discountedPrice: Int
     let stock: Int
-    let images: [ProductImage]
-    let vendors: Vendor
+    let images: [ProductImage]?
+    let vendors: Vendor?
     let createdAt: String
     let issuedAt: String
 

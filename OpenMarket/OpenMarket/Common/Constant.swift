@@ -6,5 +6,5 @@
 //
 
 struct Constant {
-    static let baseUrl = "https://market-training.yagom-academy.kr/"
+    
 }
