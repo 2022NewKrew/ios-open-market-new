@@ -6,7 +6,8 @@
 //
 
 struct APIConstants {
-    static let baseURL = "https://market-training.yagom-academy.kr/api/products"
+    static let baseURL = "https://market-training.yagom-academy.kr/api"
+    static let productsEndPoint = "products"
     static let pageNo = "page_no"
     static let itemsPerPage = "items_per_page"
     static let productId = "product_id"

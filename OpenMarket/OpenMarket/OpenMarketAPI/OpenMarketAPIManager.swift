@@ -15,7 +15,7 @@ struct OpenMarketAPIManager {
     var decoder: JSONDecoder = JSONDecoder()
     var urlSession: URLSession
     
-    func getOpenMarketProductList(pageNumber: Int, itemsPerPage: Int, completion: @escaping (Result<GetOpenMarketProudctListResponse, Error>) -> Void) {
+    func getOpenMarketProductList(pageNumber: Int, itemsPerPage: Int, completion: @escaping (Result<OpenMarketProudctListGetResponse, Error>) -> Void) {
         guard let request = OpenMarketAPIRouter
                 .getOpenMarketProductList(pageNumber: pageNumber, itemsPerPage: itemsPerPage)
                 .asURLRequest() else {
@@ -29,13 +29,13 @@ struct OpenMarketAPIManager {
                 return
             }
             
-            let result = self.handleOpenMarketAPIGetResponse(responseType: GetOpenMarketProudctListResponse.self, response: response, data: data)
+            let result = self.handleOpenMarketAPIGetResponse(responseType: OpenMarketProudctListGetResponse.self, response: response, data: data)
             completion(result)
         })
         task.resume()
     }
     
-    func getOpenMarketProductDetail(productId: Int, completion: @escaping (Result<GetDetailOpenMarketProductResponse,Error>) -> Void) {
+    func getOpenMarketProductDetail(productId: Int, completion: @escaping (Result<OpenMarketProductDetailGetResponse,Error>) -> Void) {
         guard let request = OpenMarketAPIRouter
                 .getDetailOpenMarketProduct(productId: productId)
                 .asURLRequest() else {
@@ -49,7 +49,7 @@ struct OpenMarketAPIManager {
                 return
             }
             
-            let result = self.handleOpenMarketAPIGetResponse(responseType: GetDetailOpenMarketProductResponse.self, response: response, data: data)
+            let result = self.handleOpenMarketAPIGetResponse(responseType: OpenMarketProductDetailGetResponse.self, response: response, data: data)
             completion(result)
         })
         task.resume()

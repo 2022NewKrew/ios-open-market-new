@@ -35,7 +35,7 @@ class ModelTests: XCTestCase {
             return (successResponse, mockJSONData)
         }
         
-        let expectedResponse = GetOpenMarketProudctListResponse(
+        let expectedResponse = OpenMarketProudctListGetResponse(
             pageNumber: 1,
             itemsPerPage: 2,
             totalCount: 777,
@@ -103,7 +103,7 @@ class ModelTests: XCTestCase {
             return (successResponse, mockJSONData)
         }
         
-        let expectedResponse = GetDetailOpenMarketProductResponse(
+        let expectedResponse = OpenMarketProductDetailGetResponse(
             id: 300,
             vendorId: 3,
             name: "99999Test Product",
@@ -127,8 +127,8 @@ class ModelTests: XCTestCase {
             vendors: Vendor(
                 name: "Vendor2",
                 id: 3,
-                createdAt: "2021-12-27T00:00:00.0",
-                issuedAt: "2021-12-27T00:00:00.0"
+                createdAt: "2021-12-27T00:00:00.00",
+                issuedAt: "2021-12-27T00:00:00.00"
             )
         )
         

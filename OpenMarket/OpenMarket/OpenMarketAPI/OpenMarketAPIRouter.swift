@@ -12,8 +12,8 @@ enum OpenMarketAPIRouter {
     
     var path: String {
         switch self {
-        case .getDetailOpenMarketProduct(let productId): return String(productId)
-        default: return ""
+        case .getDetailOpenMarketProduct(let productId): return APIConstants.productsEndPoint + "/" + String(productId)
+        case .getOpenMarketProductList: return APIConstants.productsEndPoint
         }
     }
     
@@ -35,7 +35,7 @@ enum OpenMarketAPIRouter {
         return [:]
     }
     
-    var baseURL: String {
+    var requestURL: String {
         return APIConstants.baseURL + "/" + self.path
     }
     
@@ -46,7 +46,7 @@ enum OpenMarketAPIRouter {
     }
     
     func asURLRequest() -> URLRequest? {
-        guard var urlComponets = URLComponents(string: self.baseURL) else {
+        guard var urlComponets = URLComponents(string: self.requestURL) else {
             return nil
         }
         
