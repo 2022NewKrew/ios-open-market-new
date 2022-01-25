@@ -10,6 +10,6 @@ import Foundation
 struct Vendor: Codable {
     let name: String
     let id: Int
-    let createdAt: String
-    let issuedAt: String
+    let createdAt: Date
+    let issuedAt: Date
 }

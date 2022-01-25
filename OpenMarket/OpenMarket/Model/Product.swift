@@ -17,8 +17,8 @@ struct Product: Codable {
     let bargainPrice: Int
     let discountedPrice: Int
     let stock: Int
-    let createdAt: String
-    let issuedAt: String
+    let createdAt: Date
+    let issuedAt: Date
     
     let description: String?
     let images: [Image]?
