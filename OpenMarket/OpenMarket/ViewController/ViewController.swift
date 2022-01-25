@@ -10,7 +10,19 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        // API Test
+        APIManager.shared.fetchProductList(pageNo: 2, itemsPerPage: 5) { page in
+            print(page)
+        }
+
+        APIManager.shared.fetchProduct(productId: 657) { product in
+            print(product)
+        }
+
+        APIManager.shared.checkServer { isAvailable in
+            print(isAvailable)
+        }
     }
 
 

@@ -14,17 +14,17 @@ struct Image: Codable {
     let succeed: Bool
     let issuedAt: String
     
+    enum CodingKeys: String, CodingKey {
+        case id, url, succeed
+        case issuedAt = "issuedAt"
+        case thumbnail = "thumbnailUrl"
+    }
+    
     var thumbnailUrl: URL? {
         URL(string: thumbnail)
     }
     
     var imageUrl: URL? {
         URL(string: url)
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case id, url, succeed
-        case thumbnail = "thumbnail_url"
-        case issuedAt = "issued_at"
     }
 }
