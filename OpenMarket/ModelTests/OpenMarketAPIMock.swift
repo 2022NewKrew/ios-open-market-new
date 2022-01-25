@@ -83,5 +83,5 @@ enum OpenMarketAPIMock {
                 "has_prev": false
             }
             """.utf8
-        )
+    )
 }

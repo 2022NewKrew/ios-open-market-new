@@ -25,7 +25,7 @@ enum OpenMarketAPIRouter {
                 APIConstants.pageNo : String(pageNumber),
                 APIConstants.itemsPerPage: String(itemsPerPage)
             ]
-        
+            
         default: break
         }
         return query

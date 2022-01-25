@@ -5,9 +5,6 @@
 //  Created by kakao on 2022/01/25.
 //
 
-import Foundation
-
-
 struct APIConstants {
     static let baseURL = "https://market-training.yagom-academy.kr/api/products"
     static let pageNo = "page_no"

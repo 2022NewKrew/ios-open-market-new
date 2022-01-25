@@ -8,7 +8,6 @@
 import Foundation
 
 struct OpenMarketAPIManager {
-    
     init(urlSession: URLSession = URLSession.shared) {
         self.urlSession = urlSession
     }
@@ -20,9 +19,9 @@ struct OpenMarketAPIManager {
         guard let request = OpenMarketAPIRouter
                 .getOpenMarketProductList(pageNumber: pageNumber, itemsPerPage: itemsPerPage)
                 .asURLRequest() else {
-            completion(.failure(OpenMarketAPIError.invalidRequest))
-            return
-        }
+                    completion(.failure(OpenMarketAPIError.invalidRequest))
+                    return
+                }
         
         let task = self.urlSession.dataTask(with: request, completionHandler: { data, response, error in
             if let error = error {
@@ -40,9 +39,9 @@ struct OpenMarketAPIManager {
         guard let request = OpenMarketAPIRouter
                 .getDetailOpenMarketProduct(productId: productId)
                 .asURLRequest() else {
-            completion(.failure(OpenMarketAPIError.invalidRequest))
-            return
-        }
+                    completion(.failure(OpenMarketAPIError.invalidRequest))
+                    return
+                }
         
         let task = self.urlSession.dataTask(with: request, completionHandler: { data, response, error in
             if let error = error {

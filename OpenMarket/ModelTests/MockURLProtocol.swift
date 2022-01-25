@@ -17,7 +17,7 @@ class MockURLProtocol: URLProtocol {
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
-
+    
     override func startLoading() {
         guard let handler = MockURLProtocol.requestHandler else {
             return
@@ -31,6 +31,6 @@ class MockURLProtocol: URLProtocol {
             client?.urlProtocol(self, didFailWithError: error)
         }
     }
-
+    
     override func stopLoading() { }
 }

@@ -8,7 +8,6 @@
 import Foundation
 
 struct GetOpenMarketProudctListResponse: Decodable, Equatable {
-    
     var pageNumber: Int?
     var itemsPerPage: Int?
     var totalCount: Int?
