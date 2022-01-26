@@ -25,6 +25,7 @@ class ViewController: UIViewController {
         navigationItem.titleView = listOrGrid
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: nil)
 //        navigationItem.title = "adsfg"
+//        OpenMarketAPI.shared.getProductList(numberOfPage: 1, itemsPerPage: 10)
     }
 }
 

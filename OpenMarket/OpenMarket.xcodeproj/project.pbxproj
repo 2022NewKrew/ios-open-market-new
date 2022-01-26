@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C259FBD2279E41B1007319D5 /* Connector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBD1279E41B1007319D5 /* Connector.swift */; };
+		C259FBD2279E41B1007319D5 /* URLConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBD1279E41B1007319D5 /* URLConnector.swift */; };
 		C259FBD4279E5FA0007319D5 /* Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBD3279E5FA0007319D5 /* Decoder.swift */; };
 		C259FBD6279E61B8007319D5 /* Products.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBD5279E61B8007319D5 /* Products.swift */; };
 		C259FBD8279E6234007319D5 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBD7279E6234007319D5 /* Product.swift */; };
 		C259FBDA279EA1B6007319D5 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBD9279EA1B6007319D5 /* Image.swift */; };
 		C259FBDC279EA21F007319D5 /* Vendor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBDB279EA21F007319D5 /* Vendor.swift */; };
-		C259FBDF279EAD02007319D5 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBDE279EAD02007319D5 /* Server.swift */; };
 		C259FBE4279FB389007319D5 /* ProductListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBE3279FB389007319D5 /* ProductListView.swift */; };
 		C259FBE6279FC4AB007319D5 /* ListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBE5279FC4AB007319D5 /* ListTableViewController.swift */; };
 		C259FBE8279FC584007319D5 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBE7279FC584007319D5 /* ListTableViewCell.swift */; };
+		C259FBDF279EAD02007319D5 /* OpenMarketAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C259FBDE279EAD02007319D5 /* OpenMarketAPI.swift */; };
 		C70FB0FB25BEF61C00C9924E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70FB0FA25BEF61C00C9924E /* AppDelegate.swift */; };
 		C70FB0FD25BEF61C00C9924E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70FB0FC25BEF61C00C9924E /* SceneDelegate.swift */; };
 		C70FB0FF25BEF61C00C9924E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70FB0FE25BEF61C00C9924E /* ViewController.swift */; };
@@ -26,16 +26,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C259FBD1279E41B1007319D5 /* Connector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connector.swift; sourceTree = "<group>"; };
+		C259FBD1279E41B1007319D5 /* URLConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConnector.swift; sourceTree = "<group>"; };
 		C259FBD3279E5FA0007319D5 /* Decoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decoder.swift; sourceTree = "<group>"; };
 		C259FBD5279E61B8007319D5 /* Products.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Products.swift; sourceTree = "<group>"; };
 		C259FBD7279E6234007319D5 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		C259FBD9279EA1B6007319D5 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		C259FBDB279EA21F007319D5 /* Vendor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vendor.swift; sourceTree = "<group>"; };
-		C259FBDE279EAD02007319D5 /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		C259FBE3279FB389007319D5 /* ProductListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListView.swift; sourceTree = "<group>"; };
 		C259FBE5279FC4AB007319D5 /* ListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewController.swift; sourceTree = "<group>"; };
 		C259FBE7279FC584007319D5 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
+		C259FBDE279EAD02007319D5 /* OpenMarketAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketAPI.swift; sourceTree = "<group>"; };
 		C70FB0F725BEF61C00C9924E /* OpenMarket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenMarket.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C70FB0FA25BEF61C00C9924E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C70FB0FC25BEF61C00C9924E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -71,9 +71,9 @@
 		C259FBE0279EAD09007319D5 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				C259FBD1279E41B1007319D5 /* Connector.swift */,
+				C259FBD1279E41B1007319D5 /* URLConnector.swift */,
 				C259FBD3279E5FA0007319D5 /* Decoder.swift */,
-				C259FBDE279EAD02007319D5 /* Server.swift */,
+				C259FBDE279EAD02007319D5 /* OpenMarketAPI.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -184,12 +184,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				C259FBE4279FB389007319D5 /* ProductListView.swift in Sources */,
-				C259FBDF279EAD02007319D5 /* Server.swift in Sources */,
+				C259FBDF279EAD02007319D5 /* OpenMarketAPI.swift in Sources */,
 				C259FBDC279EA21F007319D5 /* Vendor.swift in Sources */,
 				C259FBE6279FC4AB007319D5 /* ListTableViewController.swift in Sources */,
 				C70FB0FF25BEF61C00C9924E /* ViewController.swift in Sources */,
 				C259FBDA279EA1B6007319D5 /* Image.swift in Sources */,
-				C259FBD2279E41B1007319D5 /* Connector.swift in Sources */,
+				C259FBD2279E41B1007319D5 /* URLConnector.swift in Sources */,
 				C70FB0FB25BEF61C00C9924E /* AppDelegate.swift in Sources */,
 				C259FBD6279E61B8007319D5 /* Products.swift in Sources */,
 				C259FBD4279E5FA0007319D5 /* Decoder.swift in Sources */,

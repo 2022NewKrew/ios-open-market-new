@@ -1,14 +1,13 @@
 import Foundation
 
-struct Server {
-    let connector: Connector
+struct OpenMarketAPI {
+    static let shared = OpenMarketAPI()
+    let connector = URLConnector(baseURL: "https://market-training.yagom-academy.kr/")
     
-    init(connector: Connector) {
-        self.connector = connector
-    }
+    private init() {}
     
     func checkAPIStatus() {
-        connector.check()
+        connector.checkHTTPResponse(url: "healthChecker")
     }
     
     func getProductList(numberOfPage: Int, itemsPerPage: Int) {
