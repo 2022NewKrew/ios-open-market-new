@@ -1,14 +1,14 @@
 import Foundation
 
-struct Server {
-    let connector: Connector
+struct OpenMarketAPI {
+    let connector: URLConnector
     
-    init(connector: Connector) {
+    init(connector: URLConnector) {
         self.connector = connector
     }
     
     func checkAPIStatus() {
-        connector.check()
+        connector.checkHTTPResponse(url: "healthChecker")
     }
     
     func getProductList(numberOfPage: Int, itemsPerPage: Int) {

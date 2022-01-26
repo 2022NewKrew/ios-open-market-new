@@ -1,14 +1,14 @@
 import Foundation
 
-struct Connector {
-    let root: String
+struct URLConnector {
+    let baseURL: String
     
-    init(root: String) {
-        self.root = root
+    init(baseURL: String) {
+        self.baseURL = baseURL
     }
     
-    func check() {
-        var request = URLRequest(url: URL(string: root + "healthChecker")!)
+    func checkHTTPResponse(url: String) {
+        var request = URLRequest(url: URL(string: baseURL + url)!)
         request.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: request) { _, response, error in
             if let error = error {
@@ -22,8 +22,8 @@ struct Connector {
         task.resume()
     }
     
-    func get<T: Decodable> (from: String, type: T.Type) {
-        var request = URLRequest(url: URL(string: root + from)!)
+    func get<T: Decodable> (from url: String, type: T.Type) {
+        var request = URLRequest(url: URL(string: baseURL + url)!)
         request.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {
