@@ -1,13 +1,7 @@
-//
-//  ListTableViewCell.swift
-//  OpenMarket
-//
-//  Created by kakao on 2022/01/25.
-//
-
 import UIKit
 
 class ListTableViewCell: UITableViewCell {
+    // MARK: - property
     static let identifier = "ListCell"
     
     let productImage: UIImageView = {
@@ -35,6 +29,16 @@ class ListTableViewCell: UITableViewCell {
         return label
     }()
     
+    lazy var stackOfInformations: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [productImage, productName, productStock])
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
+    // MARK: - override functions
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpView()
@@ -51,16 +55,28 @@ class ListTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
+    // MARK: - functions
     func setListCell(data: Product) {
-        
+        do {
+            let imageData: Data = try Data(contentsOf: data.thumbnail)
+            productImage.image = UIImage(data: imageData)
+        } catch {}
+        productName.text = data.name
+        productStock.text = data.stock == 0 ? "품절" : "잔여수량: \(data.stock)"
+        productStock.textColor = data.stock == 0 ? .systemOrange : .systemGray
+//        
     }
     
     func setUpView() {
+        addSubview(stackOfInformations)
         
+        stackOfInformations.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true
+        stackOfInformations.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
+        stackOfInformations.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
+        stackOfInformations.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
+        productImage.widthAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.widthAnchor, multiplier: 0.1).isActive = true
     }
 
 }
