@@ -15,9 +15,7 @@ class APIManager {
     private init() { }
     
     func checkServer(completion: @escaping (Result<Bool,Error>) -> Void) {
-        guard let url = URL(string: apiHost + "healthChecker") else { return }
-        
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+        let task = URLSession.shared.dataTask(with: healthcheckURL()) { data, response, error in
             if let error = error {
                 completion(.failure(error))
             }
@@ -32,18 +30,13 @@ class APIManager {
         task.resume()
     }
     
+    func healthcheckURL() -> URL {
+        guard let url = URL(string: apiHost + "healthChecker") else { fatalError("wrong url format") }
+        return url
+    }
+    
     func fetchProductList(pageNo: Int, itemsPerPage: Int, completion: @escaping (Result<Page,Error>) -> Void) {
-        var urlComponents = URLComponents(string: apiHost + "api/products")
-        let queryItems :[URLQueryItem] = [
-            URLQueryItem(name: "page_no", value: String(pageNo)),
-            URLQueryItem(name: "items_per_page", value: String(itemsPerPage))
-        ]
-        urlComponents?.queryItems = queryItems
-        guard let url = urlComponents?.url else { return }
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
-        
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: productListURL(pageNo, itemsPerPage)) { data, response, error in
             if let error = error {
                 completion(.failure(error))
             }
@@ -52,7 +45,7 @@ class APIManager {
                 return
             }
             do {
-                let page = try JSONDecoder.isoSnakeJSONDecoder().decode(Page.self, from: data)
+                let page = try JSONDecoder.snakeToCamelJsonDecoder().decode(Page.self, from: data)
                 completion(.success(page))
             } catch {
                 completion(.failure(error))
@@ -62,10 +55,19 @@ class APIManager {
         task.resume()
     }
     
+    func productListURL(_ pageNo: Int,_ itemsPerPage: Int) -> URL {
+        var urlComponents = URLComponents(string: apiHost + "api/products")
+        let queryItems :[URLQueryItem] = [
+            URLQueryItem(name: "page_no", value: String(pageNo)),
+            URLQueryItem(name: "items_per_page", value: String(itemsPerPage))
+        ]
+        urlComponents?.queryItems = queryItems
+        guard let url = urlComponents?.url else { fatalError("wrong url formmat") }
+        return url
+    }
+    
     func fetchProduct(productId: Int, completion: @escaping (Result<Product,Error>) -> Void) {
-        guard let url = URL(string: apiHost + "api/products/\(productId)") else { return }
-        
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+        let task = URLSession.shared.dataTask(with: productUrl(with: productId)) { data, response, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -75,7 +77,7 @@ class APIManager {
                 return
             }
             do {
-                let product = try JSONDecoder.isoSnakeJSONDecoder().decode(Product.self, from: data)
+                let product = try JSONDecoder.snakeToCamelJsonDecoder().decode(Product.self, from: data)
                 completion(.success(product))
             } catch {
                 print(String(describing: error))
@@ -85,8 +87,14 @@ class APIManager {
         
         task.resume()
     }
-                           
     
+    func productUrl(with productId: Int) -> URL{
+        guard let url = URL(string: apiHost + "api/products/\(productId)") else {
+            fatalError("wrong url formmat")
+        }
+        return url
+    }
+                           
     enum APIError: Error {
         case noData
         case responseError

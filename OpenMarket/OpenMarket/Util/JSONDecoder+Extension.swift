@@ -8,7 +8,7 @@
 import Foundation
 
 extension JSONDecoder {
-    static func isoSnakeJSONDecoder() -> JSONDecoder {
+    static func snakeToCamelJsonDecoder() -> JSONDecoder {
         let decoder = JSONDecoder()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SS"
