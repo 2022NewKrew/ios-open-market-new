@@ -80,7 +80,7 @@ class GridCollectionViewCell: UICollectionViewCell {
             return
         }
         productPrice.text = previousInformation + "\n" + currentInformation
-        productPrice.changeFont(target: previousInformation)
+        productPrice.markDiscountPrice(target: previousInformation)
         
     }
 }

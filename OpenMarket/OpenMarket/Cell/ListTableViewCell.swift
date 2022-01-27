@@ -89,7 +89,7 @@ class ListTableViewCell: UITableViewCell {
             return
         }
         productPrice.text = previousInformation + " " + currentInformation
-        productPrice.changeFont(target: previousInformation)
+        productPrice.markDiscountPrice(target: previousInformation)
     }
     
     func setUpView() {
@@ -105,7 +105,7 @@ class ListTableViewCell: UITableViewCell {
 }
 
 extension UILabel {
-    func changeFont(target: String) {
+    func markDiscountPrice(target: String) {
         let fullText = self.text ?? ""
         let targetRange = (fullText as NSString).range(of: target)
         let attributedString = NSMutableAttributedString(string: fullText)
