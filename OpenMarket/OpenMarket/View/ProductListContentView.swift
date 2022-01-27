@@ -12,8 +12,10 @@ class ProductListContentView: UIView, UIContentView {
     
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var productNameLabel: UILabel!
-    @IBOutlet weak var prodcutPriceLabel: UILabel!
+    @IBOutlet weak var discountedPriceLabel: UILabel!
     @IBOutlet weak var productThumbnailImageView: UIImageView!
+    @IBOutlet weak var productPriceLabel: UILabel!
+    @IBOutlet weak var stockLabel: UILabel!
     
     private var currentConfiguration: ProductContentConfiguration!
     var configuration: UIContentConfiguration {
@@ -52,28 +54,31 @@ class ProductListContentView: UIView, UIContentView {
     
     private func apply(configuration: ProductContentConfiguration) {
         guard currentConfiguration != configuration else { return }
-        
+        print("apply called")
         currentConfiguration = configuration
         
         productNameLabel.text = configuration.productName
-        prodcutPriceLabel.text = "\(configuration.currency?.rawValue ?? "KRW"):\(configuration.price ?? 0)"
-        guard let imageUrl = configuration.thumbnailImage else { return }
-        productThumbnailImageView.imageFromServerURL(url: imageUrl)
+        
+        if let discountedPrice = configuration.discountedPrice {
+            let text = "\(configuration.currency?.rawValue ?? "KRW") \(discountedPrice)"
+            discountedPriceLabel.isHidden = false
+            let attributeString: NSMutableAttributedString = NSMutableAttributedString(string: text)
+                attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSRange(location: 0, length: attributeString.length))
+            discountedPriceLabel.attributedText = attributeString
+        }
+        
+        productPriceLabel.text = "\(configuration.currency?.rawValue ?? "KRW") \(configuration.price ?? 0)"
+        
+        if let stock = configuration.stock {
+            stockLabel.textColor = stock == 0 ? .systemOrange : .lightGray
+            stockLabel.text = stock == 0 ? "품절" : "\(stock)"
+        }
+        
+        guard let thumbnailURL = configuration.thumbnailURL else { return }
+        ImageCache.shared.load(url: thumbnailURL as NSURL) { image in
+            self.productThumbnailImageView.image = image
+        }
     }
 }
 
-extension UIImageView {
 
- public func imageFromServerURL(url: URL) {
-        URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) -> Void in
-            if error != nil {
-                print(error ?? "No Error")
-                return
-            }
-            DispatchQueue.main.async(execute: { () -> Void in
-                let image = UIImage(data: data!)
-                self.image = image
-            })
-        }).resume()
-    }
-}

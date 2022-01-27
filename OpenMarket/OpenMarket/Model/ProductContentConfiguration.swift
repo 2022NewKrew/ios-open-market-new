@@ -11,7 +11,7 @@ import UIKit
 struct ProductContentConfiguration: UIContentConfiguration, Hashable {
     
     var productName: String?
-    var thumbnailImage: URL?
+    var thumbnailURL: URL?
     var price: Double?
     var discountedPrice: Double?
     var stock: Int?

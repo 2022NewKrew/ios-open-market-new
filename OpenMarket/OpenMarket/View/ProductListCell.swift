@@ -17,7 +17,7 @@ class ProductListCell: UICollectionViewListCell {
         newConfiguration.stock = product?.stock
         newConfiguration.discountedPrice = product?.discountedPrice
         newConfiguration.price = product?.price
-        newConfiguration.thumbnailImage = product?.thumbnailURL
+        newConfiguration.thumbnailURL = product?.thumbnailURL
         newConfiguration.currency = product?.currency
         
         contentConfiguration = newConfiguration

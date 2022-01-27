@@ -16,8 +16,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let laoutConfig = UICollectionLayoutListConfiguration(appearance: .plain)
-        let listLayout = UICollectionViewCompositionalLayout.list(using: laoutConfig)
+        let layoutConfig = UICollectionLayoutListConfiguration(appearance: .plain)
+        let listLayout = UICollectionViewCompositionalLayout.list(using: layoutConfig)
         collectionView.collectionViewLayout = listLayout
         
         let cellRegistration = UICollectionView.CellRegistration<ProductListCell,Product> { cell,indexPath,item in
@@ -26,8 +26,7 @@ class ViewController: UIViewController {
         
         dataSource = UICollectionViewDiffableDataSource<Section, Product>(collectionView: collectionView) {
                (collectionView: UICollectionView, indexPath: IndexPath, identifier: Product) -> UICollectionViewCell? in
-               
-               let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration,
+            let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration,
                                                                        for: indexPath,
                                                                        item: identifier)
             cell.accessories = [.disclosureIndicator()]
@@ -38,7 +37,7 @@ class ViewController: UIViewController {
         snapshot.appendSections([.main])
         
         // API Test
-        APIManager.shared.fetchProductList(pageNo: 1, itemsPerPage: 10) { result in
+        APIManager.shared.fetchProductList(pageNo: 1, itemsPerPage: 20) { result in
             switch result {
             case .success(let page):
                 self.snapshot.appendItems(page.pages, toSection: .main)
@@ -47,24 +46,6 @@ class ViewController: UIViewController {
                 print(error)
             }
         }
-//
-//        APIManager.shared.fetchProduct(productId: 657) { result in
-//            switch result {
-//            case .success(let product):
-//                print(product)
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//
-//        APIManager.shared.checkServer { result in
-//            switch result {
-//            case .success(let isAvailable):
-//                print(isAvailable)
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
     }
 
 
