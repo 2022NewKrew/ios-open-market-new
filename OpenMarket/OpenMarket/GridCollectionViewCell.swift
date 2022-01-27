@@ -46,6 +46,7 @@ class GridCollectionViewCell: UICollectionViewCell {
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.distribution = .equalCentering
+        stackView.spacing = 2
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -57,6 +58,7 @@ class GridCollectionViewCell: UICollectionViewCell {
         gridStack.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
         gridStack.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
         gridStack.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
+        productImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8).isActive = true
     }
     
     required init?(coder: NSCoder) {

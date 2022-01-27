@@ -37,6 +37,8 @@ class ViewController: UIViewController {
     // MARK: - Property
     var products: [Product] = []
     var isLoading: Bool = true
+    var currentPage: Int = 1
+    var hasNextPage: Bool = true
     
     // MARK: - Override function
     override func viewDidLoad() {
@@ -48,15 +50,16 @@ class ViewController: UIViewController {
         view.addSubview(activityIndicator)
         view.bringSubviewToFront(activityIndicator)
         activityIndicator.startAnimating()
-        OpenMarketAPI.shared.getProductList(numberOfPage: 1, itemsPerPage: 20)
-        // index에따라..
+        OpenMarketAPI.shared.getProductList(numberOfPage: currentPage, itemsPerPage: 20)
     }
     
     // MARK: - objc function
     @objc
     func reloadData(_ notification: NSNotification) {
         let loadedData = notification.userInfo?["data"] as! Products
-        products = loadedData.pages
+        products += loadedData.pages
+        hasNextPage = loadedData.hasNext
+
         DispatchQueue.main.async {
             self.segmentedControlChanged(segmentedControl: self.listOrGrid)
             self.activityIndicator.stopAnimating()
@@ -118,7 +121,16 @@ class ViewController: UIViewController {
 
 // MARK: - TableView
 extension ViewController: UITableViewDelegate {
-    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let height = scrollView.frame.size.height
+        let contentYoffset = scrollView.contentOffset.y
+        let distanceFromBottom = scrollView.contentSize.height - contentYoffset
+        if distanceFromBottom < height && hasNextPage {
+            self.currentPage += 1
+            OpenMarketAPI.shared.getProductList(numberOfPage: currentPage, itemsPerPage: 20)
+            self.activityIndicator.startAnimating()
+        }
+    }
 }
 
 extension ViewController: UITableViewDataSource {
@@ -136,7 +148,7 @@ extension ViewController: UITableViewDataSource {
 
 // MARK: - CollectionView
 extension ViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
+
 }
 
 extension ViewController: UICollectionViewDataSource {
@@ -147,15 +159,15 @@ extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GridCollectionViewCell.identifier, for: indexPath) as? GridCollectionViewCell ?? GridCollectionViewCell()
         cell.setupCell(data: products[indexPath.row])
-        cell.layer.borderColor = UIColor.systemGray.cgColor
-        cell.layer.borderWidth = 1
+        cell.layer.borderColor = UIColor.systemGray3.cgColor
+        cell.layer.borderWidth = 2
         cell.layer.cornerRadius = 10
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.frame.width - 32 )/2
-        let height = collectionView.frame.height / 3 - 1
+        let height = collectionView.frame.height / 3 + 10
         return CGSize(width: width, height: height)
     }
 }
