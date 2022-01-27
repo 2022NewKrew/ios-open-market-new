@@ -32,7 +32,8 @@ struct URLConnector {
             }
             if let data = data {
                 guard let parsedData = Decoder.decodeJSONData(type: type, from: data) else { return }
-                print(parsedData)
+                NotificationCenter.default.post(name: Notification.Name("GET"), object: nil, userInfo: ["GET": parsedData])
+//                print(parsedData)
             }
             
         }
