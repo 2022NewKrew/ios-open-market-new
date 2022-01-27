@@ -17,20 +17,12 @@ class GridCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    lazy var originalPrice: UILabel = {
+    let productPrice: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.textColor = .systemRed
-        label.attributedText = label.text?.strikeThrough()
         label.textAlignment = .center
-        return label
-    }()
-    
-    let currentPrice: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.preferredFont(forTextStyle: .body)
         label.textColor = .systemGray
-        label.textAlignment = .center
+        label.numberOfLines = 0
         return label
     }()
     
@@ -42,7 +34,7 @@ class GridCollectionViewCell: UICollectionViewCell {
     }()
     
     lazy var gridStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [productImage, name, originalPrice, currentPrice, stock])
+        let stackView = UIStackView(arrangedSubviews: [productImage, name, productPrice, stock])
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.distribution = .equalCentering
@@ -71,17 +63,20 @@ class GridCollectionViewCell: UICollectionViewCell {
             productImage.image = UIImage(data: imageData)
         } catch {}
         name.text = data.name
-        originalPrice.text = "\(data.price)"
-        currentPrice.text = "\(data.discountedPrice)"
         stock.text = data.stock == 0 ? "품절" : "잔여수량: \(data.stock)"
         stock.textColor = data.stock == 0 ? .systemOrange : .systemGray
+        setPriceLabel(originalPrice: Int.init(data.price), currentPrice: Int.init(data.discountedPrice), currency: data.currency)
     }
-}
-
-extension String {
-    func strikeThrough() -> NSAttributedString {
-        let attributeString: NSMutableAttributedString = NSMutableAttributedString(string: self)
-        attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: NSMakeRange(0, attributeString.length))
-        return attributeString
+    
+    func setPriceLabel(originalPrice: Int, currentPrice: Int, currency: String) {
+        let previousInformation = "\(currency) \(originalPrice)"
+        let currentInformation = "\(currency) \(currentPrice)"
+        if originalPrice == currentPrice {
+            productPrice.text = currentInformation
+            return
+        }
+        productPrice.text = previousInformation + "\n" + currentInformation
+        productPrice.changeFont(target: previousInformation)
+        
     }
 }

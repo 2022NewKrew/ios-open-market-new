@@ -22,6 +22,7 @@ class ListTableViewCell: UITableViewCell {
         let label = UILabel()
         label.adjustsFontForContentSizeCategory = true
         label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.textColor = .systemGray
         return label
     }()
     
@@ -79,10 +80,18 @@ class ListTableViewCell: UITableViewCell {
         productName.text = data.name
         productStock.text = data.stock == 0 ? "품절" : "잔여수량: \(data.stock)"
         productStock.textColor = data.stock == 0 ? .systemOrange : .systemGray
-        let discountPriceInformation = data.price != data.discountedPrice ? "\(data.currency) \(Int.init(data.price))" : ""
-        productPrice.text =  discountPriceInformation +
-            " \(data.currency) \(Int.init(data.discountedPrice))"
-//        
+        setPriceLabel(originalPrice: Int.init(data.price), currentPrice: Int.init(data.discountedPrice), currency: data.currency)
+    }
+    
+    func setPriceLabel(originalPrice: Int, currentPrice: Int, currency: String) {
+        let previousInformation = "\(currency) \(originalPrice)"
+        let currentInformation = "\(currency) \(currentPrice)"
+        if originalPrice == currentPrice {
+            productPrice.text = currentInformation
+            return
+        }
+        productPrice.text = previousInformation + " " + currentInformation
+        productPrice.changeFont(target: previousInformation)
     }
     
     func setUpView() {
@@ -95,5 +104,16 @@ class ListTableViewCell: UITableViewCell {
         stackOfInformations.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
         productImage.widthAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.widthAnchor, multiplier: 0.1).isActive = true
     }
+}
 
+extension UILabel {
+    func changeFont(target: String) {
+        let fullText = self.text ?? ""
+        let targetRange = (fullText as NSString).range(of: target)
+        let attributedString = NSMutableAttributedString(string: fullText)
+        attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.systemRed, range: targetRange)
+        attributedString.addAttribute(NSAttributedString.Key.strokeColor, value: UIColor.systemRed, range: targetRange)
+        attributedString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: targetRange)
+        self.attributedText = attributedString
+    }
 }
