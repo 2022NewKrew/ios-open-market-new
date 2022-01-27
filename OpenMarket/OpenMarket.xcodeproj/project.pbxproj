@@ -76,6 +76,15 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
+		C259FBF027A2A6C0007319D5 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				C259FBE7279FC584007319D5 /* ListTableViewCell.swift */,
+				C259FBEE27A2270C007319D5 /* GridCollectionViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		C70FB0EE25BEF61C00C9924E = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +104,7 @@
 		C70FB0F925BEF61C00C9924E /* OpenMarket */ = {
 			isa = PBXGroup;
 			children = (
+				C259FBF027A2A6C0007319D5 /* Cell */,
 				C259FBE0279EAD09007319D5 /* Utility */,
 				C259FBDD279EAC35007319D5 /* Model */,
 				C70FB0FA25BEF61C00C9924E /* AppDelegate.swift */,
@@ -104,8 +114,6 @@
 				C70FB10325BEF61D00C9924E /* Assets.xcassets */,
 				C70FB10525BEF61D00C9924E /* LaunchScreen.storyboard */,
 				C70FB10825BEF61D00C9924E /* Info.plist */,
-				C259FBE7279FC584007319D5 /* ListTableViewCell.swift */,
-				C259FBEE27A2270C007319D5 /* GridCollectionViewCell.swift */,
 			);
 			path = OpenMarket;
 			sourceTree = "<group>";

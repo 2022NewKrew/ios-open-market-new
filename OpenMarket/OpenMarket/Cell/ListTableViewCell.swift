@@ -48,7 +48,6 @@ class ListTableViewCell: UITableViewCell {
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.spacing = 10
-//        stackView.distribution = .equalSpacing
         return stackView
     }()
     
@@ -64,7 +63,6 @@ class ListTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

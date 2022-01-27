@@ -22,7 +22,7 @@ struct URLConnector {
         task.resume()
     }
     
-    func get<T: Decodable> (from url: String, type: T.Type) {
+    func getData<T: Decodable> (from url: String, type: T.Type) {
         var request = URLRequest(url: URL(string: baseURL + url)!)
         request.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
@@ -32,7 +32,7 @@ struct URLConnector {
             }
             if let data = data {
                 guard let parsedData = Decoder.decodeJSONData(type: type, from: data) else { return }
-                NotificationCenter.default.post(name: Notification.Name("GET"), object: nil, userInfo: ["data": parsedData])
+                NotificationCenter.default.post(name: Notification.Name("LoadData"), object: nil, userInfo: ["data": parsedData])
             }
             
         }
