@@ -29,8 +29,16 @@ class ListTableViewCell: UITableViewCell {
         return label
     }()
     
+    lazy var nameAndPriceStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [productName, productPrice])
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .equalCentering
+        return stackView
+    }()
+    
     lazy var stackOfInformations: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [productImage, productName, productStock])
+        let stackView = UIStackView(arrangedSubviews: [productImage, nameAndPriceStack, productStock])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .center
@@ -66,12 +74,12 @@ class ListTableViewCell: UITableViewCell {
         productName.text = data.name
         productStock.text = data.stock == 0 ? "품절" : "잔여수량: \(data.stock)"
         productStock.textColor = data.stock == 0 ? .systemOrange : .systemGray
+        productPrice.text = "\(data.price)"
 //        
     }
     
     func setUpView() {
         addSubview(stackOfInformations)
-        
         stackOfInformations.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true
         stackOfInformations.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
         stackOfInformations.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
