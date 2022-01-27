@@ -1,6 +1,7 @@
 import UIKit
 
 class ViewController: UIViewController {
+    // MARK: - UI componets
     lazy var listOrGrid: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["LIST", "GRID"])
         let titleTextAttribute = [NSAttributedString.Key.foregroundColor: UIColor.systemBackground]
@@ -13,7 +14,6 @@ class ViewController: UIViewController {
         return segmentedControl
     }()
     
-    var products: [Product] = []
     let tableView: UITableView = UITableView()
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -25,6 +25,43 @@ class ViewController: UIViewController {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return cv
     }()
+    
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        indicator.center = view.center
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    // MARK: - Property
+    var products: [Product] = []
+    var isLoading: Bool = true
+    
+    // MARK: - Override function
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData(_:)), name: Notification.Name("GET"), object: nil)
+        setupNavigationBar()
+        setupTableView()
+        setupCollectionView()
+        view.addSubview(activityIndicator)
+        view.bringSubviewToFront(activityIndicator)
+        activityIndicator.startAnimating()
+        OpenMarketAPI.shared.getProductList(numberOfPage: 1, itemsPerPage: 20)
+        // index에따라..
+    }
+    
+    // MARK: - objc function
+    @objc
+    func reloadData(_ notification: NSNotification) {
+        let loadedData = notification.userInfo?["data"] as! Products
+        products = loadedData.pages
+        DispatchQueue.main.async {
+            self.segmentedControlChanged(segmentedControl: self.listOrGrid)
+            self.activityIndicator.stopAnimating()
+        }
+    }
     
     @objc
     func segmentedControlChanged(segmentedControl: UISegmentedControl) {
@@ -41,49 +78,45 @@ class ViewController: UIViewController {
             return
         }
     }
+    //MARK: - function
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData(_:)), name: Notification.Name("GET"), object: nil)
+    func setupNavigationBar() {
         navigationItem.titleView = listOrGrid
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: nil)
-        OpenMarketAPI.shared.getProductList(numberOfPage: 1, itemsPerPage: 20)
-        // index에따라..
-        view.addSubview(tableView)
-        view.addSubview(collectionView)
-        collectionView.isHidden = true
-        tableView.delegate = self
-        tableView.dataSource = self
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.frame = view.safeAreaLayoutGuide.layoutFrame
-        tableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
-        collectionView.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: GridCollectionViewCell.identifier)
-
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        
-//        collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-//        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-//        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
-    @objc
-    func reloadData(_ notification: NSNotification) {
-        print("reloaded")
-        let loadedData = notification.userInfo?["GET"] as! Products
-        products = loadedData.pages
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+    func setupTableView() {
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
+        
+    }
+    
+    func setupCollectionView() {
+        view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isHidden = true
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: GridCollectionViewCell.identifier)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
     }
 }
 
+// MARK: - TableView
 extension ViewController: UITableViewDelegate {
     
 }
@@ -96,17 +129,14 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier) as? ListTableViewCell ?? ListTableViewCell()
         cell.setListCell(data: products[indexPath.row])
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
 }
 
-extension ViewController: UICollectionViewDelegate {
+// MARK: - CollectionView
+extension ViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-}
-
-extension ViewController: UICollectionViewDelegateFlowLayout {
-    
-
 }
 
 extension ViewController: UICollectionViewDataSource {
@@ -128,6 +158,4 @@ extension ViewController: UICollectionViewDataSource {
         let height = collectionView.frame.height / 3 - 1
         return CGSize(width: width, height: height)
     }
-    
-    
 }

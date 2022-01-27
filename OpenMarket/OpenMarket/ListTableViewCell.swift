@@ -13,24 +13,28 @@ class ListTableViewCell: UITableViewCell {
     
     let productName: UILabel = {
         let label = UILabel()
+        label.adjustsFontForContentSizeCategory = true
         label.font = UIFont.preferredFont(forTextStyle: .title1)
         return label
     }()
     
     let productPrice: UILabel = {
         let label = UILabel()
+        label.adjustsFontForContentSizeCategory = true
         label.font = UIFont.preferredFont(forTextStyle: .body)
         return label
     }()
     
     let productStock: UILabel = {
         let label = UILabel()
+        label.adjustsFontForContentSizeCategory = true
         label.font = UIFont.preferredFont(forTextStyle: .body)
         return label
     }()
     
     lazy var nameAndPriceStack: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [productName, productPrice])
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.distribution = .equalCentering
@@ -42,7 +46,8 @@ class ListTableViewCell: UITableViewCell {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .center
-        stackView.distribution = .equalSpacing
+        stackView.spacing = 10
+//        stackView.distribution = .equalSpacing
         return stackView
     }()
     
@@ -74,12 +79,16 @@ class ListTableViewCell: UITableViewCell {
         productName.text = data.name
         productStock.text = data.stock == 0 ? "품절" : "잔여수량: \(data.stock)"
         productStock.textColor = data.stock == 0 ? .systemOrange : .systemGray
-        productPrice.text = "\(data.price)"
+        let discountPriceInformation = data.price != data.discountedPrice ? "\(data.currency) \(Int.init(data.price))" : ""
+        productPrice.text =  discountPriceInformation +
+            " \(data.currency) \(Int.init(data.discountedPrice))"
 //        
     }
     
     func setUpView() {
-        addSubview(stackOfInformations)
+        contentView.addSubview(stackOfInformations)
+        contentView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        productStock.widthAnchor.constraint(equalToConstant: 80).isActive = true
         stackOfInformations.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true
         stackOfInformations.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
         stackOfInformations.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true

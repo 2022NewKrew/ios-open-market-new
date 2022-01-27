@@ -5,7 +5,9 @@ class GridCollectionViewCell: UICollectionViewCell {
     
     let productImage: UIImageView = {
         let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
         return imageView
     }()
     
@@ -15,7 +17,7 @@ class GridCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    let originalPrice: UILabel = {
+    lazy var originalPrice: UILabel = {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .body)
         label.textColor = .systemRed
@@ -43,6 +45,7 @@ class GridCollectionViewCell: UICollectionViewCell {
         let stackView = UIStackView(arrangedSubviews: [productImage, name, originalPrice, currentPrice, stock])
         stackView.axis = .vertical
         stackView.alignment = .center
+        stackView.distribution = .equalCentering
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -76,7 +79,6 @@ class GridCollectionViewCell: UICollectionViewCell {
 extension String {
     func strikeThrough() -> NSAttributedString {
         let attributeString: NSMutableAttributedString = NSMutableAttributedString(string: self)
-        attributeString.addAttribute(NSAttributedString.Key.strokeColor, value: UIColor.red, range: NSMakeRange(0, attributeString.length))
         attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: NSMakeRange(0, attributeString.length))
         return attributeString
     }
