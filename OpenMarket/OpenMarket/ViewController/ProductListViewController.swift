@@ -11,8 +11,11 @@ class ProductListViewController: UIViewController {
     @IBOutlet weak var layoutSegmentedControl: UISegmentedControl!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    let apiManager = OpenMarketAPIManager()
-    var products: [OpenMarketProduct?] = []
+    private let apiManager = OpenMarketAPIManager()
+    private var products: [OpenMarketProduct?] = []
+    private var isLoading = false
+    private var loadingView: LoadingFooterView?
+    private var totalCount: Int = 0
     
     enum SegmentedControlValue: Int {
         case list
@@ -37,13 +40,16 @@ class ProductListViewController: UIViewController {
     }
     
     private func setup() {
-        self.registerCells()
+        self.registerViews()
         self.setupDelegate()
     }
     
-    private func registerCells() {
+    private func registerViews() {
         let listCellNibFile = UINib(nibName: Constants.openMarketProcutListCellNibFileName, bundle: nil)
         self.collectionView.register(listCellNibFile, forCellWithReuseIdentifier: Constants.openMarketProductListCellReuseIdentifier)
+        
+        let loadingReusableView = UINib(nibName: Constants.openMarketProcutFooterViewFileName, bundle: nil)
+        self.collectionView.register(loadingReusableView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: Constants.openMarketProductFooterViewIdentifier)
     }
     
     private func fetchData(at index: Int, completion: @escaping () -> Void) {
@@ -54,39 +60,28 @@ class ProductListViewController: UIViewController {
         ) { [weak self] result in
             let data = try? result.get()
             guard let products = data?.products,
-                  let count = data?.totalCount else {
-                return
-            }
-            if self?.products.count == 0 {
-                self?.products = Array(repeating: nil, count: count)
-            }
-            
+                  let totalCount = data?.totalCount else {
+                      return
+                  }
+            self?.totalCount = totalCount
+            self?.products.append(contentsOf: products)
             products.enumerated().forEach { index, product in
                 let index = (page - 1) * Constants.itemsPerPage + index
                 self?.products[index] = product
             }
-            completion()
+            DispatchQueue.main.async {
+                completion()
+            }
         }
     }
     
     private func setupDelegate() {
         self.collectionView.dataSource = self
-//        self.collectionView.prefetchDataSource = self
-    }
-    
-    private func prefetchProductData(at indexPath: IndexPath) {
-        self.fetchData(at: indexPath.row) {
-            DispatchQueue.main.async {
-                let indexPath = IndexPath(row: indexPath.row, section: 0)
-                if self.collectionView.indexPathsForVisibleItems.contains(indexPath) {
-                    self.collectionView.reloadItems(at: [IndexPath(row: indexPath.row, section: 0)])
-                }
-            }
-        }
+        self.collectionView.delegate = self
     }
 }
 
-extension ProductListViewController: UICollectionViewDataSource {
+extension ProductListViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return products.count
     }
@@ -97,8 +92,8 @@ extension ProductListViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: Constants.openMarketProductListCellReuseIdentifier,
                 for: indexPath) as? OpenMarketProductListCell else {
-                      return UICollectionViewCell()
-                  }
+                    return UICollectionViewCell()
+                }
             if let product = self.products[indexPath.row] {
                 cell.configure(of: product)
                 ImageLoader.loadImage(urlString: product.thumbnailURLString) { image in
@@ -106,12 +101,9 @@ extension ProductListViewController: UICollectionViewDataSource {
                         cell.thumbnailImageView.image = image
                     }
                 }
-                return cell
-            }
-            if (indexPath.row + 1) % Constants.itemsPerPage == 0 {
-                self.prefetchProductData(at: indexPath)
             }
             return cell
+            
         case SegmentedControlValue.grid.rawValue:
             break
         default:
@@ -120,5 +112,47 @@ extension ProductListViewController: UICollectionViewDataSource {
         
         return UICollectionViewCell()
     }
-
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if self.products.count == self.totalCount {
+            return
+        }
+        if indexPath.row == self.products.count - 10 && !self.isLoading {
+            self.isLoading = true
+            self.fetchData(at: indexPath.row + 10) {
+                self.collectionView.reloadData()
+                self.isLoading = false
+            }
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if self.isLoading || self.products.count == self.totalCount {
+            return .zero
+        }
+        return CGSize(width: self.collectionView.bounds.size.width, height: Constants.loadingFooterViewHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionFooter,
+              let loadingFooterView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Constants.openMarketProductFooterViewIdentifier, for: indexPath) as? LoadingFooterView else{
+                  return UICollectionReusableView()
+                  
+              }
+        loadingFooterView.backgroundColor = .clear
+        self.loadingView = loadingFooterView
+        return loadingFooterView
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionView.elementKindSectionFooter && self.isLoading {
+            self.loadingView?.activityIndicator.startAnimating()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionView.elementKindSectionFooter {
+            self.loadingView?.activityIndicator.stopAnimating()
+        }
+    }
 }

@@ -26,7 +26,7 @@ class OpenMarketProductListCell: UICollectionViewCell {
         self.containerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width - 32.0).isActive = true
     }
     
-    func configure(of product: OpenMarketProduct) {        
+    func configure(of product: OpenMarketProduct) {
         self.productNameLabel.text = product.name
         self.stockLabel.text = "잔여수량 : \(product.stock ?? 0)"
         
@@ -50,6 +50,7 @@ class OpenMarketProductListCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
+        self.thumbnailImageView.image = UIImage(named: Constants.loadingImageName)
         self.notDiscountedPriceLabel.isHidden = false
     }
     
