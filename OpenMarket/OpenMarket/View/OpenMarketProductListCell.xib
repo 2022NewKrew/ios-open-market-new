@@ -41,7 +41,7 @@
                                     <constraint firstAttribute="width" constant="16" id="gjJ-5F-CAG"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FDl-nr-3Uf">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FDl-nr-3Uf">
                                 <rect key="frame" x="42" y="0.0" width="167.5" height="39"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <nil key="textColor"/>
@@ -71,6 +71,7 @@
                             <constraint firstItem="ZFO-pg-XmH" firstAttribute="centerY" secondItem="E99-Xq-MA3" secondAttribute="centerY" id="Csb-LP-xab"/>
                             <constraint firstItem="ZFO-pg-XmH" firstAttribute="width" secondItem="E99-Xq-MA3" secondAttribute="width" multiplier="0.1" id="DJM-aR-tN7"/>
                             <constraint firstItem="hso-Im-u9S" firstAttribute="leading" secondItem="FDl-nr-3Uf" secondAttribute="leading" id="HGW-aL-UOP"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hso-Im-u9S" secondAttribute="trailing" id="HO4-g3-ex5"/>
                             <constraint firstItem="FDl-nr-3Uf" firstAttribute="leading" secondItem="ZFO-pg-XmH" secondAttribute="trailing" constant="16" id="Hue-L3-U4i"/>
                             <constraint firstItem="BhF-ca-4ng" firstAttribute="centerY" secondItem="frc-yD-gZc" secondAttribute="centerY" id="KBU-gh-I0e"/>
                             <constraint firstAttribute="bottom" secondItem="hso-Im-u9S" secondAttribute="bottom" id="U6W-Cm-KaM"/>
@@ -94,6 +95,7 @@
             </constraints>
             <size key="customSize" width="293" height="75"/>
             <connections>
+                <outlet property="containerView" destination="E99-Xq-MA3" id="OAr-b9-97V"/>
                 <outlet property="notDiscountedPriceLabel" destination="t7q-tn-u0V" id="BWU-Wt-JqL"/>
                 <outlet property="productNameLabel" destination="FDl-nr-3Uf" id="Jig-cb-V5X"/>
                 <outlet property="sellingPriceLabel" destination="FTt-hd-Hw6" id="Zbx-cl-Btr"/>

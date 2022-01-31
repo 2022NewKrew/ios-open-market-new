@@ -38,7 +38,11 @@ struct OpenMarketProduct: Codable, Equatable {
         
         func priceString(of price: Float) -> String {
             if self == .krw {
-                return "\(self.rawValue) \(Int(price))"
+                let numberFormatter = NumberFormatter()
+                numberFormatter.numberStyle = .decimal
+                if let price = numberFormatter.string(from: price as NSNumber) {
+                    return "\(self.rawValue) \(price)"
+                }
             }
             return "\(self.rawValue) \(price)"
         }

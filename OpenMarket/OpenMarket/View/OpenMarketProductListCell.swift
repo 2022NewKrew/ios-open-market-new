@@ -8,6 +8,7 @@
 import UIKit
 
 class OpenMarketProductListCell: UICollectionViewCell {
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var productNameLabel: UILabel!
     @IBOutlet weak var notDiscountedPriceLabel: UILabel!
@@ -22,11 +23,10 @@ class OpenMarketProductListCell: UICollectionViewCell {
     
     private func setupUI() {
         self.notDiscountedPriceLabel.attributedText = self.notDiscountedPriceLabel.text?.strikeThrough()
+        self.containerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width - 32.0).isActive = true
     }
     
-    func configure(of product: OpenMarketProduct) {
-        self.thumbnailImageView.loadImage(urlString: product.thumbnailURLString)
-        
+    func configure(of product: OpenMarketProduct) {        
         self.productNameLabel.text = product.name
         self.stockLabel.text = "잔여수량 : \(product.stock ?? 0)"
         
@@ -59,16 +59,5 @@ class OpenMarketProductListCell: UICollectionViewCell {
             self.contentView.layer.addBorder([.bottom], color: .lightGray, borderWidth: 1)
             isBorderApplied = true
         }
-    }
-    
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        super.preferredLayoutAttributesFitting(layoutAttributes)
-
-        let autoSize = contentView.systemLayoutSizeFitting(layoutAttributes.size)
-        var frame = layoutAttributes.frame
-        frame.size.height = ceil(autoSize.height)
-        
-        layoutAttributes.frame = frame
-        return layoutAttributes
     }
 }

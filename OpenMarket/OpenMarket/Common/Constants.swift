@@ -11,4 +11,5 @@ enum Constants {
     static let unknwon = "Unknown"
     static let openMarketProcutListCellNibFileName = "OpenMarketProductListCell"
     static let openMarketProductListCellReuseIdentifier = "OpenMarketProductListCell"
+    static let itemsPerPage = 200
 }

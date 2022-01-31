@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C260BF8B27A7ADB200DEFE8F /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C260BF8A27A7ADB200DEFE8F /* ImageLoader.swift */; };
 		C2C959B2279F861E00F87F67 /* OpenMarketProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C959B1279F861E00F87F67 /* OpenMarketProduct.swift */; };
 		C2C959B8279F944100F87F67 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C959B7279F944100F87F67 /* APIConstants.swift */; };
 		C2C959BC279FAAE700F87F67 /* OpenMarketAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C959BB279FAAE700F87F67 /* OpenMarketAPIManager.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C260BF8A27A7ADB200DEFE8F /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		C2C959B1279F861E00F87F67 /* OpenMarketProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketProduct.swift; sourceTree = "<group>"; };
 		C2C959B7279F944100F87F67 /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		C2C959BB279FAAE700F87F67 /* OpenMarketAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketAPIManager.swift; sourceTree = "<group>"; };
@@ -89,6 +91,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C260BF8927A7ADA300DEFE8F /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				C260BF8A27A7ADB200DEFE8F /* ImageLoader.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
 		C2C95973279E5FF500F87F67 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,6 +196,7 @@
 		C70FB0F925BEF61C00C9924E /* OpenMarket */ = {
 			isa = PBXGroup;
 			children = (
+				C260BF8927A7ADA300DEFE8F /* Utility */,
 				C2C95A4127A1494000F87F67 /* Resource */,
 				C2C95A3E27A148F900F87F67 /* ViewController */,
 				C2C95A3627A13DE600F87F67 /* Extension */,
@@ -323,6 +334,7 @@
 				C70FB0FB25BEF61C00C9924E /* AppDelegate.swift in Sources */,
 				C2C95A3827A13DF100F87F67 /* String+Extension.swift in Sources */,
 				C2C95A3D27A1479600F87F67 /* UIImageView+Extension.swift in Sources */,
+				C260BF8B27A7ADB200DEFE8F /* ImageLoader.swift in Sources */,
 				C2C95A4527A27EAD00F87F67 /* CALayer+Extension.swift in Sources */,
 				C70FB0FD25BEF61C00C9924E /* SceneDelegate.swift in Sources */,
 				C2C959CF279FE97000F87F67 /* OpenMarketAPIError.swift in Sources */,
