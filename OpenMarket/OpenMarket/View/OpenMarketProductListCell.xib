@@ -12,45 +12,45 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="OpenMarketProductListCell" id="gTV-IL-0wX" customClass="OpenMarketProductListCell" customModule="OpenMarket" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="293" height="75"/>
+            <rect key="frame" x="0.0" y="0.0" width="266" height="59"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="293" height="75"/>
+                <rect key="frame" x="0.0" y="0.0" width="266" height="59"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E99-Xq-MA3">
-                        <rect key="frame" x="16" y="8" width="261" height="59"/>
+                        <rect key="frame" x="16" y="8" width="234" height="43"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="stock" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BhF-ca-4ng">
-                                <rect key="frame" x="209.5" y="11" width="35.5" height="17"/>
+                                <rect key="frame" x="182.5" y="3" width="35.5" height="17"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZFO-pg-XmH">
-                                <rect key="frame" x="0.0" y="16.5" width="26" height="26"/>
+                                <rect key="frame" x="0.0" y="10" width="23.5" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ZFO-pg-XmH" secondAttribute="height" multiplier="1:1" id="IM0-b4-HMa"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="frc-yD-gZc">
-                                <rect key="frame" x="245" y="13.5" width="16" height="12.5"/>
+                                <rect key="frame" x="218" y="5.5" width="16" height="12.5"/>
                                 <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="Qh2-bc-nJA"/>
                                     <constraint firstAttribute="width" constant="16" id="gjJ-5F-CAG"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FDl-nr-3Uf">
-                                <rect key="frame" x="42" y="0.0" width="167.5" height="39"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FDl-nr-3Uf">
+                                <rect key="frame" x="39.5" y="0.0" width="143" height="23"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="hso-Im-u9S">
-                                <rect key="frame" x="42" y="42" width="88" height="17"/>
+                                <rect key="frame" x="39.5" y="26" width="88" height="17"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="price1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t7q-tn-u0V">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="price1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t7q-tn-u0V">
                                         <rect key="frame" x="0.0" y="0.0" width="39" height="17"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <color key="textColor" systemColor="systemRedColor"/>
@@ -88,12 +88,12 @@
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="E99-Xq-MA3" secondAttribute="trailing" constant="16" id="2Nm-Mn-SIn"/>
-                <constraint firstItem="E99-Xq-MA3" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="IeM-Nx-z5c"/>
+                <constraint firstAttribute="trailing" secondItem="E99-Xq-MA3" secondAttribute="trailing" priority="999" constant="16" id="2Nm-Mn-SIn"/>
+                <constraint firstItem="E99-Xq-MA3" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" priority="999" constant="16" id="IeM-Nx-z5c"/>
                 <constraint firstAttribute="bottom" secondItem="E99-Xq-MA3" secondAttribute="bottom" constant="8" id="fVO-IL-3zQ"/>
                 <constraint firstItem="E99-Xq-MA3" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="oZR-XV-go5"/>
             </constraints>
-            <size key="customSize" width="293" height="75"/>
+            <size key="customSize" width="266" height="59"/>
             <connections>
                 <outlet property="containerView" destination="E99-Xq-MA3" id="OAr-b9-97V"/>
                 <outlet property="notDiscountedPriceLabel" destination="t7q-tn-u0V" id="BWU-Wt-JqL"/>
@@ -102,7 +102,7 @@
                 <outlet property="stockLabel" destination="BhF-ca-4ng" id="Dps-Zd-irf"/>
                 <outlet property="thumbnailImageView" destination="ZFO-pg-XmH" id="xxR-SP-fEa"/>
             </connections>
-            <point key="canvasLocation" x="-129.71014492753625" y="19.084821428571427"/>
+            <point key="canvasLocation" x="-149.27536231884059" y="12.388392857142856"/>
         </collectionViewCell>
     </objects>
     <resources>

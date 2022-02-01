@@ -23,11 +23,12 @@ class OpenMarketProductListCell: UICollectionViewCell {
     
     private func setupUI() {
         self.notDiscountedPriceLabel.attributedText = self.notDiscountedPriceLabel.text?.strikeThrough()
+        self.containerView.translatesAutoresizingMaskIntoConstraints = false
         self.containerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width - 32.0).isActive = true
     }
     
     func configure(of product: OpenMarketProduct) {
-        self.productNameLabel.text = product.name
+        self.productNameLabel.text = product.name ?? Constants.unknwon
         self.stockLabel.text = "잔여수량 : \(product.stock ?? 0)"
         
         guard let price = product.price else {
@@ -50,6 +51,7 @@ class OpenMarketProductListCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.thumbnailImageView.image = UIImage(named: Constants.loadingImageName)
         self.notDiscountedPriceLabel.isHidden = false
     }
