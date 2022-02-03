@@ -15,6 +15,8 @@ class OpenMarketProductListCell: UICollectionViewCell, OpenMarketProductCellType
     @IBOutlet weak var sellingPriceLabel: UILabel!
     @IBOutlet weak var stockLabel: UILabel!
     private var isBorderApplied: Bool = false
+    private static let labelSpacing = 5.0
+    private static let topBottomSpacing = 8.0
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,9 +25,6 @@ class OpenMarketProductListCell: UICollectionViewCell, OpenMarketProductCellType
     
     private func setupUI() {
         self.notDiscountedPriceLabel.attributedText = self.notDiscountedPriceLabel.text?.strikeThrough()
-        self.containerView.translatesAutoresizingMaskIntoConstraints = false
-        let insets = Constants.openMarketPrdouctCellLeadingTrailingInset * 2.0
-        self.containerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width - insets).isActive = true
     }
     
     override func prepareForReuse() {
@@ -35,11 +34,25 @@ class OpenMarketProductListCell: UICollectionViewCell, OpenMarketProductCellType
         self.stockLabel.textColor = .systemGray
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if !isBorderApplied {
-            self.contentView.layer.addBorder([.bottom], color: .lightGray, borderWidth: 1)
-            isBorderApplied = true
-        }
+    static func cellForWidth(safeAreaWidth: CGFloat) -> CGFloat {
+        let width =  safeAreaWidth - Constants.openMarketPrdouctCellLeadingTrailingInset * 2.0
+        return width
+    }
+    
+    static func cellForHeight(safeAreaWidth: CGFloat) -> CGFloat {
+        let nameLabel = UILabel()
+        nameLabel.font = UIFont.preferredFont(forTextStyle: .title1)
+        nameLabel.text = Constants.unknwon
+        nameLabel.sizeToFit()
+        
+        let priceLabel = UILabel()
+        priceLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        priceLabel.text = Constants.unknwon
+        priceLabel.sizeToFit()
+        
+        let labelHeight = nameLabel.frame.height + priceLabel.frame.height + topBottomSpacing * 2.0 + labelSpacing
+        let imageViewHeight = safeAreaWidth * 0.1 + topBottomSpacing * 2.0
+        
+        return labelHeight > imageViewHeight ? labelHeight : imageViewHeight
     }
 }
