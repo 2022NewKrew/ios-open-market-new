@@ -50,12 +50,12 @@ class GridCollectionViewCell: UICollectionViewCell, ProductCell {
     }
 
     private func setPrice(product: Product) {
-        self.gridProductStackView.productOriginPrice.text = "\(product.currency) \(product.price)"
+        self.gridProductStackView.productDiscountedPrice.text = "\(product.currency) \(product.price)"
         if product.bargainPrice == 0 {
-            self.gridProductStackView.productDiscountedPrice.isHidden = true
+            self.gridProductStackView.productOriginPrice.isHidden = true
         } else {
+            self.gridProductStackView.productOriginPrice.text = "\(product.currency) \(product.discountedPrice)"
             self.gridProductStackView.productOriginPrice.strikethrough(labelText: self.gridProductStackView.productOriginPrice.text ?? "")
-            self.gridProductStackView.productDiscountedPrice.text = "\(product.currency) \(product.discountedPrice)"
         }
     }
 
