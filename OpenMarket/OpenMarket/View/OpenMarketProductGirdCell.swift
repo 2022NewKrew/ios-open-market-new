@@ -27,20 +27,10 @@ class OpenMarketProductGirdCell: UICollectionViewCell, OpenMarketProductCellType
     
     private func setupUI() {
         self.notDiscountedPriceLabel.attributedText = self.notDiscountedPriceLabel.text?.strikeThrough()
-        self.setupConstraint()
         self.layer.borderColor = UIColor.lightGray.cgColor
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 16
         
-    }
-    
-    private func setupConstraint() {
-//        self.containerView.translatesAutoresizingMaskIntoConstraints = false
-//        let spacing = Constants.openMarketPrdouctCellLeadingTrailingInset * 2.0 + Constants.openMarketProductGridCellMinimumInterItemSpacing
-//        self.containerView.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.size.width - spacing) / 2.0).isActive = true
-        
-//        self.priceStackView.translatesAutoresizingMaskIntoConstraints = false
-//        self.priceStackView.heightAnchor.constraint(equalToConstant: Self.calculateStackViewHeight()).isActive = true
     }
     
     private static func calculateStackViewHeight() -> CGFloat {
@@ -48,7 +38,7 @@ class OpenMarketProductGirdCell: UICollectionViewCell, OpenMarketProductCellType
         label.font = UIFont.preferredFont(forTextStyle: .body)
         label.text = Constants.unknwon
         label.sizeToFit()
-        return label.frame.height * 2.0 + priceStackViewSpacing
+        return label.frame.height * 2.0 + Self.priceStackViewSpacing
     }
     
     static func cellForWidth(safeAreaWidth: CGFloat) -> CGFloat {
@@ -65,7 +55,7 @@ class OpenMarketProductGirdCell: UICollectionViewCell, OpenMarketProductCellType
         nameLabel.sizeToFit()
         let nameLabelHeight = nameLabel.frame.height
         
-        let priceStackViewHeight = calculateStackViewHeight()
+        let priceStackViewHeight = Self.calculateStackViewHeight()
         
         let stockLabel = UILabel()
         stockLabel.font = UIFont.preferredFont(forTextStyle: .body)
@@ -73,7 +63,7 @@ class OpenMarketProductGirdCell: UICollectionViewCell, OpenMarketProductCellType
         stockLabel.sizeToFit()
         let stockLabelHeight = stockLabel.frame.height
         
-        let height = ceil(imageViewTopBottomSpacing * 2.0 + imageViewHeight + nameLabelHeight + priceStackViewTopBottomSpacing * 2.0 + priceStackViewHeight + stockLabelHeight + stockLabelBottomSpacing)
+        let height = ceil(Self.imageViewTopBottomSpacing * 2.0 + imageViewHeight + nameLabelHeight + Self.priceStackViewTopBottomSpacing * 2.0 + priceStackViewHeight + stockLabelHeight + Self.stockLabelBottomSpacing)
         
         return height
     }

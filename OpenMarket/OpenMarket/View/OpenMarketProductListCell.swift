@@ -50,8 +50,8 @@ class OpenMarketProductListCell: UICollectionViewCell, OpenMarketProductCellType
         priceLabel.text = Constants.unknwon
         priceLabel.sizeToFit()
         
-        let labelHeight = nameLabel.frame.height + priceLabel.frame.height + topBottomSpacing * 2.0 + labelSpacing
-        let imageViewHeight = safeAreaWidth * 0.1 + topBottomSpacing * 2.0
+        let labelHeight = nameLabel.frame.height + priceLabel.frame.height + Self.topBottomSpacing * 2.0 + Self.labelSpacing
+        let imageViewHeight = safeAreaWidth * 0.1 + Self.topBottomSpacing * 2.0
         
         return labelHeight > imageViewHeight ? labelHeight : imageViewHeight
     }
