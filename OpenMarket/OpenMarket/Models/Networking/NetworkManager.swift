@@ -5,14 +5,16 @@
 //  Created by 이승주 on 2022/01/25.
 //
 
-import Foundation
+import UIKit
 
 struct NetworkManager {
+
+    private let session = URLSession.shared
+
     func get<T: Decodable>(url: URL, completion: @escaping (Result<T?, NetworkError>) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.get.description
 
-        let session = URLSession.shared
         session.dataTask(with: request) { data, response, error in
             guard error == nil else {
                 completion(.failure(.transportError))
@@ -36,10 +38,20 @@ struct NetworkManager {
 
             guard let decodedData = JSONConverter.decode(T.self, from: data) else {
                 completion(.failure(.decodingError))
-              return
+                return
             }
 
             completion(.success(decodedData))
+        }.resume()
+    }
+
+    func image(url: URL, completion: @escaping (Data) -> Void) {
+        session.dataTask(with: url) { data, _, _ in
+            guard let data = data else {
+                return
+            }
+
+            completion(data)
         }.resume()
     }
 }

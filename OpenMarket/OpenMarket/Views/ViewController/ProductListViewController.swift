@@ -12,7 +12,7 @@ class ProductListViewController: UIViewController {
     @IBOutlet weak var loadingUI: UIActivityIndicatorView!
     @IBOutlet weak var productSegmentedControll: UISegmentedControl!
 
-    var productListViewModel = ProductListViewModel()
+    private let productListViewModel = ProductListViewModel()
     private var productList: ProductList?
     private var segmentedControlIndex: Int {
         self.productSegmentedControll.selectedSegmentIndex
@@ -22,7 +22,7 @@ class ProductListViewController: UIViewController {
         super.viewDidLoad()
 
         self.setViewModel()
-        self.productListViewModel.productList(pageNumber: 1, itemPerPage: 11)
+        self.productListViewModel.productList(pageNumber: 1, itemPerPage: 20)
         DispatchQueue.main.async {
             self.loadingUI.startAnimating()
             self.loadingUI.isHidden = false
@@ -97,7 +97,7 @@ extension ProductListViewController {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
 
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.3))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.5))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
 
             let section = NSCollectionLayoutSection(group: group)

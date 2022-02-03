@@ -9,11 +9,17 @@ import UIKit
 
 class GridCollectionViewCell: UICollectionViewCell, ProductCell {
 
+    private let productListViewModel = ProductListViewModel()
     private lazy var gridProductStackView = GridProductStackView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.bindConstraints()
+        self.productListViewModel.updateImage = { [weak self] in
+            guard let self = self else { return }
+
+            self.gridProductStackView.productThumbnail.image = self.productListViewModel.productThumbnailImage
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -43,10 +49,18 @@ class GridCollectionViewCell: UICollectionViewCell, ProductCell {
     func updateCell(product: Product?) {
         guard let product = product else { return }
 
-        self.gridProductStackView.productThumbnail.image = UIImage(systemName: "note")
+        self.setImage(product: product)
         self.gridProductStackView.productName.text = product.name
         self.setPrice(product: product)
         self.setStock(product: product)
+    }
+
+    private func setImage(product: Product) {
+        guard let url = URL(string: product.thumbnail) else {
+            return
+        }
+
+        self.productListViewModel.image(url: url)
     }
 
     private func setPrice(product: Product) {

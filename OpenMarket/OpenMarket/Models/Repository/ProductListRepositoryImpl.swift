@@ -5,6 +5,8 @@
 //  Created by 이승주 on 2022/01/25.
 //
 
+import UIKit
+
 struct ProductListRepositoryImpl: ProductListRepository {
 
     private let networkManager = NetworkManager()
@@ -16,5 +18,9 @@ struct ProductListRepositoryImpl: ProductListRepository {
         }
 
         self.networkManager.get(url: url, completion: completion)
+    }
+
+    func image(url: URL, completion: @escaping (Data) -> Void) {
+        self.networkManager.image(url: url, completion: completion)
     }
 }
