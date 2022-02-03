@@ -105,6 +105,15 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
+		C260BF9627AB96D000DEFE8F /* ResponseType */ = {
+			isa = PBXGroup;
+			children = (
+				C2C959E227A041D300F87F67 /* OpenMarketProductDetailGetResponse.swift */,
+				C2C959C0279FB00700F87F67 /* OpenMarketProductListGetResponse.swift */,
+			);
+			path = ResponseType;
+			sourceTree = "<group>";
+		};
 		C2C95973279E5FF500F87F67 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,9 +126,8 @@
 		C2C959B6279F943400F87F67 /* OpenMarketAPI */ = {
 			isa = PBXGroup;
 			children = (
+				C260BF9627AB96D000DEFE8F /* ResponseType */,
 				C2C959B7279F944100F87F67 /* APIConstants.swift */,
-				C2C959C0279FB00700F87F67 /* OpenMarketProductListGetResponse.swift */,
-				C2C959E227A041D300F87F67 /* OpenMarketProductDetailGetResponse.swift */,
 				C2C959BB279FAAE700F87F67 /* OpenMarketAPIManager.swift */,
 				C2C959CC279FE20600F87F67 /* OpenMarketAPIRouter.swift */,
 				C2C959CE279FE97000F87F67 /* OpenMarketAPIError.swift */,
