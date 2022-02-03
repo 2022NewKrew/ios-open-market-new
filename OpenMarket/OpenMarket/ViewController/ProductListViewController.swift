@@ -24,7 +24,6 @@ class ProductListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.setupUI()
         self.setup()
         self.fetchData(at: 0) {
             DispatchQueue.main.async {
@@ -33,12 +32,6 @@ class ProductListViewController: UIViewController {
         }
     }
     
-//    private func setupUI() {
-//        if let flowLayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-//            flowLayout.estimatedItemSize = .zero
-////            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-//        }
-//    }
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         guard let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
@@ -165,9 +158,19 @@ extension ProductListViewController: UICollectionViewDataSource, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let safeAreaWidth = self.view.safeAreaLayoutGuide.layoutFrame.width
-        let width = OpenMarketProductListCell.cellForWidth(safeAreaWidth: safeAreaWidth)
-        let height = OpenMarketProductListCell.cellForHeight(safeAreaWidth: safeAreaWidth)
-        return CGSize(width: width, height: height)
+        
+        switch layoutSegmentedControl.selectedSegmentIndex {
+        case SegmentedControlValue.list.rawValue:
+            let width = OpenMarketProductListCell.cellForWidth(safeAreaWidth: safeAreaWidth)
+            let height = OpenMarketProductListCell.cellForHeight(safeAreaWidth: safeAreaWidth)
+            return CGSize(width: width, height: height)
+        case SegmentedControlValue.grid.rawValue:
+            let width = OpenMarketProductGirdCell.cellForWidth(safeAreaWidth: safeAreaWidth)
+            let height = OpenMarketProductGirdCell.cellForHeight(safeAreaWidth: safeAreaWidth)
+            return CGSize(width: width, height: height)
+        default:
+            return .zero
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
