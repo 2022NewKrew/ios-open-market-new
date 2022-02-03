@@ -17,6 +17,7 @@ class ProductListCell: UICollectionViewCell{
     @IBOutlet weak var productThumbnailImageView: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
+
     }
     
     override func prepareForReuse() {

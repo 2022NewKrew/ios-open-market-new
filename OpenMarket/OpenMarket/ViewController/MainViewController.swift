@@ -22,6 +22,17 @@ class MainViewController: UIViewController {
         return layout
     }()
     
+    private lazy var gridFlowLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 5
+        layout.sectionInset = UIEdgeInsets(top: 10 , left: 10, bottom: 10, right: 10)
+        let cellWidth: CGFloat = view.bounds.width * 0.4
+        let cellHeight: CGFloat = cellWidth * 1.5
+        layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
+        return layout
+    }()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,8 +56,12 @@ class MainViewController: UIViewController {
         switch sender.selectedSegmentIndex {
         case 0:
             collectionViewState = .list
+            collectionView.reloadData()
+            collectionView.setCollectionViewLayout(listFlowLayout, animated: true)
         case 1:
             collectionViewState = .grid
+            collectionView.reloadData()
+            collectionView.setCollectionViewLayout(gridFlowLayout, animated: true)
         default:
             break
         }
@@ -55,6 +70,7 @@ class MainViewController: UIViewController {
     
     func configureCollectionView(){
         collectionView.register(UINib(nibName: "ProductListCell", bundle: .main), forCellWithReuseIdentifier: "ListCell")
+        collectionView.register(UINib(nibName: "ProductGridCell", bundle: .main), forCellWithReuseIdentifier: "GridCell")
         collectionView.collectionViewLayout = listFlowLayout
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -78,11 +94,10 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         case .list:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ListCell", for: indexPath) as! ProductListCell
             cell.configureUI(product: products[indexPath.row])
-            
             return cell
         case .grid:
-            //cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ListCell", for: indexPath) as! ProductGridCell
-            let cell = UICollectionViewCell()
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GridCell", for: indexPath) as! ProductGridCell
+            cell.configureUI(product: products[indexPath.row])
             return cell
         }
     }
