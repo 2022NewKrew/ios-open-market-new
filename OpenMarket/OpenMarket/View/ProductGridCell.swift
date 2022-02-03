@@ -1,0 +1,25 @@
+////
+////  ProductListCell.swift
+////  OpenMarket
+////
+////  Created by kakao on 2022/01/27.
+////
+//
+//import UIKit
+//
+//@available(iOS 14.0, *)
+//class ProductGridCell: UICollectionViewListCell {
+//    var product: Product?
+//    
+//    override func updateConfiguration(using state: UICellConfigurationState) {
+//        var newConfiguration = ProductGridContentConfiguration().updated(for: state)
+//        newConfiguration.productName = product?.name
+//        newConfiguration.stock = product?.stock
+//        newConfiguration.discountedPrice = product?.discountedPrice
+//        newConfiguration.price = product?.price
+//        newConfiguration.thumbnailURL = product?.thumbnailURL
+//        newConfiguration.currency = product?.currency
+//        
+//        contentConfiguration = newConfiguration
+//    }
+//}
