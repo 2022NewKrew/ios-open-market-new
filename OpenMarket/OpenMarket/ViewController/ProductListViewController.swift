@@ -42,11 +42,15 @@ class ProductListViewController: UIViewController {
     private func setup() {
         self.registerViews()
         self.setupDelegate()
+        self.addTargets()
     }
     
     private func registerViews() {
         let listCellNibFile = UINib(nibName: Constants.openMarketProcutListCellNibFileName, bundle: nil)
         self.collectionView.register(listCellNibFile, forCellWithReuseIdentifier: Constants.openMarketProductListCellReuseIdentifier)
+        
+        let gridCellNibFile = UINib(nibName: Constants.openMarketProductGridCellNibFileName, bundle: nil)
+        self.collectionView.register(gridCellNibFile, forCellWithReuseIdentifier: Constants.openMarketProductGridCellReuseIdentifier)
         
         let loadingReusableView = UINib(nibName: Constants.openMarketProcutFooterViewFileName, bundle: nil)
         self.collectionView.register(loadingReusableView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: Constants.openMarketProductFooterViewIdentifier)
@@ -79,6 +83,18 @@ class ProductListViewController: UIViewController {
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
     }
+    
+    private func addTargets() {
+        self.layoutSegmentedControl.addTarget(
+            self,
+            action: #selector(segmentedControlValueDidChange),
+            for: .valueChanged
+        )
+    }
+    
+    @objc func segmentedControlValueDidChange(_ segmentedControl: UISegmentedControl) {
+        self.collectionView.reloadData()
+    }
 }
 
 extension ProductListViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -105,7 +121,20 @@ extension ProductListViewController: UICollectionViewDataSource, UICollectionVie
             return cell
             
         case SegmentedControlValue.grid.rawValue:
-            break
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: Constants.openMarketProductGridCellReuseIdentifier,
+                for: indexPath) as? OpenMarketProductGirdCell else {
+                    return UICollectionViewCell()
+                }
+            if let product = self.products[indexPath.row] {
+                cell.configure(of: product)
+                ImageLoader.loadImage(urlString: product.thumbnailURLString) { image in
+                    if indexPath == collectionView.indexPath(for: cell) {
+                        cell.thumbnailImageView.image = image
+                    }
+                }
+            }
+            return cell
         default:
             break
         }
@@ -154,5 +183,32 @@ extension ProductListViewController: UICollectionViewDataSource, UICollectionVie
         if elementKind == UICollectionView.elementKindSectionFooter {
             self.loadingView?.activityIndicator.stopAnimating()
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        switch layoutSegmentedControl.selectedSegmentIndex {
+        case SegmentedControlValue.grid.rawValue:
+            return Constants.openMarketProductGridCellMinimumInterItemSpacing
+        default:
+            return 0
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        switch layoutSegmentedControl.selectedSegmentIndex {
+        case SegmentedControlValue.grid.rawValue:
+            return Constants.openMarketProductGridCellMinimumInterLineSpacing
+        default:
+            return 0
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+            return UIEdgeInsets(
+                top: Constants.openMarketPrdouctCellTopBottomInset,
+                left: Constants.openMarketPrdouctCellLeadingTrailingInset,
+                bottom: Constants.openMarketPrdouctCellTopBottomInset,
+                right: Constants.openMarketPrdouctCellLeadingTrailingInset
+            )
     }
 }
