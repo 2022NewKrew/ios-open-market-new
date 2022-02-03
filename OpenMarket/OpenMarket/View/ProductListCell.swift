@@ -17,7 +17,6 @@ class ProductListCell: UICollectionViewCell{
     @IBOutlet weak var productThumbnailImageView: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
-
     }
     
     override func prepareForReuse() {
@@ -26,7 +25,6 @@ class ProductListCell: UICollectionViewCell{
     }
     
     func configureUI(product: Product) {
-        
         productNameLabel.text = product.name
         
         if product.discountedPrice != 0 {
@@ -36,13 +34,11 @@ class ProductListCell: UICollectionViewCell{
                 attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSRange(location: 0, length: attributeString.length))
             discountedPriceLabel.attributedText = attributeString
         }
-
         
         productPriceLabel.text = "\(product.currency.rawValue) \(product.price - product.discountedPrice)"
         
         stockLabel.textColor = product.stock == 0 ? .systemOrange : .lightGray
         stockLabel.text = product.stock == 0 ? "품절" : "잔여수량: \(product.stock)"
-        
         
         guard let thumbnailURL = product.thumbnailURL else { return }
         ImageCache.shared.load(url: thumbnailURL as NSURL) { image in

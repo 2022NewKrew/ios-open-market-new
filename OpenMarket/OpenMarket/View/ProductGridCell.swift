@@ -28,7 +28,6 @@ class ProductGridCell: UICollectionViewCell {
     }
     
     func configureUI(product: Product) {
-        
         productNameLabel.text = product.name
         
         if product.discountedPrice != 0 {
@@ -39,12 +38,10 @@ class ProductGridCell: UICollectionViewCell {
             discountedPriceLabel.attributedText = attributeString
         }
 
-        
         productPriceLabel.text = "\(product.currency.rawValue) \(product.price - product.discountedPrice)"
         
         stockLabel.textColor = product.stock == 0 ? .systemOrange : .lightGray
         stockLabel.text = product.stock == 0 ? "품절" : "잔여수량: \(product.stock)"
-        
         
         guard let thumbnailURL = product.thumbnailURL else { return }
         ImageCache.shared.load(url: thumbnailURL as NSURL) { image in

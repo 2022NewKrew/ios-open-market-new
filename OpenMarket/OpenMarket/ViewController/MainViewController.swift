@@ -9,9 +9,12 @@ import UIKit
 class MainViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     private var products: [Product] = []
     private var collectionViewState: CollectionViewState = .list
     private var isLoading = false
+    private var currentPage = 1
+    private let itemsPerPage = 10
     
     private lazy var listFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -27,8 +30,8 @@ class MainViewController: UIViewController {
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 5
         layout.sectionInset = UIEdgeInsets(top: 10 , left: 10, bottom: 10, right: 10)
-        let cellWidth: CGFloat = view.bounds.width * 0.4
-        let cellHeight: CGFloat = cellWidth * 1.5
+        let cellWidth: CGFloat = view.bounds.width * 0.45
+        let cellHeight: CGFloat = cellWidth * 1.4
         layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
         return layout
     }()
@@ -36,20 +39,8 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureCollectionView()
-        
-        // API Test
-        APIManager.shared.fetchProductList(pageNo: 1, itemsPerPage: 20) { result in
-            switch result {
-            case .success(let page):
-                self.products.append(contentsOf: page.pages)
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
+        configureCollectionView()
+        fetchProducts(pageNo: currentPage, itemsPerPage: itemsPerPage)
     }
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
@@ -69,22 +60,48 @@ class MainViewController: UIViewController {
     }
     
     func configureCollectionView(){
-        collectionView.register(UINib(nibName: "ProductListCell", bundle: .main), forCellWithReuseIdentifier: "ListCell")
-        collectionView.register(UINib(nibName: "ProductGridCell", bundle: .main), forCellWithReuseIdentifier: "GridCell")
+        collectionView.register(UINib(nibName: Constant.listcellNib, bundle: .main),
+                                forCellWithReuseIdentifier: Constant.listCellIdentifier)
+        collectionView.register(UINib(nibName: Constant.gridCellNib, bundle: .main),
+                                forCellWithReuseIdentifier: Constant.gridCellIdentifier)
         collectionView.collectionViewLayout = listFlowLayout
         collectionView.delegate = self
         collectionView.dataSource = self
     }
     
-    
-
-    enum Section {
-        case main
+    func fetchProducts(pageNo: Int, itemsPerPage: Int){
+        isLoading = true
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        APIManager.shared.fetchProductList(pageNo: pageNo, itemsPerPage: itemsPerPage) { result in
+            switch result {
+            case .success(let page):
+                self.products.append(contentsOf: page.pages)
+                self.currentPage = page.pageNo + 1
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            case .failure(let error):
+                print(error)
+            }
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.isHidden = true
+                self.isLoading = false
+            }
+        }
     }
     
     enum CollectionViewState {
         case list
         case grid
+    }
+    
+    enum Constant {
+        static let listcellNib = "ProductListCell"
+        static let gridCellNib = "ProductGridCell"
+        static let listCellIdentifier = "ListCell"
+        static let gridCellIdentifier = "GridCell"
     }
 }
 
@@ -92,11 +109,13 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch collectionViewState {
         case .list:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ListCell", for: indexPath) as! ProductListCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.listCellIdentifier,
+                                                          for: indexPath) as! ProductListCell
             cell.configureUI(product: products[indexPath.row])
             return cell
         case .grid:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GridCell", for: indexPath) as! ProductGridCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.gridCellIdentifier,
+                                                          for: indexPath) as! ProductGridCell
             cell.configureUI(product: products[indexPath.row])
             return cell
         }
@@ -106,5 +125,14 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         products.count
     }
     
-    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentHeight = scrollView.contentSize.height
+        let yOffset = scrollView.contentOffset.y
+        let heightRemainBottomHeight = contentHeight - yOffset
+        
+        let frameHeight = scrollView.frame.size.height
+        if heightRemainBottomHeight < frameHeight {
+            fetchProducts(pageNo: currentPage, itemsPerPage: itemsPerPage)
+        }
+    }
 }

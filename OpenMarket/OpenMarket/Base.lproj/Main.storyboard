@@ -27,6 +27,10 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
+                                <activityIndicatorView key="backgroundView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" id="W3P-Ad-dcD">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                </activityIndicatorView>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="f2s-8o-3oH">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
@@ -64,6 +68,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Pd8-1V-ejR"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="W3P-Ad-dcD" id="6SB-wS-Zyl"/>
                         <outlet property="collectionView" destination="IfQ-Q3-IQ1" id="CwJ-La-cp9"/>
                     </connections>
                 </viewController>
