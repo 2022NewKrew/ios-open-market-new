@@ -9,21 +9,38 @@ import UIKit
 
 class GridCollectionViewCell: UICollectionViewCell, ProductCell {
 
-    private let productListViewModel = ProductListViewModel()
+    var productListViewModel = ProductListViewModel()
+
     private lazy var gridProductStackView = GridProductStackView()
+
+    var productThumbnail: UIImageView!
+    var productName: UILabel!
+    var productOriginPrice: UILabel!
+    var productDiscountedPrice: UILabel!
+    var productStock: UILabel!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        self.bindProperties()
         self.bindConstraints()
         self.productListViewModel.updateImage = { [weak self] in
             guard let self = self else { return }
 
-            self.gridProductStackView.productThumbnail.image = self.productListViewModel.productThumbnailImage
+            self.productThumbnail.image = self.productListViewModel.productThumbnailImage
         }
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+
+    private func bindProperties() {
+        self.productThumbnail = self.gridProductStackView.productThumbnail
+        self.productName = self.gridProductStackView.productName
+        self.productOriginPrice = self.gridProductStackView.productOriginPrice
+        self.productDiscountedPrice = self.gridProductStackView.productDiscountedPrice
+        self.productStock = self.gridProductStackView.productStock
     }
 
     private func bindConstraints() {
@@ -44,42 +61,5 @@ class GridCollectionViewCell: UICollectionViewCell, ProductCell {
         super.awakeFromNib()
         // Initialization code
 
-    }
-
-    func updateCell(product: Product?) {
-        guard let product = product else { return }
-
-        self.setImage(product: product)
-        self.gridProductStackView.productName.text = product.name
-        self.setPrice(product: product)
-        self.setStock(product: product)
-    }
-
-    private func setImage(product: Product) {
-        guard let url = URL(string: product.thumbnail) else {
-            return
-        }
-
-        self.productListViewModel.productThumbnailImage(url: url)
-    }
-
-    private func setPrice(product: Product) {
-        self.gridProductStackView.productDiscountedPrice.text = "\(product.currency) \(product.price)"
-        if product.bargainPrice == 0 {
-            self.gridProductStackView.productOriginPrice.isHidden = true
-        } else {
-            self.gridProductStackView.productOriginPrice.text = "\(product.currency) \(product.discountedPrice)"
-            self.gridProductStackView.productOriginPrice.strikethrough(labelText: self.gridProductStackView.productOriginPrice.text ?? "")
-        }
-    }
-
-    private func setStock(product: Product) {
-        if product.stock == 0 {
-            self.gridProductStackView.productStock.text = Constant.soldOutText
-            self.gridProductStackView.productStock.textColor = .orange
-        } else {
-            self.gridProductStackView.productStock.text = "\(Constant.remainingQuantityText): \(product.stock)"
-            self.gridProductStackView.productStock.textColor = .gray
-        }
     }
 }

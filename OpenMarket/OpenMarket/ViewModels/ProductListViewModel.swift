@@ -9,6 +9,7 @@ import UIKit
 
 class ProductListViewModel {
     private let repository: ProductListRepository = RepositoryInjection.injectProductListRepository()
+    private let imageCache = NSCache<NSString, UIImage>()
     private var pageNumber = 0
     var updateView: (Int) -> Void = {_ in }
     var updateImage: () -> Void = {}
@@ -45,10 +46,22 @@ class ProductListViewModel {
         }
     }
 
-    func productThumbnailImage(url: URL) {
+    func productThumbnailImage(thumbnailUrl: String) {
+        if let image = self.imageCache.object(forKey: thumbnailUrl as NSString) {
+            self.productThumbnailImage = image
+            return
+        }
+
+        guard let url = URL(string: thumbnailUrl) else {
+            return
+        }
+
         self.repository.image(url: url) { data in
             DispatchQueue.main.async {
-                self.productThumbnailImage = UIImage(data: data)
+                guard let thumbnailImage = UIImage(data: data) else { return }
+
+                self.imageCache.setObject(thumbnailImage, forKey: thumbnailUrl as NSString)
+                self.productThumbnailImage = thumbnailImage
             }
         }
     }
