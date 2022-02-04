@@ -5,7 +5,7 @@
 //  Created by kakao on 2022/01/25.
 //
 
-import Foundation
+import UIKit
 
 struct OpenMarketAPIManager {
     init(urlSession: URLSession = URLSession.shared) {
@@ -29,13 +29,13 @@ struct OpenMarketAPIManager {
                 return
             }
             
-            let result = self.handleOpenMarketAPIGetResponse(responseType: OpenMarketProudctListGetResponse.self, response: response, data: data)
+            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProudctListGetResponse.self, response: response, data: data)
             completion(result)
         })
         task.resume()
     }
     
-    func getOpenMarketProductDetail(productId: Int, completion: @escaping (Result<OpenMarketProductDetailGetResponse,Error>) -> Void) {
+    func getOpenMarketProductDetail(productId: Int, completion: @escaping (Result<OpenMarketProductDetailGetResponse, Error>) -> Void) {
         guard let request = OpenMarketAPIRouter
                 .getDetailOpenMarketProduct(productId: productId)
                 .asURLRequest() else {
@@ -49,13 +49,38 @@ struct OpenMarketAPIManager {
                 return
             }
             
-            let result = self.handleOpenMarketAPIGetResponse(responseType: OpenMarketProductDetailGetResponse.self, response: response, data: data)
+            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProductDetailGetResponse.self, response: response, data: data)
             completion(result)
         })
         task.resume()
     }
     
-    private func handleOpenMarketAPIGetResponse<T: Decodable>(responseType: T.Type, response: URLResponse?, data: Data?) -> Result<T, Error> {
+    func postOpenMarketProduct(identifier: String, params: OpenMarketProductPostParam, images: [UIImage], completion: @escaping (Result<OpenMarketProudctPostResponse, Error>) -> Void) {
+        
+        let boundary = self.generateBoundaryString()
+        let body = self.createBody(boundary: boundary, params: params, images: images)
+        
+        guard let request = OpenMarketAPIRouter
+                .postOpenMarektProduct(boundary: boundary, identifier: identifier, body: body)
+                .asURLRequest() else {
+                    completion(.failure(OpenMarketAPIError.invalidRequest))
+                    return
+                }
+        
+        
+        let task = self.urlSession.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProudctPostResponse.self, response: response, data: data)
+            completion(result)
+        }
+        task.resume()
+    }
+    
+    private func handleOpenMarketAPIResponse<T: Decodable>(responseType: T.Type, response: URLResponse?, data: Data?) -> Result<T, Error> {
         guard let httpResponse = response as? HTTPURLResponse else {
             return .failure(OpenMarketAPIError.notHTTPResponse)
         }
@@ -79,4 +104,38 @@ struct OpenMarketAPIManager {
         }
     }
     
+    private func generateBoundaryString() -> String {
+        return "Boundary-\(UUID().uuidString)"
+    }
+    
+    private func createBody(boundary: String, params: OpenMarketProductPostParam, images: [UIImage]) -> Data {
+        var body = Data()
+        body.append(MultipartFromDataConstants.boundaryPrefix(boundary: boundary).value)
+        
+        let encoder = JSONEncoder()
+        let paramData = try! encoder.encode(params)
+        
+        body.append(MultipartFromDataConstants.contentDispositionOfText(name: APIConstants.params).value)
+        body.append(paramData)
+        body.append(MultipartFromDataConstants.lineBreak.value)
+        
+        var imageDatas = [Data]()
+        for image in images {
+            if let data = image.jpeg(maximumSizeKb: 300.0) {
+                imageDatas.append(data)
+            }
+        }
+        
+        for (index,imageData) in imageDatas.enumerated() {
+            let fileName = "image\(index).jpg"
+            body.append(MultipartFromDataConstants.boundaryPrefix(boundary: boundary).value)
+            body.append(MultipartFromDataConstants.contentDispositionOfFile(name: APIConstants.images, fileName: fileName).value)
+            body.append(MultipartFromDataConstants.contentTypeOfFile().value)
+            body.append(imageData)
+            body.append(MultipartFromDataConstants.lineBreak.value)
+        }
+        
+        body.append(MultipartFromDataConstants.boundaryPrefix(boundary: boundary, isLast: true).value)
+        return body
+    }
 }

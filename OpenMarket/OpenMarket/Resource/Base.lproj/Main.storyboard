@@ -48,7 +48,11 @@
                                 <segment title="GRID"/>
                             </segments>
                         </segmentedControl>
-                        <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="GUN-jo-Ttn"/>
+                        <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="GUN-jo-Ttn">
+                            <connections>
+                                <segue destination="TNM-dx-RR5" kind="show" id="pcB-IK-02I"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="66M-0g-I9B" id="9oq-6M-gnx"/>
@@ -58,6 +62,111 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="884.05797101449286" y="68.973214285714278"/>
+        </scene>
+        <!--상품 등록-->
+        <scene sceneID="3YD-vm-Sy8">
+            <objects>
+                <viewController id="TNM-dx-RR5" customClass="ProductRegisterationViewController" customModule="OpenMarket" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="67I-fY-Peo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ww5-qT-wK4">
+                                <rect key="frame" x="0.0" y="88" width="414" height="156"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="uzm-8u-6dT">
+                                        <rect key="frame" x="0.0" y="0.0" width="156" height="156"/>
+                                        <subviews>
+                                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Qd8-ri-WO4">
+                                                <rect key="frame" x="0.0" y="16" width="124" height="124"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Qd8-ri-WO4" secondAttribute="height" id="f6x-on-s6A"/>
+                                                </constraints>
+                                            </imageView>
+                                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jc6-XI-ALZ">
+                                                <rect key="frame" x="0.0" y="16" width="124" height="124"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Jc6-XI-ALZ" secondAttribute="height" id="oGq-Qm-U4O"/>
+                                                </constraints>
+                                            </imageView>
+                                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="roS-Mz-SFW">
+                                                <rect key="frame" x="0.0" y="16" width="124" height="124"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="roS-Mz-SFW" secondAttribute="height" id="RY7-9F-WEE"/>
+                                                </constraints>
+                                            </imageView>
+                                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yDd-Ie-59C">
+                                                <rect key="frame" x="0.0" y="16" width="124" height="124"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="yDd-Ie-59C" secondAttribute="height" id="mgQ-4j-XfF"/>
+                                                </constraints>
+                                            </imageView>
+                                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="llm-IR-LzA">
+                                                <rect key="frame" x="0.0" y="16" width="124" height="124"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="llm-IR-LzA" secondAttribute="height" id="5lJ-0w-KRl"/>
+                                                </constraints>
+                                            </imageView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vkQ-S2-DVP">
+                                                <rect key="frame" x="16" y="16" width="124" height="124"/>
+                                                <color key="backgroundColor" systemColor="systemGray4Color"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="vkQ-S2-DVP" secondAttribute="height" multiplier="1:1" id="c1d-TA-wXv"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="plus" catalog="system"/>
+                                                <connections>
+                                                    <action selector="pickImage:" destination="TNM-dx-RR5" eventType="touchUpInside" id="gtL-Q5-qND"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="Jc6-XI-ALZ" firstAttribute="width" secondItem="Jc6-XI-ALZ" secondAttribute="height" id="ZYG-gq-cT2"/>
+                                        </constraints>
+                                        <directionalEdgeInsets key="directionalLayoutMargins" top="16" leading="16" bottom="16" trailing="16"/>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="uzm-8u-6dT" firstAttribute="width" secondItem="8UU-IX-FyS" secondAttribute="width" multiplier="0.81401" priority="1" id="Yfk-cg-2IC"/>
+                                    <constraint firstItem="uzm-8u-6dT" firstAttribute="leading" secondItem="ww5-qT-wK4" secondAttribute="leading" id="dxs-o9-wNo"/>
+                                    <constraint firstAttribute="trailing" secondItem="uzm-8u-6dT" secondAttribute="trailing" id="hJU-7c-VpD"/>
+                                    <constraint firstItem="uzm-8u-6dT" firstAttribute="top" secondItem="8UU-IX-FyS" secondAttribute="top" id="idi-qV-N5g"/>
+                                    <constraint firstItem="uzm-8u-6dT" firstAttribute="height" secondItem="ww5-qT-wK4" secondAttribute="height" id="ngX-OF-xZb"/>
+                                    <constraint firstAttribute="bottom" secondItem="uzm-8u-6dT" secondAttribute="bottom" id="pBE-rD-H7n"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="6kI-vf-kqy"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="8UU-IX-FyS"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Z5R-vT-frp"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Z5R-vT-frp" firstAttribute="trailing" secondItem="ww5-qT-wK4" secondAttribute="trailing" id="2sn-94-3SB"/>
+                            <constraint firstItem="ww5-qT-wK4" firstAttribute="leading" secondItem="Z5R-vT-frp" secondAttribute="leading" id="KTM-3p-uh9"/>
+                            <constraint firstItem="vkQ-S2-DVP" firstAttribute="width" secondItem="Z5R-vT-frp" secondAttribute="width" multiplier="0.3" id="RTi-ii-5Uj"/>
+                            <constraint firstItem="ww5-qT-wK4" firstAttribute="top" secondItem="Z5R-vT-frp" secondAttribute="top" id="eRK-2d-SiJ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="상품 등록" id="H9S-4Z-GCD">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="nUt-2b-cVj"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="qLV-ah-8VY">
+                            <connections>
+                                <action selector="postImage:" destination="TNM-dx-RR5" id="twM-Nj-qg6"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="addImageButton" destination="vkQ-S2-DVP" id="KG8-VY-6od"/>
+                        <outlet property="fifthImageView" destination="llm-IR-LzA" id="Bcm-5R-z9i"/>
+                        <outlet property="firstImageView" destination="Qd8-ri-WO4" id="GWe-qC-O8m"/>
+                        <outlet property="fourthImageView" destination="yDd-Ie-59C" id="Jvg-8Z-ZJm"/>
+                        <outlet property="secondImageView" destination="Jc6-XI-ALZ" id="JVJ-A5-QFf"/>
+                        <outlet property="thirdImageView" destination="roS-Mz-SFW" id="Vxn-QQ-HRo"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3xB-bI-9hQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1697.1014492753625" y="68.973214285714278"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="nXv-mm-TPJ">
@@ -82,6 +191,9 @@
         <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray4Color">
+            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
