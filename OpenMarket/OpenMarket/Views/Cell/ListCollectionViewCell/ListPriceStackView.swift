@@ -26,6 +26,7 @@ class ListPriceStackView: BaseStackView {
         label.font = UIFont.preferredFont(forTextStyle: .body)
         label.textColor = .gray
         label.textAlignment = .left
+        label.numberOfLines = 0
         return label
     }()
 
@@ -36,6 +37,7 @@ class ListPriceStackView: BaseStackView {
         label.font = UIFont.preferredFont(forTextStyle: .body)
         label.textColor = .gray
         label.textAlignment = .left
+        label.numberOfLines = 0
         return label
     }()
 

@@ -9,11 +9,12 @@ import UIKit
 class ProductListViewController: UIViewController {
 
     @IBOutlet weak var productListCollectionView: UICollectionView!
-    @IBOutlet weak var loadingUI: UIActivityIndicatorView!
+    @IBOutlet weak var initLoadingUI: UIActivityIndicatorView!
+    @IBOutlet weak var pagingLoadingUI: UIActivityIndicatorView!
     @IBOutlet weak var productSegmentedControll: UISegmentedControl!
 
     private let productListViewModel = ProductListViewModel()
-    private var productList: ProductList?
+    private var products: [Product]?
     private var segmentedControlIndex: Int {
         self.productSegmentedControll.selectedSegmentIndex
     }
@@ -22,10 +23,9 @@ class ProductListViewController: UIViewController {
         super.viewDidLoad()
 
         self.setViewModel()
-        self.productListViewModel.productList(pageNumber: 1, itemPerPage: 30)
+        self.productListViewModel.productList()
         DispatchQueue.main.async {
-            self.loadingUI.startAnimating()
-            self.loadingUI.isHidden = false
+            self.initLoadingUI.startAnimating()
         }
     }
 
@@ -48,14 +48,18 @@ class ProductListViewController: UIViewController {
     }
 
     private func setViewModel() {
-        self.productListViewModel.updateView = { [weak self] in
+        self.productListViewModel.updateView = { [weak self] pageNumber in
             guard let self = self else { return }
 
-            self.productList = self.productListViewModel.productList
+            self.products = self.productListViewModel.products
             self.setCollectionView()
             DispatchQueue.main.async {
-                self.loadingUI.stopAnimating()
-                self.loadingUI.isHidden = true
+                if pageNumber == 1 {
+                    self.initLoadingUI.stopAnimating()
+                } else {
+                    self.pagingLoadingUI.stopAnimating()
+                }
+                self.productListViewModel.isPaginating = false
             }
         }
     }
@@ -117,7 +121,7 @@ extension ProductListViewController: UICollectionViewDelegate {
 // MARK - DataSource
 extension ProductListViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.productList?.itemsPerPage ?? 0
+        return self.products?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -136,12 +140,40 @@ extension ProductListViewController: UICollectionViewDataSource {
             productCell = cell
         }
 
-        guard let product = productList?.products?[indexPath.row] else {
+
+        guard let products = self.products,
+              indexPath.row < products.count
+        else {
             return productCell
         }
 
+        let product = products[indexPath.row]
+//
+//        print(indexPath)
+//        print(collectionView.indexPath(for: productCell))
+
+//        if indexPath == collectionView.indexPath(for: productCell) {
+//            productCell.setImage(product: product)
+//        }
+        
         productCell.updateCell(product: product)
 
         return productCell
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let frameHeight = scrollView.frame.size.height
+        let contentHeight = scrollView.contentSize.height
+        let contentYOffset = scrollView.contentOffset.y
+        let distanceFromBottom = contentHeight - contentYOffset
+
+        if distanceFromBottom < frameHeight {
+            guard self.productListViewModel.isPaginating == false else { return }
+
+            self.productListViewModel.productList()
+            DispatchQueue.main.async {
+                self.pagingLoadingUI.startAnimating()
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ class OpenMarketTests: XCTestCase {
         let pageNumber = 1
         let itemPerPage = 10
 
-        self.projectListRepository.productList(pageNumber: pageNumber, itemPerPage: itemPerPage) { result in
+        self.projectListRepository.productList(pageNumber: pageNumber, itemsPerPage: itemPerPage) { result in
             switch result {
             case .success(let productList):
                 var result = true

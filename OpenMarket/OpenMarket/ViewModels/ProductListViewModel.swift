@@ -9,12 +9,14 @@ import UIKit
 
 class ProductListViewModel {
     private let repository: ProductListRepository = RepositoryInjection.injectProductListRepository()
-    var updateView: () -> Void = {}
+    private var pageNumber = 0
+    var updateView: (Int) -> Void = {_ in }
     var updateImage: () -> Void = {}
+    var isPaginating = false
 
-    var productList: ProductList? {
+    var products: [Product] = [] {
         didSet {
-            self.updateView()
+            self.updateView(self.pageNumber)
         }
     }
 
@@ -24,11 +26,19 @@ class ProductListViewModel {
         }
     }
 
-    func productList(pageNumber: Int, itemPerPage: Int) {
-        self.repository.productList(pageNumber: pageNumber, itemPerPage: itemPerPage) { result in
+    func productList() {
+        self.isPaginating = true
+        self.pageNumber += 1
+        self.repository.productList(pageNumber: self.pageNumber, itemsPerPage: Constant.itemsPerPage) { result in
             switch result {
             case .success(let productList):
-                self.productList = productList
+                guard let productList = productList,
+                      let products = productList.products
+                else {
+                    return
+                }
+
+                self.products.append(contentsOf: products)
             case .failure(let error):
                 print(error.errorDescription)
             }

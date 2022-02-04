@@ -25,7 +25,7 @@ struct NetworkManager {
                 completion(.failure(.responseError))
                 return
             }
-
+            
             guard (200...299).contains(response.statusCode) else {
                 completion(.failure(.networkFailure(statusCode: response.statusCode)))
                 return

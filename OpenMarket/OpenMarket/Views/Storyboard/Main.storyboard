@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="R7k-BP-r2b">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="754"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="k6R-Aq-HRZ">
                                     <size key="itemSize" width="128" height="128"/>
@@ -27,8 +27,8 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <activityIndicatorView key="backgroundView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" id="6fR-1z-Roh">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
+                                <activityIndicatorView key="backgroundView" hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" id="6fR-1z-Roh">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="754"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </activityIndicatorView>
                                 <cells>
@@ -42,14 +42,19 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="K13-zX-OTx">
+                                <rect key="frame" x="197" y="842" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="zBJ-U2-ASp"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="zBJ-U2-ASp" firstAttribute="trailing" secondItem="R7k-BP-r2b" secondAttribute="trailing" id="6jn-4Z-dlf"/>
                             <constraint firstItem="R7k-BP-r2b" firstAttribute="top" secondItem="zBJ-U2-ASp" secondAttribute="top" id="BnD-dI-aLK"/>
-                            <constraint firstItem="zBJ-U2-ASp" firstAttribute="bottom" secondItem="R7k-BP-r2b" secondAttribute="bottom" id="JAP-k3-WYa"/>
+                            <constraint firstItem="K13-zX-OTx" firstAttribute="centerX" secondItem="Pko-FC-Kz6" secondAttribute="centerX" id="NPq-H7-dsO"/>
                             <constraint firstItem="R7k-BP-r2b" firstAttribute="leading" secondItem="zBJ-U2-ASp" secondAttribute="leading" id="RJH-fC-pxT"/>
+                            <constraint firstItem="K13-zX-OTx" firstAttribute="top" secondItem="R7k-BP-r2b" secondAttribute="bottom" id="gpM-mn-Iy0"/>
+                            <constraint firstItem="K13-zX-OTx" firstAttribute="bottom" secondItem="zBJ-U2-ASp" secondAttribute="bottom" id="hLR-w9-y6X"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="bfl-4X-QUI">
@@ -72,7 +77,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="loadingUI" destination="6fR-1z-Roh" id="1pI-mi-0q9"/>
+                        <outlet property="initLoadingUI" destination="6fR-1z-Roh" id="1pI-mi-0q9"/>
+                        <outlet property="pagingLoadingUI" destination="K13-zX-OTx" id="tgc-aS-5WF"/>
                         <outlet property="productListCollectionView" destination="R7k-BP-r2b" id="wbl-gX-w3j"/>
                         <outlet property="productSegmentedControll" destination="pIz-nS-wBh" id="DWY-NM-H81"/>
                         <segue destination="kQk-vz-ntW" kind="show" identifier="moveProductIdentifier" id="n3Z-5a-a4F"/>
