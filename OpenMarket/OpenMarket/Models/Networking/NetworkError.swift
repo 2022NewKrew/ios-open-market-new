@@ -30,7 +30,7 @@ extension NetworkError: LocalizedError {
         case .missingData:
             return "데이터가 유실되었습니다"
         case .decodingError:
-            return "클라이언트 오류: 잘못된 데이터 포멧"
+            return "디코딩 오류"
         }
     }
 }

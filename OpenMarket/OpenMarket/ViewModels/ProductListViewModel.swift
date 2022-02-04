@@ -35,7 +35,7 @@ class ProductListViewModel {
         }
     }
 
-    func image(url: URL) {
+    func productThumbnailImage(url: URL) {
         self.repository.image(url: url) { data in
             DispatchQueue.main.async {
                 self.productThumbnailImage = UIImage(data: data)

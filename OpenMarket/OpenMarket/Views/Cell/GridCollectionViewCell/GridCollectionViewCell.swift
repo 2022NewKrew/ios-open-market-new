@@ -60,7 +60,7 @@ class GridCollectionViewCell: UICollectionViewCell, ProductCell {
             return
         }
 
-        self.productListViewModel.image(url: url)
+        self.productListViewModel.productThumbnailImage(url: url)
     }
 
     private func setPrice(product: Product) {

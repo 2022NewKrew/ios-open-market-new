@@ -22,7 +22,7 @@ class ProductListViewController: UIViewController {
         super.viewDidLoad()
 
         self.setViewModel()
-        self.productListViewModel.productList(pageNumber: 1, itemPerPage: 20)
+        self.productListViewModel.productList(pageNumber: 1, itemPerPage: 30)
         DispatchQueue.main.async {
             self.loadingUI.startAnimating()
             self.loadingUI.isHidden = false
@@ -36,6 +36,7 @@ class ProductListViewController: UIViewController {
     @IBAction func changeSegmentedControl(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
+//            self.productListCollectionView.collectionViewLayout.invalidateLayout()
             self.productListCollectionView.collectionViewLayout = self.createListCompositionLayout()
             self.productListCollectionView.reloadData()
         case 1:
