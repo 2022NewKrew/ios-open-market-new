@@ -35,6 +35,17 @@ struct OpenMarketProduct: Codable, Equatable {
     enum Currency: String, Codable, Equatable {
         case krw = "KRW"
         case usd = "USD"
+        
+        func priceString(of price: Float) -> String {
+            if self == .krw {
+                let numberFormatter = NumberFormatter()
+                numberFormatter.numberStyle = .decimal
+                if let price = numberFormatter.string(from: price as NSNumber) {
+                    return "\(self.rawValue) \(price)"
+                }
+            }
+            return "\(self.rawValue) \(price)"
+        }
     }
     
     struct ProductImage: Codable, Equatable {
