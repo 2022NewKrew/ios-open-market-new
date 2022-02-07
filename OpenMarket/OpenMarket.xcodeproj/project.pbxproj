@@ -121,15 +121,6 @@
 			path = OpenMarketTests;
 			sourceTree = "<group>";
 		};
-		6E10220B27AA34D200359BD0 /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				C70FB0FE25BEF61C00C9924E /* ProductListViewController.swift */,
-				6E10220C27AA34F300359BD0 /* ProductViewController.swift */,
-			);
-			path = ViewController;
-			sourceTree = "<group>";
-		};
 		6E10221027AA3CA400359BD0 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -138,14 +129,6 @@
 				6E10222E27ABDB3C00359BD0 /* GridCollectionViewCell */,
 			);
 			path = Cell;
-			sourceTree = "<group>";
-		};
-		6E10221127AA3CAE00359BD0 /* Storyboard */ = {
-			isa = PBXGroup;
-			children = (
-				6EDC38FD279FBE62000BC3D9 /* Main.storyboard */,
-			);
-			path = Storyboard;
 			sourceTree = "<group>";
 		};
 		6E10222E27ABDB3C00359BD0 /* GridCollectionViewCell */ = {
@@ -166,6 +149,24 @@
 				6E10222227AA85E700359BD0 /* ListCollectionViewCell.swift */,
 			);
 			path = ListCollectionViewCell;
+			sourceTree = "<group>";
+		};
+		6E307D6027B0C235006ABA91 /* ProductListView */ = {
+			isa = PBXGroup;
+			children = (
+				C70FB0FE25BEF61C00C9924E /* ProductListViewController.swift */,
+				6E307D5E27B01A0E006ABA91 /* ProductListSegmentValue.swift */,
+				6E10221027AA3CA400359BD0 /* Cell */,
+			);
+			path = ProductListView;
+			sourceTree = "<group>";
+		};
+		6E307D6127B0C245006ABA91 /* ProductView */ = {
+			isa = PBXGroup;
+			children = (
+				6E10220C27AA34F300359BD0 /* ProductViewController.swift */,
+			);
+			path = ProductView;
 			sourceTree = "<group>";
 		};
 		6EDC38D1279E4AA3000BC3D9 /* Models */ = {
@@ -234,10 +235,9 @@
 		6EDC38DF279EBB2A000BC3D9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6E10221127AA3CAE00359BD0 /* Storyboard */,
-				6E10221027AA3CA400359BD0 /* Cell */,
-				6E10220B27AA34D200359BD0 /* ViewController */,
-				6E307D5E27B01A0E006ABA91 /* ProductListSegmentValue.swift */,
+				6EDC38FD279FBE62000BC3D9 /* Main.storyboard */,
+				6E307D6027B0C235006ABA91 /* ProductListView */,
+				6E307D6127B0C245006ABA91 /* ProductView */,
 			);
 			path = Views;
 			sourceTree = "<group>";

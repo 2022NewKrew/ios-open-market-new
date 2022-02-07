@@ -112,7 +112,9 @@ extension ProductListViewController {
 
 // MARK - Delegate
 extension ProductListViewController: UICollectionViewDelegate {
-
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.performSegue(withIdentifier: Constant.productSegue, sender: self)
+    }
 }
 
 // MARK - DataSource
