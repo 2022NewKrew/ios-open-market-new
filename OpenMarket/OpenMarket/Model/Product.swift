@@ -26,4 +26,5 @@ struct Product: Codable {
     var thumbnailURL: URL? {
         URL(string: thumbnail)
     }
+    
 }

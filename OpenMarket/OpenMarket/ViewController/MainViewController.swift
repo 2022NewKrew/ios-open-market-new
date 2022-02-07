@@ -36,11 +36,18 @@ class MainViewController: UIViewController {
         return layout
     }()
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
         fetchProducts(pageNo: currentPage, itemsPerPage: itemsPerPage)
+    }
+    
+    @IBAction func addAction(_ sender: Any) {
+        guard let productEditViewController = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(withIdentifier: "ProductEditVC") as? ProductEditViewController else { return }
+        productEditViewController.modalPresentationStyle = .fullScreen
+        productEditViewController.mode = .add
+        present(productEditViewController, animated: true, completion: nil)
     }
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
@@ -48,11 +55,11 @@ class MainViewController: UIViewController {
         case 0:
             collectionViewState = .list
             collectionView.reloadData()
-            collectionView.setCollectionViewLayout(listFlowLayout, animated: true)
+            collectionView.setCollectionViewLayout(listFlowLayout, animated: false)
         case 1:
             collectionViewState = .grid
             collectionView.reloadData()
-            collectionView.setCollectionViewLayout(gridFlowLayout, animated: true)
+            collectionView.setCollectionViewLayout(gridFlowLayout, animated: false)
         default:
             break
         }
@@ -123,6 +130,15 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         products.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let productEditViewController = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(withIdentifier: "ProductEditVC") as? ProductEditViewController else { return }
+        productEditViewController.modalPresentationStyle = .fullScreen
+        productEditViewController.mode = .edit
+        productEditViewController.product = products[indexPath.row]
+        present(productEditViewController, animated: true, completion: nil)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
