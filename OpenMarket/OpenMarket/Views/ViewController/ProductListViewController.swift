@@ -11,13 +11,10 @@ class ProductListViewController: UIViewController {
     @IBOutlet weak var productListCollectionView: UICollectionView!
     @IBOutlet weak var initLoadingUI: UIActivityIndicatorView!
     @IBOutlet weak var pagingLoadingUI: UIActivityIndicatorView!
-    @IBOutlet weak var productSegmentedControll: UISegmentedControl!
+    @IBOutlet weak var productSegmentedControl: UISegmentedControl!
 
     private let productListViewModel = ProductListViewModel()
     private var products: [Product]?
-    private var segmentedControlIndex: Int {
-        self.productSegmentedControll.selectedSegmentIndex
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,11 +32,10 @@ class ProductListViewController: UIViewController {
 
     @IBAction func changeSegmentedControl(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
-        case 0:
-//            self.productListCollectionView.collectionViewLayout.invalidateLayout()
+        case ProductListSegmentValue.list.rawValue:
             self.productListCollectionView.collectionViewLayout = self.createListCompositionLayout()
             self.productListCollectionView.reloadData()
-        case 1:
+        case ProductListSegmentValue.grid.rawValue:
             self.productListCollectionView.collectionViewLayout = self.createGridCompositionLayout()
             self.productListCollectionView.reloadData()
         default:
@@ -52,11 +48,12 @@ class ProductListViewController: UIViewController {
             guard let self = self else { return }
 
             self.products = self.productListViewModel.products
-            self.setCollectionView()
             DispatchQueue.main.async {
-                if pageNumber == 1 {
+                self.setCollectionView()
+                switch pageNumber {
+                case 1:
                     self.initLoadingUI.stopAnimating()
-                } else {
+                default:
                     self.pagingLoadingUI.stopAnimating()
                 }
                 self.productListViewModel.isPaginating = false
@@ -65,14 +62,12 @@ class ProductListViewController: UIViewController {
     }
 
     private func setCollectionView() {
-        DispatchQueue.main.async {
-            self.productListCollectionView.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: ListCollectionViewCell.self))
-            self.productListCollectionView.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: GridCollectionViewCell.self))
-            self.productListCollectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            self.productListCollectionView.collectionViewLayout = self.createListCompositionLayout()
-            self.productListCollectionView.delegate = self
-            self.productListCollectionView.dataSource = self
-        }
+        self.productListCollectionView.delegate = self
+        self.productListCollectionView.dataSource = self
+        self.productListCollectionView.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: ListCollectionViewCell.self))
+        self.productListCollectionView.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: GridCollectionViewCell.self))
+        self.productListCollectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.productListCollectionView.collectionViewLayout = self.createListCompositionLayout()
     }
 }
 
@@ -81,11 +76,12 @@ extension ProductListViewController {
     private func createListCompositionLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout {
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
 
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.12))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.15))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
             let section = NSCollectionLayoutSection(group: group)
@@ -98,6 +94,7 @@ extension ProductListViewController {
     private func createGridCompositionLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout {
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
@@ -126,20 +123,22 @@ extension ProductListViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var productCell: ProductCell
-        if self.segmentedControlIndex == 0 {
+
+        if self.productSegmentedControl.selectedSegmentIndex == ProductListSegmentValue.list.rawValue {
             let cellIdentifier = String(describing: ListCollectionViewCell.self)
-            guard let cell = productListCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? ListCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? ListCollectionViewCell else {
                 return UICollectionViewCell()
             }
+
             productCell = cell
         } else {
             let cellIdentifier = String(describing: GridCollectionViewCell.self)
-            guard let cell = productListCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? GridCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? GridCollectionViewCell else {
                 return UICollectionViewCell()
             }
+            
             productCell = cell
         }
-
 
         guard let products = self.products,
               indexPath.row < products.count
@@ -148,15 +147,7 @@ extension ProductListViewController: UICollectionViewDataSource {
         }
 
         let product = products[indexPath.row]
-//
-//        print(indexPath)
-//        print(collectionView.indexPath(for: productCell))
-
-//        if indexPath == collectionView.indexPath(for: productCell) {
-//            productCell.setImage(product: product)
-//        }
-        
-        productCell.updateCell(product: product)
+        productCell.updateCell(product: product, indexPath: indexPath, collectionView: collectionView)
 
         return productCell
     }

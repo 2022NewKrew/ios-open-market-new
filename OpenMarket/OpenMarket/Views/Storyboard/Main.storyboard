@@ -32,7 +32,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </activityIndicatorView>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="4pZ-OX-Kok">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ProductCell" id="4pZ-OX-Kok">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="4KX-4J-PdN">
@@ -80,7 +80,7 @@
                         <outlet property="initLoadingUI" destination="6fR-1z-Roh" id="1pI-mi-0q9"/>
                         <outlet property="pagingLoadingUI" destination="K13-zX-OTx" id="tgc-aS-5WF"/>
                         <outlet property="productListCollectionView" destination="R7k-BP-r2b" id="wbl-gX-w3j"/>
-                        <outlet property="productSegmentedControll" destination="pIz-nS-wBh" id="DWY-NM-H81"/>
+                        <outlet property="productSegmentedControl" destination="pIz-nS-wBh" id="DWY-NM-H81"/>
                         <segue destination="kQk-vz-ntW" kind="show" identifier="moveProductIdentifier" id="n3Z-5a-a4F"/>
                     </connections>
                 </viewController>

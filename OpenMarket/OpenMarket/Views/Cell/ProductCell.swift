@@ -15,24 +15,44 @@ protocol ProductCell: UICollectionViewCell {
     var productDiscountedPrice: UILabel! { get }
     var productStock: UILabel! { get }
 
-    func updateCell(product: Product?)
-    func setImage(product: Product)
+    func updateCell(product: Product?, indexPath: IndexPath, collectionView: UICollectionView)
+    func setImage(product: Product, indexPath: IndexPath, collectionView: UICollectionView)
     func setPrice(product: Product)
     func setStock(product: Product)
 }
 
 extension ProductCell {
-    func updateCell(product: Product?) {
+    func updateCell(product: Product?, indexPath: IndexPath, collectionView: UICollectionView) {
         guard let product = product else { return }
 
-        self.setImage(product: product)
         self.productName.text = product.name
+        self.setImage(product: product, indexPath: indexPath, collectionView: collectionView)
         self.setPrice(product: product)
         self.setStock(product: product)
     }
 
-    func setImage(product: Product) {
-        self.productListViewModel.productThumbnailImage(thumbnailUrl: product.thumbnail)
+    func setImage(product: Product, indexPath: IndexPath, collectionView: UICollectionView) {
+        self.productListViewModel.updateImage = { [weak self] cellIndexPath, collectionView in
+            guard let self = self,
+                let cellIndexPath = cellIndexPath,
+                let collectionView = collectionView,
+                let collectionViewIndexPath = collectionView.indexPath(for: self)
+            else {
+                return
+            }
+
+            if cellIndexPath == collectionViewIndexPath {
+                DispatchQueue.main.async {
+                    self.productThumbnail.image = self.productListViewModel.productThumbnailImage
+                }
+            }
+        }
+        
+        self.productListViewModel.productThumbnailImage(
+            thumbnailUrl: product.thumbnail,
+            indexPath: indexPath,
+            collectionView: collectionView
+        )
     }
 
     func setPrice(product: Product) {

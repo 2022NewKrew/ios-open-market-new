@@ -24,11 +24,6 @@ class GridCollectionViewCell: UICollectionViewCell, ProductCell {
         
         self.bindProperties()
         self.bindConstraints()
-        self.productListViewModel.updateImage = { [weak self] in
-            guard let self = self else { return }
-
-            self.productThumbnail.image = self.productListViewModel.productThumbnailImage
-        }
     }
 
     required init?(coder: NSCoder) {
