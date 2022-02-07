@@ -23,7 +23,8 @@ struct URLConnector {
     }
     
     func getData<T: Decodable> (from url: String, type: T.Type) {
-        var request = URLRequest(url: URL(string: baseURL + url)!)
+        guard let targetURL = URL(string: baseURL + url) else { return }
+        var request = URLRequest(url: targetURL)
         request.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {

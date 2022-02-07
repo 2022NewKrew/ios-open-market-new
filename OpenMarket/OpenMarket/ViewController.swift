@@ -34,7 +34,6 @@ class ViewController: UIViewController {
     
     // MARK: - Property
     var products: [Product] = []
-    var isLoading: Bool = true
     var currentPage: Int = 1
     var hasNextPage: Bool = true
     let itemsPerPage: Int = 20
