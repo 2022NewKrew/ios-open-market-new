@@ -51,10 +51,4 @@ class GridCollectionViewCell: UICollectionViewCell, ProductCell {
             self.gridProductStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: CGFloat(-10))
         ])
     }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-
-    }
 }

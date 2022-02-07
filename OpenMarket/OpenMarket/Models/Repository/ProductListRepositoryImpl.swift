@@ -12,7 +12,7 @@ struct ProductListRepositoryImpl: ProductListRepository {
     private let networkManager = NetworkManager()
 
     func productList(pageNumber: Int, itemsPerPage: Int, completion: @escaping (Result<ProductList?, NetworkError>) -> Void) {
-        guard let url = OpenMarketURL.productList(pageNumber: pageNumber, itemPerPage: itemsPerPage).url else {
+        guard let url = OpenMarketURL.productList(pageNumber: pageNumber, itemsPerPage: itemsPerPage).url else {
             completion(.failure(.invalidURL))
             return
         }

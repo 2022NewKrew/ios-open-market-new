@@ -5,7 +5,7 @@
 //  Created by 이승주 on 2022/01/25.
 //
 
-import UIKit
+import Foundation
 
 struct NetworkManager {
 

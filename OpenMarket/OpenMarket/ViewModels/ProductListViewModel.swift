@@ -13,8 +13,8 @@ class ProductListViewModel {
     private var pageNumber = 0
     private var cellIndexPath: IndexPath?
     private var collectionView: UICollectionView?
-    var updateView: (Int) -> Void = {_ in }
-    var updateImage: (IndexPath?, UICollectionView?) -> Void = {_,_  in}
+    var updateView: (Int) -> Void = { _ in }
+    var updateImage: (IndexPath?, UICollectionView?) -> Void = { _,_  in}
     var isPaginating = false
 
     var products: [Product] = [] {

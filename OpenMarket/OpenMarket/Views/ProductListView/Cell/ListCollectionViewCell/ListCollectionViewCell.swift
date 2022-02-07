@@ -53,10 +53,4 @@ class ListCollectionViewCell: UICollectionViewCell, ProductCell {
             self.listProductStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-
-    }
 }
