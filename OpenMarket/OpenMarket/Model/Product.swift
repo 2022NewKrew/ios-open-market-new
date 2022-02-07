@@ -4,7 +4,7 @@ struct Product: Decodable {
     let id: Int
     let vendorId: Int
     let name: String
-    let thumbnail: String
+    let thumbnail: URL
     let currency: String
     let price: Double
     let bargainPrice: Double
