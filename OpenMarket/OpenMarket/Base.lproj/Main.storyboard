@@ -92,7 +92,7 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8U7-Oq-8UM" userLabel="ContentView">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1223"/>
                                         <subviews>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Ndd-IM-nQN">
                                                 <rect key="frame" x="20" y="10" width="374" height="133"/>
@@ -143,6 +143,7 @@
                                                                 <constraint firstItem="aW9-RQ-D3l" firstAttribute="top" secondItem="vzZ-8F-IAM" secondAttribute="top" id="yS0-K7-tA0"/>
                                                             </constraints>
                                                         </collectionViewCellContentView>
+                                                        <color key="backgroundColor" systemColor="labelColor"/>
                                                         <connections>
                                                             <outlet property="imageView" destination="aW9-RQ-D3l" id="u3g-sZ-32K"/>
                                                         </connections>
@@ -186,9 +187,22 @@
                                                     </textField>
                                                 </subviews>
                                             </stackView>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="상품설명" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="b5N-Cd-b1G">
-                                                <rect key="frame" x="20" y="333" width="374" height="441"/>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="b5N-Cd-b1G">
+                                                <rect key="frame" x="20" y="333" width="374" height="890"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <mutableString key="text">ou have to call registerForKeyboardNotifications at viewDidLoad, so you will add an observer to notification center for when keyboard appears or disappears from screen. When these notification fire, methods keyboardWasShown and keyboardWillBeHidden will be called and then scrollview will move accordingly to keyboard size. You can find more detailed information about NotificationCenter here: developer.apple.com/library/mac/documentation/Cocoa/Reference/… – 
+Nerkyator
+ Mar 2 '15 at 20:47
+13
+Thanks, that's exactly what I was looking for - an apple recommended solution. However, in my case I already had a scroll view that spanned outside the viewable area. This code would disable scrolling after the keyboard would hide. I removed "self.scrollView.scrollEnabled = false" and it would still not scroll. What worked for me was "self.scrollView.contentInset = UIEdgeInsetsZero;" this single line in keyboardWillHide event – 
+F Yaqoobou have to call registerForKeyboardNotifications at viewDidLoad, so you will add an observer to notification center for when keyboard appears or disappears from screen. When these notification fire, methods keyboardWasShown and keyboardWillBeHidden will be called and then scrollview will move accordingly to keyboard size. You can find more detailed information about NotificationCenter here: developer.apple.com/library/mac/documentation/Cocoa/Reference/… – 
+Nerkyator
+ Mar 2 '15 at 20:47
+13
+Thanks, that's exactly what I was looking for - an apple recommended solution. However, in my case I already had a scroll view that spanned outside the viewable area. This code would disable scrolling after the keyboard would hide. I removed "self.scrollView.scrollEnabled = false" and it would still not scroll. What worked for me was "self.scrollView.contentInset = UIEdgeInsetsZero;" this single line in keyboardWillHide event – 
+F Yaqoob
+ 
+ </mutableString>
                                                 <color key="textColor" systemColor="labelColor"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -259,6 +273,8 @@
                         <outlet property="productNameTextField" destination="eCP-mx-Mfe" id="dsn-4p-xlV"/>
                         <outlet property="productPriceTextField" destination="e0T-XF-kxb" id="RlY-cp-VzH"/>
                         <outlet property="productStockTextField" destination="82w-ut-nnB" id="YBg-1w-TId"/>
+                        <outlet property="scrollView" destination="AlT-V0-4Xv" id="bjw-Ts-JNm"/>
+                        <outlet property="textViewbottomConstraint" destination="dLV-Z2-lEm" id="eAD-o8-DKA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sJe-y0-GpK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
