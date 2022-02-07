@@ -55,8 +55,11 @@ class ViewController: UIViewController {
         let loadedData = notification.userInfo?["data"] as! Products
         products += loadedData.pages
         hasNextPage = loadedData.hasNext
+        let indexPaths = (products.count - loadedData.pages.count ..< products.count)
+            .map { IndexPath(row: $0, section: 0) }
         DispatchQueue.main.async {
-            self.segmentedControlChanged(segmentedControl: self.listOrGrid)
+            self.listView.insertRows(at: indexPaths, with: .left)
+            self.gridView.insertItems(at: indexPaths)
             self.activityIndicator.stopAnimating()
         }
     }
@@ -67,11 +70,9 @@ class ViewController: UIViewController {
         case 0:
             listView.isHidden = false
             gridView.isHidden = true
-            listView.reloadData()
         case 1:
             listView.isHidden = true
             gridView.isHidden = false
-            gridView.reloadData()
         default:
             return
         }
