@@ -9,7 +9,6 @@ import UIKit
 
 class ProductListCell: UICollectionViewCell{
     
-    
     @IBOutlet weak var productNameLabel: UILabel!
     @IBOutlet weak var stockLabel: UILabel!
     @IBOutlet weak var discountedPriceLabel: UILabel!
@@ -42,7 +41,9 @@ class ProductListCell: UICollectionViewCell{
         
         guard let thumbnailURL = product.thumbnailURL else { return }
         ImageCache.shared.load(url: thumbnailURL as NSURL) { image in
-            self.productThumbnailImageView.image = image
+            DispatchQueue.main.async {
+                self.productThumbnailImageView.image = image
+            }
         }
     }
 }

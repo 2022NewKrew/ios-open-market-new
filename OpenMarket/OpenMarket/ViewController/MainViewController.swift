@@ -21,7 +21,7 @@ class MainViewController: UIViewController {
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 0
-        layout.itemSize = CGSize(width: view.bounds.width, height: 70)
+        layout.itemSize = CGSize(width: view.bounds.width, height: 75)
         return layout
     }()
     
