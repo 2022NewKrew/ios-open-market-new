@@ -94,12 +94,12 @@ class ListTableViewCell: UITableViewCell {
     
     func setUpView() {
         contentView.addSubview(stackOfInformations)
-        contentView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         productStock.widthAnchor.constraint(equalToConstant: 80).isActive = true
         stackOfInformations.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true
         stackOfInformations.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
         stackOfInformations.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
         stackOfInformations.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
         productImage.widthAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.widthAnchor, multiplier: 0.1).isActive = true
+        productImage.heightAnchor.constraint(equalTo: productImage.widthAnchor).isActive = true
     }
 }
