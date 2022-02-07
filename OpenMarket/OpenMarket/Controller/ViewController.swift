@@ -81,7 +81,7 @@ class ViewController: UIViewController {
     //MARK: - function
     func setupNavigationBar() {
         navigationItem.titleView = listOrGrid
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: nil)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: #selector(addProduct))
     }
     
     func setupTableView() {
@@ -117,6 +117,12 @@ class ViewController: UIViewController {
         view.addSubview(activityIndicator)
         view.bringSubviewToFront(activityIndicator)
         activityIndicator.startAnimating()
+    }
+    
+    @objc
+    func addProduct() {
+        let editViewController = ProductEditViewController()
+        navigationController?.pushViewController(editViewController, animated: true)
     }
 }
 
