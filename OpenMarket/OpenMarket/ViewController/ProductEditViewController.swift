@@ -80,6 +80,14 @@ class ProductEditViewController: UIViewController {
     
     @IBAction func doneAction(_ sender: Any) {
         // done action
+        switch mode {
+        case .add:
+            addProduct()
+        case .edit:
+            break
+        case .none:
+            break
+        }
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
@@ -96,6 +104,30 @@ class ProductEditViewController: UIViewController {
     }
         
     // MARK: Helpers
+    private func addProduct(){
+        guard let name = productNameTextField.text,
+              let descriptions = productDescriptionTextView.text,
+              let priceString = productPriceTextField.text,
+              let price = Double(priceString),
+              let discountedPriceString = discountedPriceTextField.text,
+              let discountedPrice = Double(discountedPriceString),
+              let stockString = productStockTextField.text,
+              let stock = Int(stockString) else { return }
+        let currency: Currency = productCurrencySegment.selectedSegmentIndex == 1 ? .usd : .krw
+        
+        APIManager.shared.addProduct(name: name, descriptions: descriptions, price: price, currency: currency, discountedPrice: discountedPrice, stock: stock, images: images.compactMap {$0}) { result in
+            switch result{
+            case .success(_):
+                print("post succeed")
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            case .failure(_):
+                print("post failed")
+            }
+        }
+    }
+    
     private func setNavigationBarTitle(){
         if let mode = mode {
             switch mode {
@@ -181,17 +213,17 @@ extension ProductEditViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
   //      scrollToCursorPositionIfBelowKeyboard()
    //     scrollView.scrollRectToVisible(textView.frame, animated: true)
-        if !borrr {
-            textViewbottomConstraint.constant = -keyboardHeight!
-        }
+//        if !borrr {
+//            textViewbottomConstraint.constant = -keyboardHeight!
+//        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
     //    scrollToCursorPositionIfBelowKeyboard()
     //    scrollView.scrollRectToVisible(textView.frame, animated: true)
-        if !borrr {
-            textViewbottomConstraint.constant = -keyboardHeight!
-        }
+//        if !borrr {
+//            textViewbottomConstraint.constant = -keyboardHeight!
+//        }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -216,3 +248,6 @@ extension ProductEditViewController: UIImagePickerControllerDelegate, UINavigati
         picker.dismiss(animated: true, completion: nil)
     }
 }
+                                 
+                                 
+
