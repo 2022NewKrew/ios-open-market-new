@@ -22,14 +22,17 @@ class ProductListViewController: UIViewController {
         case grid
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.products = []
+        self.fetchData(at: 0) {
+            self.collectionView.reloadData()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
-        self.fetchData(at: 0) {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

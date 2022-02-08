@@ -13,8 +13,8 @@ struct APIConstants {
     static let itemsPerPage = "items_per_page"
     static let productId = "product_id"
     static let identifier = "identifier"
-    static let vendorIdentifier = "cd706a3e-66db-11ec-9626-796401f2341a"
-    static let vendorPassword = "password"
+    static let vendorIdentifier = "aa848b00-7217-11ec-abfa-0933567519e0"
+    static let vendorPassword = "Jq_xu-7-N_5#!*ET"
     static let params = "params"
     static let images = "images"
 }

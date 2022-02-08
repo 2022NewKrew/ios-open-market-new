@@ -15,8 +15,8 @@ struct OpenMarketProudctPostResponse: Decodable, Equatable {
     var thumbnailImageUrl: String?
     var currency: OpenMarketProduct.Currency?
     var price: Int?
-    var bargainPrcie: Int?
-    var discountedPrice: Int?
+    var bargainPrice: Int?
+    var discountedPrice: Float?
     var stock: Int?
     var images: [OpenMarketProduct.ProductImage]?
     var vendor: Vendor?
@@ -28,7 +28,7 @@ struct OpenMarketProudctPostResponse: Decodable, Equatable {
         case vendorId = "vendor_id"
         case vendorName = "name"
         case thumbnailImageUrl = "thumbnail"
-        case bargainPrcie = "bargain_price"
+        case bargainPrice = "bargain_price"
         case discountedPrice = "discounted_price"
         case vendor = "vendors"
         case createdAt = "created_at"

@@ -17,4 +17,8 @@ extension String {
         )
         return attributeString
     }
+    
+    var isNotEmtpy: Bool {
+        return !self.isEmpty
+    }
 }
