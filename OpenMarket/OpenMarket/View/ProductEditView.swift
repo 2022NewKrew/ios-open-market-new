@@ -1,20 +1,26 @@
 import UIKit
 
 class ProductEditView: UIStackView {
-    lazy var images: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(addImage)
-        return scrollView
+    let imageScrollView = UIScrollView()
+    
+    lazy var imageContentView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.spacing = 5
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(addImageButton)
+        return stackView
     }()
     
-    let addImage: UIButton = {
+    let addImageButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalTo: button.widthAnchor).isActive = true
         button.backgroundColor = .systemGray5
         button.setTitle("+", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
+        button.addTarget(self, action: #selector(ProductEditViewController.presentAlbum), for: .touchUpInside)
         return button
     }()
     
@@ -87,15 +93,36 @@ class ProductEditView: UIStackView {
         self.alignment = .center
         self.distribution = .fill
         self.spacing = 10
-        self.addArrangedSubview(images)
+        self.addArrangedSubview(imageScrollView)
         self.addArrangedSubview(productName)
         self.addArrangedSubview(productPriceView)
         self.addArrangedSubview(productDiscountPrice)
         self.addArrangedSubview(productStock)
         self.addArrangedSubview(productDetail)
-        addImage.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
-        images.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
-        images.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        
+        imageScrollView.translatesAutoresizingMaskIntoConstraints = false
+        imageScrollView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        imageScrollView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
+        imageScrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        imageScrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        imageScrollView.addSubview(containerView)
+        containerView.leadingAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.leadingAnchor).isActive = true
+        containerView.trailingAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.trailingAnchor).isActive = true
+        containerView.topAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.topAnchor).isActive = true
+        containerView.bottomAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.bottomAnchor).isActive = true
+        containerView.heightAnchor.constraint(equalTo: imageScrollView.frameLayoutGuide.heightAnchor).isActive = true
+        
+        imageScrollView.addSubview(imageContentView)
+        imageContentView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        imageContentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+        imageContentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
+        imageContentView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
+        
+        addImageButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
+        
         productName.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         productPriceView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         productPrice.trailingAnchor.constraint(equalTo: productCurrency.leadingAnchor, constant: -5).isActive = true
@@ -107,5 +134,14 @@ class ProductEditView: UIStackView {
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func addImage(image: UIImage) {
+        let imageView = UIImageView()
+        imageView.image = image
+        imageContentView.addArrangedSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
     }
 }

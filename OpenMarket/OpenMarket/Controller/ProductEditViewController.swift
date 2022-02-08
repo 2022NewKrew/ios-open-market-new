@@ -15,3 +15,25 @@ class ProductEditViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: nil)
     }
 }
+
+extension ProductEditViewController: UIImagePickerControllerDelegate {
+    @objc
+    func presentAlbum(){
+        let pickerController = UIImagePickerController()
+        pickerController.sourceType = .photoLibrary
+        pickerController.delegate = self
+        pickerController.allowsEditing = true
+        present(pickerController, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.editedImage] as? UIImage {
+            editView.addImage(image: image)
+        }
+        dismiss(animated: true, completion: nil)
+    }
+}
+
+extension ProductEditViewController: UINavigationControllerDelegate {
+    
+}
