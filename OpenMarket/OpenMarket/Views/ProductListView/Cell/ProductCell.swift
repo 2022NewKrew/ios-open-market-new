@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ProductCell: UICollectionViewCell {
-    var productListViewModel: ProductListViewModel { get }
+    var productCellViewModel: ProductCellViewModel { get }
     var productThumbnail: UIImageView! { get }
     var productName: UILabel! { get }
     var productOriginPrice: UILabel! { get }
@@ -32,18 +32,18 @@ extension ProductCell {
     }
 
     func setImage(product: Product, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell) {
-        self.productListViewModel.productThumbnailImage(
+        self.productCellViewModel.productThumbnailImage(
             thumbnailUrl: product.thumbnail,
             indexPath: indexPath,
             collectionView: collectionView,
             cell: cell
         )
 
-        self.productListViewModel.updateImage = { [weak self] in
+        self.productCellViewModel.updateImage = { [weak self] in
             guard let self = self else { return }
 
             DispatchQueue.main.async {
-                self.productThumbnail.image = self.productListViewModel.productThumbnailImage
+                self.productThumbnail.image = self.productCellViewModel.productThumbnailImage
             }
         }
     }

@@ -9,7 +9,7 @@ import UIKit
 
 class ListCollectionViewCell: UICollectionViewCell, ProductCell {
 
-    var productListViewModel = ProductListViewModel()
+    var productCellViewModel = ProductCellViewModel()
 
     private lazy var listProductStackView = ListProductStackView()
     private lazy var listNameAndPriceStackView = self.listProductStackView.listNameAndPriceStackView

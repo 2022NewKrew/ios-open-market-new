@@ -9,23 +9,13 @@ import UIKit
 
 class ProductListViewModel {
     private let repository: ProductListRepository = RepositoryInjection.injectProductListRepository()
-    private let imageCache = NSCache<NSString, UIImage>()
     private var pageNumber = 0
-    private var cellIndexPath: IndexPath?
-    private var collectionView: UICollectionView?
     var updateView: (Int) -> Void = { _ in }
-    var updateImage: () -> Void = {}
     var isPaginating = false
 
     var products: [Product] = [] {
         didSet {
             self.updateView(self.pageNumber)
-        }
-    }
-
-    var productThumbnailImage: UIImage? {
-        didSet {
-            self.updateImage()
         }
     }
 
@@ -46,32 +36,6 @@ class ProductListViewModel {
                 self.products.append(contentsOf: products)
             case .failure(let error):
                 print(error.errorDescription)
-            }
-        }
-    }
-
-    func productThumbnailImage(thumbnailUrl: String, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell) {
-        if let image = self.imageCache.object(forKey: thumbnailUrl as NSString) {
-            self.productThumbnailImage = image
-            return
-        }
-
-        guard let url = URL(string: thumbnailUrl) else { return }
-
-        self.repository.image(url: url) { [weak self] data in
-            guard let self = self,
-              let thumbnailImage = UIImage(data: data)
-            else {
-                return
-            }
-
-            DispatchQueue.main.async {
-                if indexPath == collectionView.indexPath(for: cell) {
-                    self.imageCache.setObject(thumbnailImage, forKey: thumbnailUrl as NSString)
-                    self.cellIndexPath = indexPath
-                    self.collectionView = collectionView
-                    self.productThumbnailImage = thumbnailImage
-                }
             }
         }
     }

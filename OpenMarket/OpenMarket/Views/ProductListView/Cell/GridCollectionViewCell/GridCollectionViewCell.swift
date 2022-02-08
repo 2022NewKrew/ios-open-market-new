@@ -9,7 +9,7 @@ import UIKit
 
 class GridCollectionViewCell: UICollectionViewCell, ProductCell {
 
-    var productListViewModel = ProductListViewModel()
+    var productCellViewModel = ProductCellViewModel()
 
     private lazy var gridProductStackView = GridProductStackView()
 
