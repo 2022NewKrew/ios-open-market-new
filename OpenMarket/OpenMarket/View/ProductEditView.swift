@@ -38,6 +38,7 @@ class ProductEditView: UIStackView {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "상품가격"
+        textField.keyboardType = .numberPad
         textField.layer.borderColor = UIColor.systemGray.cgColor
         textField.layer.borderWidth = 1
         textField.layer.cornerRadius = 3
@@ -62,6 +63,7 @@ class ProductEditView: UIStackView {
     let productDiscountPrice: UITextField = {
         let textField = UITextField()
         textField.placeholder = "할인금액"
+        textField.keyboardType = .numberPad
         textField.layer.borderColor = UIColor.systemGray.cgColor
         textField.layer.borderWidth = 1
         textField.layer.cornerRadius = 3
@@ -71,6 +73,7 @@ class ProductEditView: UIStackView {
     let productStock: UITextField = {
         let textField = UITextField()
         textField.placeholder = "재고수량"
+        textField.keyboardType = .numberPad
         textField.layer.borderColor = UIColor.systemGray.cgColor
         textField.layer.borderWidth = 1
         textField.layer.cornerRadius = 3
@@ -85,6 +88,8 @@ class ProductEditView: UIStackView {
         textView.text = "temp"
         return textView
     }()
+    
+    var imageData: [Data] = []
     
     override init(frame: CGRect) {
         super.init(frame: frame)
