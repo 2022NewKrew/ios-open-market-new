@@ -15,44 +15,37 @@ protocol ProductCell: UICollectionViewCell {
     var productDiscountedPrice: UILabel! { get }
     var productStock: UILabel! { get }
 
-    func updateCell(product: Product?, indexPath: IndexPath, collectionView: UICollectionView)
-    func setImage(product: Product, indexPath: IndexPath, collectionView: UICollectionView)
+    func updateCell(product: Product?, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell)
+    func setImage(product: Product, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell)
     func setPrice(product: Product)
     func setStock(product: Product)
 }
 
 extension ProductCell {
-    func updateCell(product: Product?, indexPath: IndexPath, collectionView: UICollectionView) {
+    func updateCell(product: Product?, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell) {
         guard let product = product else { return }
 
         self.productName.text = product.name
-        self.setImage(product: product, indexPath: indexPath, collectionView: collectionView)
+        self.setImage(product: product, indexPath: indexPath, collectionView: collectionView, cell: cell)
         self.setPrice(product: product)
         self.setStock(product: product)
     }
 
-    func setImage(product: Product, indexPath: IndexPath, collectionView: UICollectionView) {
-        self.productListViewModel.updateImage = { [weak self] cellIndexPath, collectionView in
-            guard let self = self,
-                let cellIndexPath = cellIndexPath,
-                let collectionView = collectionView,
-                let collectionViewIndexPath = collectionView.indexPath(for: self)
-            else {
-                return
-            }
-
-            if cellIndexPath == collectionViewIndexPath {
-                DispatchQueue.main.async {
-                    self.productThumbnail.image = self.productListViewModel.productThumbnailImage
-                }
-            }
-        }
-        
+    func setImage(product: Product, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell) {
         self.productListViewModel.productThumbnailImage(
             thumbnailUrl: product.thumbnail,
             indexPath: indexPath,
-            collectionView: collectionView
+            collectionView: collectionView,
+            cell: cell
         )
+
+        self.productListViewModel.updateImage = { [weak self] in
+            guard let self = self else { return }
+
+            DispatchQueue.main.async {
+                self.productThumbnail.image = self.productListViewModel.productThumbnailImage
+            }
+        }
     }
 
     func setPrice(product: Product) {

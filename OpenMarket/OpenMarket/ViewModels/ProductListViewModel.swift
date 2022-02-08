@@ -14,7 +14,7 @@ class ProductListViewModel {
     private var cellIndexPath: IndexPath?
     private var collectionView: UICollectionView?
     var updateView: (Int) -> Void = { _ in }
-    var updateImage: (IndexPath?, UICollectionView?) -> Void = { _,_  in}
+    var updateImage: () -> Void = {}
     var isPaginating = false
 
     var products: [Product] = [] {
@@ -25,7 +25,7 @@ class ProductListViewModel {
 
     var productThumbnailImage: UIImage? {
         didSet {
-            self.updateImage(self.cellIndexPath, self.collectionView)
+            self.updateImage()
         }
     }
 
@@ -50,7 +50,7 @@ class ProductListViewModel {
         }
     }
 
-    func productThumbnailImage(thumbnailUrl: String, indexPath: IndexPath, collectionView: UICollectionView) {
+    func productThumbnailImage(thumbnailUrl: String, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell) {
         if let image = self.imageCache.object(forKey: thumbnailUrl as NSString) {
             self.productThumbnailImage = image
             return
@@ -65,11 +65,13 @@ class ProductListViewModel {
                 return
             }
 
-            self.imageCache.setObject(thumbnailImage, forKey: thumbnailUrl as NSString)
-            self.cellIndexPath = indexPath
-            self.collectionView = collectionView
             DispatchQueue.main.async {
-                self.productThumbnailImage = thumbnailImage
+                if indexPath == collectionView.indexPath(for: cell) {
+                    self.imageCache.setObject(thumbnailImage, forKey: thumbnailUrl as NSString)
+                    self.cellIndexPath = indexPath
+                    self.collectionView = collectionView
+                    self.productThumbnailImage = thumbnailImage
+                }
             }
         }
     }

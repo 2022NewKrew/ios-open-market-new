@@ -149,7 +149,7 @@ extension ProductListViewController: UICollectionViewDataSource {
         }
 
         let product = products[indexPath.row]
-        productCell.updateCell(product: product, indexPath: indexPath, collectionView: collectionView)
+        productCell.updateCell(product: product, indexPath: indexPath, collectionView: collectionView, cell: productCell)
 
         return productCell
     }
