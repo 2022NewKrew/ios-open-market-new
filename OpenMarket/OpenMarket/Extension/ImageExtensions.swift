@@ -1,10 +1,3 @@
-//
-//  ImageExtensions.swift
-//  OpenMarket
-//
-//  Created by kakao on 2022/02/09.
-//
-
 import Foundation
 import UIKit
 

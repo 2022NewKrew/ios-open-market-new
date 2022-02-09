@@ -12,6 +12,7 @@ struct Product: Decodable {
     let stock: Int
     let createdAt: Date
     let issuedAt: Date
+    let description: String?
     let images: [Image]?
     let vendors: Vendor?
     
@@ -22,7 +23,7 @@ struct Product: Decodable {
         case createdAt = "created_at"
         case issuedAt = "issued_at"
         case id, name, thumbnail, currency, price, stock
-        case images, vendors
+        case images, vendors, description
     }
     
 }

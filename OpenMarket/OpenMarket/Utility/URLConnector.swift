@@ -34,6 +34,7 @@ struct URLConnector {
                 return
             }
             if let data = data {
+                print(String.init(data: data, encoding: .utf8)!)
                 guard let parsedData = Decoder.shared.decodeJSONData(type: type, from: data) else { return }
                 NotificationCenter.default.post(name: Notification.Name("LoadData"), object: nil, userInfo: ["data": parsedData])
             }
@@ -58,6 +59,7 @@ struct URLConnector {
                 return
             }
             if let data = data {
+                print(String.init(data: data, encoding: .utf8)!)
                 guard let parsedData = Decoder.shared.decodeJSONData(type: Product.self, from: data) else { return }
                 NotificationCenter.default.post(name: Notification.Name("PostResponse"), object: nil, userInfo: ["data": parsedData])
             }
@@ -72,7 +74,7 @@ struct URLConnector {
         body.append("Content-Disposition:form-data; name=\"params\"".data(using: .utf8)!)
         body.append("; filename=\"params.json\"\r\nContent-Type: application/json\r\n\r\n".data(using: .utf8)!)
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
-        body.append(jsonData!)
+        body.append(jsonData ?? Data())
         body.append("\r\n".data(using: .utf8)!)
         for image in images {
             body.append("--\(boundary)\r\n".data(using: .utf8)!)

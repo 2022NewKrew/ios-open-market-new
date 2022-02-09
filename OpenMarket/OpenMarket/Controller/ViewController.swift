@@ -90,12 +90,7 @@ class ViewController: UIViewController {
         listView.delegate = self
         listView.dataSource = self
         listView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
-        NSLayoutConstraint.activate([
-            listView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            listView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            listView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            listView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        ])
+        listView.constraintsToFit(view.safeAreaLayoutGuide)
     }
     
     func setupCollectionView() {
@@ -121,8 +116,8 @@ class ViewController: UIViewController {
     
     @objc
     func addProduct() {
-        let editViewController = ProductEditViewController()
-        navigationController?.pushViewController(editViewController, animated: true)
+        let addViewController = ProductAddViewController()
+        navigationController?.pushViewController(addViewController, animated: true)
     }
 }
 
@@ -137,6 +132,12 @@ extension ViewController: UITableViewDelegate {
             OpenMarketAPI.shared.getProductList(numberOfPage: currentPage, itemsPerPage: itemsPerPage)
             self.activityIndicator.startAnimating()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let editViewController = ProductEditViewController(data: products[indexPath.row])
+        navigationController?.pushViewController(editViewController, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 

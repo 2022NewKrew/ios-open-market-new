@@ -1,7 +1,18 @@
 import UIKit
 
 class ProductEditViewController: UIViewController {
-    let editView = ProductEditView()
+    let editView: ProductEditView
+    
+    init(data: Product) {
+        editView = ProductEditView()
+        super.init(nibName: nil, bundle: nil)
+        editView.setupData(data: data)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(editView)
@@ -17,33 +28,12 @@ class ProductEditViewController: UIViewController {
     
     @objc
     func addProduct() {
-        editView.saveProduct()
+//        editView.saveProduct()
+        navigationController?.popViewController(animated: true)
     }
     
     @objc
     func cancelAdding() {
-        dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
-}
-
-extension ProductEditViewController: UIImagePickerControllerDelegate {
-    @objc
-    func presentAlbum(){
-        let pickerController = UIImagePickerController()
-        pickerController.sourceType = .photoLibrary
-        pickerController.delegate = self
-        pickerController.allowsEditing = true
-        present(pickerController, animated: true, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[.editedImage] as? UIImage {
-            editView.addImage(image: image)
-        }
-        dismiss(animated: true, completion: nil)
-    }
-}
-
-extension ProductEditViewController: UINavigationControllerDelegate {
-    
 }
