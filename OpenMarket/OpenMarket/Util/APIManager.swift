@@ -91,6 +91,48 @@ class APIManager {
         task.resume()
     }
     
+    func updateProduct(productId: Int,input: ProductInput,
+                       completion: @escaping(Result<Bool,Error>) -> Void) {
+        let parameters: [String: String] = ["name": input.name,
+                                            "descriptions": input.descriptions,
+                                            "price": String(input.price),
+                                            "currency": input.currency.rawValue,
+                                            "discounted_price": String(input.discountedPrice),
+                                            "stock": String(input.stock),
+                                            "secret": secretKey]
+        var data: Data?
+        do {
+            data = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        } catch {
+            print(error)
+        }
+        var urlRequest = productUpdatUrlRequest(with: productId)
+        urlRequest.httpBody = data
+        
+        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                completion(.failure(APIError.responseError))
+                return
+            }
+            completion(.success(true))
+        }
+        
+        task.resume()
+    }
+    
+    func productUpdatUrlRequest(with productId: Int) -> URLRequest {
+        guard let url = URL(string: apiHost + "api/products/\(productId)") else { fatalError()}
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "PATCH"
+        urlRequest.setValue(vendorId, forHTTPHeaderField: "identifier")
+        return urlRequest
+    }
+    
     func productPostUrlRequest() -> URLRequest {
         guard let url = URL(string: apiHost + "api/products") else {
             fatalError("wrong url format")
@@ -98,26 +140,20 @@ class APIManager {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         urlRequest.setValue(vendorId, forHTTPHeaderField: "identifier")
- 
         return urlRequest
     }
     
-    func addProduct(name: String,
-                    descriptions: String,
-                    price: Double,
-                    currency: Currency,
-                    discountedPrice: Double,
-                    stock: Int,
+    func postProduct(input: ProductInput,
                     images:[UIImage],
                     completion: @escaping(Result<Bool,Error>) -> Void) {
         let boundary = boundaryString()
-        let parameters: [String: String] = ["name": name,
-                                      "descriptions": descriptions,
-                                      "price": String(price),
-                                      "currency": currency.rawValue,
-                                      "discounted_price": String(discountedPrice),
-                                      "stock": String(stock),
-                                      "secret": secretKey]
+        let parameters: [String: String] = ["name": input.name,
+                                            "descriptions": input.descriptions,
+                                            "price": String(input.price),
+                                            "currency": input.currency.rawValue,
+                                            "discounted_price": String(input.discountedPrice),
+                                            "stock": String(input.stock),
+                                            "secret": secretKey]
         var body: [String: String] = [:]
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
@@ -196,7 +232,6 @@ extension APIManager {
                 print("failed to convert image into png")
                 continue
             }
-            let mimeType = "image/jpeg"
             body.appendString(boundaryPrefix)
             body.appendString("Content-Disposition: form-data; name=\"\(imgDataKey)\"; filename=\"\(filename)\"\r\n")
             body.appendString("Content-Type: header\r\n\r\n")

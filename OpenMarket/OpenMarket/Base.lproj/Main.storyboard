@@ -89,10 +89,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AlT-V0-4Xv">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8U7-Oq-8UM" userLabel="ContentView">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1223"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="377"/>
                                         <subviews>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Ndd-IM-nQN">
                                                 <rect key="frame" x="20" y="10" width="374" height="133"/>
@@ -188,21 +188,11 @@
                                                 </subviews>
                                             </stackView>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="b5N-Cd-b1G">
-                                                <rect key="frame" x="20" y="333" width="374" height="890"/>
+                                                <rect key="frame" x="20" y="323" width="374" height="54"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                <mutableString key="text">ou have to call registerForKeyboardNotifications at viewDidLoad, so you will add an observer to notification center for when keyboard appears or disappears from screen. When these notification fire, methods keyboardWasShown and keyboardWillBeHidden will be called and then scrollview will move accordingly to keyboard size. You can find more detailed information about NotificationCenter here: developer.apple.com/library/mac/documentation/Cocoa/Reference/… – 
-Nerkyator
- Mar 2 '15 at 20:47
-13
-Thanks, that's exactly what I was looking for - an apple recommended solution. However, in my case I already had a scroll view that spanned outside the viewable area. This code would disable scrolling after the keyboard would hide. I removed "self.scrollView.scrollEnabled = false" and it would still not scroll. What worked for me was "self.scrollView.contentInset = UIEdgeInsetsZero;" this single line in keyboardWillHide event – 
-F Yaqoobou have to call registerForKeyboardNotifications at viewDidLoad, so you will add an observer to notification center for when keyboard appears or disappears from screen. When these notification fire, methods keyboardWasShown and keyboardWillBeHidden will be called and then scrollview will move accordingly to keyboard size. You can find more detailed information about NotificationCenter here: developer.apple.com/library/mac/documentation/Cocoa/Reference/… – 
-Nerkyator
- Mar 2 '15 at 20:47
-13
-Thanks, that's exactly what I was looking for - an apple recommended solution. However, in my case I already had a scroll view that spanned outside the viewable area. This code would disable scrolling after the keyboard would hide. I removed "self.scrollView.scrollEnabled = false" and it would still not scroll. What worked for me was "self.scrollView.contentInset = UIEdgeInsetsZero;" this single line in keyboardWillHide event – 
-F Yaqoob
- 
- </mutableString>
+                                                <string key="text" base64-UTF8="YES">
+CiA
+</string>
                                                 <color key="textColor" systemColor="labelColor"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -212,7 +202,7 @@ F Yaqoob
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="H3R-ad-DAS" secondAttribute="trailing" constant="20" id="33E-qG-WM6"/>
                                             <constraint firstItem="Ndd-IM-nQN" firstAttribute="top" secondItem="8U7-Oq-8UM" secondAttribute="top" constant="10" id="9tg-TJ-Yki"/>
-                                            <constraint firstItem="b5N-Cd-b1G" firstAttribute="top" secondItem="H3R-ad-DAS" secondAttribute="bottom" constant="10" id="RlC-Em-fLl"/>
+                                            <constraint firstItem="b5N-Cd-b1G" firstAttribute="top" secondItem="H3R-ad-DAS" secondAttribute="bottom" id="RlC-Em-fLl"/>
                                             <constraint firstItem="H3R-ad-DAS" firstAttribute="top" secondItem="Ndd-IM-nQN" secondAttribute="bottom" constant="20" id="SYR-wp-yx7"/>
                                             <constraint firstItem="b5N-Cd-b1G" firstAttribute="leading" secondItem="8U7-Oq-8UM" secondAttribute="leading" constant="20" id="bOh-g2-9PY"/>
                                             <constraint firstAttribute="trailing" secondItem="Ndd-IM-nQN" secondAttribute="trailing" constant="20" id="c49-ot-xr1"/>
@@ -260,7 +250,7 @@ F Yaqoob
                             <constraint firstItem="WCS-pd-UEB" firstAttribute="top" secondItem="neA-Es-0xW" secondAttribute="topMargin" id="5Pf-XP-DBM"/>
                             <constraint firstItem="AlT-V0-4Xv" firstAttribute="leading" secondItem="S8r-mk-N4g" secondAttribute="leading" id="6es-qQ-K8x"/>
                             <constraint firstItem="WCS-pd-UEB" firstAttribute="centerX" secondItem="neA-Es-0xW" secondAttribute="centerX" id="Srp-a4-TYy"/>
-                            <constraint firstItem="S8r-mk-N4g" firstAttribute="bottom" secondItem="AlT-V0-4Xv" secondAttribute="bottom" id="oeQ-JG-bZe"/>
+                            <constraint firstAttribute="bottom" secondItem="AlT-V0-4Xv" secondAttribute="bottom" id="oeQ-JG-bZe"/>
                             <constraint firstItem="WCS-pd-UEB" firstAttribute="leading" secondItem="neA-Es-0xW" secondAttribute="leading" id="z6u-gc-tvB"/>
                         </constraints>
                     </view>
@@ -274,7 +264,7 @@ F Yaqoob
                         <outlet property="productPriceTextField" destination="e0T-XF-kxb" id="RlY-cp-VzH"/>
                         <outlet property="productStockTextField" destination="82w-ut-nnB" id="YBg-1w-TId"/>
                         <outlet property="scrollView" destination="AlT-V0-4Xv" id="bjw-Ts-JNm"/>
-                        <outlet property="textViewbottomConstraint" destination="dLV-Z2-lEm" id="eAD-o8-DKA"/>
+                        <outlet property="scrollViewBottomConstraint" destination="oeQ-JG-bZe" id="cXJ-ar-ARB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sJe-y0-GpK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

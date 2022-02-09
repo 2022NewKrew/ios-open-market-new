@@ -39,14 +39,24 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchProducts(pageNo: currentPage, itemsPerPage: itemsPerPage)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        products = []
+        currentPage = 1
     }
     
     @IBAction func addAction(_ sender: Any) {
         guard let productEditViewController = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(withIdentifier: "ProductEditVC") as? ProductEditViewController else { return }
         productEditViewController.modalPresentationStyle = .fullScreen
-        productEditViewController.mode = .add
+        productEditViewController.mode = ProductEditViewController.AddMode(productEditViewController)
         present(productEditViewController, animated: true, completion: nil)
     }
     
@@ -136,8 +146,8 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         guard let productEditViewController = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(withIdentifier: "ProductEditVC") as? ProductEditViewController else { return }
         productEditViewController.modalPresentationStyle = .fullScreen
-        productEditViewController.mode = .edit
-        productEditViewController.product = products[indexPath.row]
+        productEditViewController.mode = ProductEditViewController.EditMode(productEditViewController)
+        productEditViewController.productId = products[indexPath.row].id
         present(productEditViewController, animated: true, completion: nil)
     }
     

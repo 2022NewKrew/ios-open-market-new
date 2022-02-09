@@ -19,14 +19,12 @@ class ProductEditViewController: UIViewController {
     @IBOutlet weak var imageCollectionView: UICollectionView!
     @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var textViewbottomConstraint: NSLayoutConstraint!
-    
-    var keyboardHeight: CGFloat?
-    var activeField: UITextField?
+    @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     
     var selectedImageIdx: Int?
-    var mode: Mode?
+    var mode: ModeState?
     var product: Product?
+    var productId: Int?
     
     lazy var imagePicker: UIImagePickerController = {
         let imagePicker = UIImagePickerController()
@@ -36,7 +34,7 @@ class ProductEditViewController: UIViewController {
         return imagePicker
     }()
     
-    private var images: [UIImage?] = [] {
+    var images: [UIImage?] = [] {
         didSet {
             imageCollectionView.reloadData()
         }
@@ -54,92 +52,84 @@ class ProductEditViewController: UIViewController {
     // MARK: LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNavigationBarTitle()
-        setProductInfo()
-        imageCollectionView.delegate = self
-        imageCollectionView.dataSource = self
-        imageCollectionView.collectionViewLayout = flowlayout
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-     //   view.addGestureRecognizer(tapGesture)
-        productDescriptionTextView.delegate = self
-
+        mode?.setNavigationTitle()
+        mode?.setupProductInfo()
+        setupCollectionView()
+        addTapGesture()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        registerKeyboardNotificationObserver()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unregisterKeyboardNotificationObserver()
     }
     
     // MARK: Action
     @IBAction func cancelAction(_ sender: Any) {
-        // cancel action
         dismiss(animated: true, completion: nil)
     }
     
     @IBAction func doneAction(_ sender: Any) {
-        // done action
-        switch mode {
-        case .add:
-            addProduct()
-        case .edit:
-            break
-        case .none:
-            break
-        }
+        guard let productInput = validateProductInput() else { return }
+        mode?.doneAction(input: productInput)
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
-        guard let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-            return
-        }
-        keyboardHeight = keyboardFrame.height
+        guard let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?
+                .cgRectValue else { return }
+        scrollViewBottomConstraint.constant = keyboardFrame.height
     }
     
+    @objc func keyboardWillClose(_ notification: Notification) {
+        scrollViewBottomConstraint.constant = 0
+    }
     
     @objc func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
         
     // MARK: Helpers
-    private func addProduct(){
+    private func registerKeyboardNotificationObserver(){
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillClose), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func unregisterKeyboardNotificationObserver(){
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func validateProductInput() -> ProductInput?{
         guard let name = productNameTextField.text,
               let descriptions = productDescriptionTextView.text,
-              let priceString = productPriceTextField.text,
-              let price = Double(priceString),
-              let discountedPriceString = discountedPriceTextField.text,
-              let discountedPrice = Double(discountedPriceString),
-              let stockString = productStockTextField.text,
-              let stock = Int(stockString) else { return }
+              let priceString = productPriceTextField.text else { return nil }
+        
+        if name.count < 3 || name.count > 100 {
+            return nil
+        }
+        
+        if descriptions.count < 10 || descriptions.count > 1000 {
+            return nil
+        }
+        
+        guard let price = Double(priceString) else { return nil }
+        
+        let discountedPriceString = discountedPriceTextField.text?.replacingOccurrences(of: " ", with: "") == "" ? "0" : discountedPriceTextField.text
+        guard let discountedPriceString = discountedPriceString ,let discountedPrice = Double(discountedPriceString) else { return nil }
+        
+        let stockString = productStockTextField.text?.replacingOccurrences(of:" ", with: "") == "" ? "0" : productStockTextField.text
+        guard let stockString = stockString, let stock = Int(stockString) else { return nil }
+        
         let currency: Currency = productCurrencySegment.selectedSegmentIndex == 1 ? .usd : .krw
         
-        APIManager.shared.addProduct(name: name, descriptions: descriptions, price: price, currency: currency, discountedPrice: discountedPrice, stock: stock, images: images.compactMap {$0}) { result in
-            switch result{
-            case .success(_):
-                print("post succeed")
-                DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: nil)
-                }
-            case .failure(_):
-                print("post failed")
-            }
-        }
+        return ProductInput(name: name, descriptions: descriptions, price: price, currency: currency, discountedPrice: discountedPrice, stock: stock)
     }
     
-    private func setNavigationBarTitle(){
-        if let mode = mode {
-            switch mode {
-            case .add:
-                navigationBar.topItem?.title = "상품등록"
-            case .edit:
-                navigationBar.topItem?.title = "상품수정"
-            }
-        }
-    }
-    
-    private func setProductInfo() {
+    func setProductInfo() {
         productNameTextField.text = product?.name
         productPriceTextField.text = product?.price.description
         productStockTextField.text = product?.stock.description
@@ -150,49 +140,40 @@ class ProductEditViewController: UIViewController {
         loadImages()
     }
     
+    private func setupCollectionView(){
+        imageCollectionView.delegate = self
+        imageCollectionView.dataSource = self
+        imageCollectionView.collectionViewLayout = flowlayout
+    }
+    
+    private func addTapGesture(){
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        tapGesture.delegate = self
+        view.addGestureRecognizer(tapGesture)
+    }
+    
     private func loadImages() {
         guard let product = product, let images = product.images else { return }
         self.images = [UIImage?](repeating: nil, count: images.count)
         for (idx, image) in images.enumerated() {
             guard let imageURL = image.imageUrl else { return }
             ImageCache.shared.load(url: imageURL as NSURL) { productImage in
-                self.images[idx] = productImage
+                DispatchQueue.main.async {
+                    self.images[idx] = productImage
+                }
             }
         }
     }
-    
-    private func scrollToCursorPositionIfBelowKeyboard() {
-        guard let keyboardHeight = keyboardHeight else { return }
-        let caret = productDescriptionTextView.caretRect(for: productDescriptionTextView.selectedTextRange!.start)
-        let textViewY = productDescriptionTextView.frame.origin.y
-        let caretY = caret.origin.y + textViewY
-        let keyboardTopBorder = view.frame.height - keyboardHeight
-
-       // Remember, the y-scale starts in the upper-left hand corner at "0", then gets
-       // larger as you go down the screen from top-to-bottom. Therefore, the caret.origin.y
-       // being larger than keyboardTopBorder indicates that the caret sits below the
-       // keyboardTopBorder, and the textView needs to scroll to the position.
-       if caretY > keyboardTopBorder {
-           print("OVER")
-        //   view.frame.origin.y -= view.frame.origin.y == 0 ? keyboardHeight : 0
-          
-        }
-     }
-    
-    enum Mode{
-        case add,edit
-    }
-    
-    var borrr = false
 }
 
 extension ProductEditViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        images.count < 5 && mode == .add ? images.count + 1 : images.count
+        return mode?.imageCount() ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.row == images.count && images.count < 5 && mode == .add {
+        if indexPath.row == images.count && images.count < 5, let _ = mode as? AddMode {
             let cell = imageCollectionView.dequeueReusableCell(withReuseIdentifier: "LastImageCell", for: indexPath)
             return cell
         } else {
@@ -203,39 +184,14 @@ extension ProductEditViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
-        selectedImageIdx = indexPath.row
-        present(imagePicker, animated: true)
-    }
-}
-
-extension ProductEditViewController: UITextViewDelegate {
-    func textViewDidChange(_ textView: UITextView) {
-  //      scrollToCursorPositionIfBelowKeyboard()
-   //     scrollView.scrollRectToVisible(textView.frame, animated: true)
-//        if !borrr {
-//            textViewbottomConstraint.constant = -keyboardHeight!
-//        }
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-    //    scrollToCursorPositionIfBelowKeyboard()
-    //    scrollView.scrollRectToVisible(textView.frame, animated: true)
-//        if !borrr {
-//            textViewbottomConstraint.constant = -keyboardHeight!
-//        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        scrollView.setContentOffset(.zero, animated: true)
+        mode?.didSelectItem(index: indexPath.row)
     }
 }
 
 extension ProductEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let newImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage,
-              let selectedImageIdx = selectedImageIdx,
-              mode == .add
+              let selectedImageIdx = selectedImageIdx
             else {
                 picker.dismiss(animated: true, completion: nil)
                 return
@@ -248,6 +204,10 @@ extension ProductEditViewController: UIImagePickerControllerDelegate, UINavigati
         picker.dismiss(animated: true, completion: nil)
     }
 }
-                                 
-                                 
 
+extension ProductEditViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        let touchPoint = touch.location(in: view)
+        return !imageCollectionView.frame.contains(touchPoint)
+    }
+}
