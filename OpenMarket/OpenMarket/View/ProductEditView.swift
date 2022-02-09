@@ -48,7 +48,6 @@ class ProductEditView: UIStackView {
     let productCurrency: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["KRW", "USD"])
         segmentedControl.selectedSegmentIndex = 0
-//        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged(segmentedControl:)), for: .valueChanged)
         return segmentedControl
     }()
     
@@ -105,26 +104,7 @@ class ProductEditView: UIStackView {
         self.addArrangedSubview(productStock)
         self.addArrangedSubview(productDetail)
         
-        imageScrollView.translatesAutoresizingMaskIntoConstraints = false
-        imageScrollView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        imageScrollView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
-        imageScrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        imageScrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        
-        let containerView = UIView()
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        imageScrollView.addSubview(containerView)
-        containerView.leadingAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.leadingAnchor).isActive = true
-        containerView.trailingAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.trailingAnchor).isActive = true
-        containerView.topAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.topAnchor).isActive = true
-        containerView.bottomAnchor.constraint(equalTo: imageScrollView.contentLayoutGuide.bottomAnchor).isActive = true
-        containerView.heightAnchor.constraint(equalTo: imageScrollView.frameLayoutGuide.heightAnchor).isActive = true
-        
-        imageScrollView.addSubview(imageContentView)
-        imageContentView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
-        imageContentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
-        imageContentView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
-        imageContentView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
+        setupScrollView()
         
         addImageButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
         
@@ -141,6 +121,21 @@ class ProductEditView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setupScrollView() {
+        imageScrollView.translatesAutoresizingMaskIntoConstraints = false
+        imageScrollView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        imageScrollView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
+        imageScrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        imageScrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        
+        let containerView = UIView()
+        imageScrollView.addSubview(containerView)
+        containerView.constraintsToFit(imageScrollView.contentLayoutGuide)
+        containerView.heightAnchor.constraint(equalTo: imageScrollView.frameLayoutGuide.heightAnchor).isActive = true
+        imageScrollView.addSubview(imageContentView)
+        imageContentView.constraintsToFit(containerView)
+    }
+    
     func addImage(image: UIImage) {
         let imageView = UIImageView()
         imageView.image = image
@@ -152,7 +147,7 @@ class ProductEditView: UIStackView {
         if let data = image.pngData() {
             let scale = Double.init(data.count / 1048576)
             if scale > 1 {
-                if let newImage = resizeImage(scale: scale, image: image) {
+                if let newImage = image.resizeImage(scale: scale) {
                     imageView.image = newImage
                     imageData.append(newImage.pngData()!)
                     return
@@ -160,18 +155,6 @@ class ProductEditView: UIStackView {
             }
             imageData.append(data)
         }
-    }
-    
-    func resizeImage(scale: Double, image: UIImage) -> UIImage? {
-        let size = image.size
-        let newSize = CGSize(width: size.width / scale, height: size.height / scale)
-        let rect = CGRect(origin: .zero, size: newSize)
-
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-        image.draw(in: rect)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage
     }
     
     func saveProduct() {
@@ -182,17 +165,6 @@ class ProductEditView: UIStackView {
         data["currency"] = productCurrency.selectedSegmentIndex == 0 ? "KRW" : "USD"
         data["discounted_price"] = productDiscountPrice.text
         data["stock"] = productStock.text
-//        var data = """
-//        {
-//            "name": "\(productName.text)"
-//            "descriptions": "\(productDetail.text)"
-//            "price" = "\(productPrice.text)"
-//            "currency" = "\(productCurrency.selectedSegmentIndex == 0 ? "KRW" : "USD")"
-//            "discounted_price" = "\(productDiscountPrice.text)"
-//            "stock" = "\(productStock.text)"
-//            "price" = "\(productPrice.text)"
-//        """
         OpenMarketAPI.shared.addProduct(data: &data, images: &imageData)
     }
-
 }

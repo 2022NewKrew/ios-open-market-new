@@ -19,6 +19,9 @@
 		C265376A27B0B27500DCF66D /* LabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C265376927B0B27500DCF66D /* LabelExtensions.swift */; };
 		C265377127B0EADD00DCF66D /* ProductEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C265377027B0EADD00DCF66D /* ProductEditViewController.swift */; };
 		C265377327B0F31C00DCF66D /* ProductEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C265377227B0F31C00DCF66D /* ProductEditView.swift */; };
+		C265377627B3A27600DCF66D /* ProductEditable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C265377527B3A27600DCF66D /* ProductEditable.swift */; };
+		C265377827B3A3DE00DCF66D /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C265377727B3A3DE00DCF66D /* ImageExtensions.swift */; };
+		C265377A27B3A4A200DCF66D /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C265377927B3A4A200DCF66D /* ViewExtensions.swift */; };
 		C70FB0FB25BEF61C00C9924E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70FB0FA25BEF61C00C9924E /* AppDelegate.swift */; };
 		C70FB0FD25BEF61C00C9924E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70FB0FC25BEF61C00C9924E /* SceneDelegate.swift */; };
 		C70FB0FF25BEF61C00C9924E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70FB0FE25BEF61C00C9924E /* ViewController.swift */; };
@@ -40,6 +43,9 @@
 		C265376927B0B27500DCF66D /* LabelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelExtensions.swift; sourceTree = "<group>"; };
 		C265377027B0EADD00DCF66D /* ProductEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductEditViewController.swift; sourceTree = "<group>"; };
 		C265377227B0F31C00DCF66D /* ProductEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductEditView.swift; sourceTree = "<group>"; };
+		C265377527B3A27600DCF66D /* ProductEditable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductEditable.swift; sourceTree = "<group>"; };
+		C265377727B3A3DE00DCF66D /* ImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
+		C265377927B3A4A200DCF66D /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		C70FB0F725BEF61C00C9924E /* OpenMarket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenMarket.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C70FB0FA25BEF61C00C9924E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C70FB0FC25BEF61C00C9924E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +101,8 @@
 			isa = PBXGroup;
 			children = (
 				C265376927B0B27500DCF66D /* LabelExtensions.swift */,
+				C265377727B3A3DE00DCF66D /* ImageExtensions.swift */,
+				C265377927B3A4A200DCF66D /* ViewExtensions.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -112,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				C265377227B0F31C00DCF66D /* ProductEditView.swift */,
+				C265377527B3A27600DCF66D /* ProductEditable.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -225,6 +234,7 @@
 				C259FBDC279EA21F007319D5 /* Vendor.swift in Sources */,
 				C70FB0FF25BEF61C00C9924E /* ViewController.swift in Sources */,
 				C265376A27B0B27500DCF66D /* LabelExtensions.swift in Sources */,
+				C265377A27B3A4A200DCF66D /* ViewExtensions.swift in Sources */,
 				C259FBDA279EA1B6007319D5 /* Image.swift in Sources */,
 				C259FBD2279E41B1007319D5 /* URLConnector.swift in Sources */,
 				C265377327B0F31C00DCF66D /* ProductEditView.swift in Sources */,
@@ -232,6 +242,8 @@
 				C259FBD6279E61B8007319D5 /* Products.swift in Sources */,
 				C259FBEF27A2270C007319D5 /* GridCollectionViewCell.swift in Sources */,
 				C259FBD4279E5FA0007319D5 /* Decoder.swift in Sources */,
+				C265377827B3A3DE00DCF66D /* ImageExtensions.swift in Sources */,
+				C265377627B3A27600DCF66D /* ProductEditable.swift in Sources */,
 				C70FB0FD25BEF61C00C9924E /* SceneDelegate.swift in Sources */,
 				C259FBE8279FC584007319D5 /* ListTableViewCell.swift in Sources */,
 				C265377127B0EADD00DCF66D /* ProductEditViewController.swift in Sources */,

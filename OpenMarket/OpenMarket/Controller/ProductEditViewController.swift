@@ -22,7 +22,7 @@ class ProductEditViewController: UIViewController {
     
     @objc
     func cancelAdding() {
-        navigationController?.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 
