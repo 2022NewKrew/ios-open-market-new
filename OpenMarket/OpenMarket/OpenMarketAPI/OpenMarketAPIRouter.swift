@@ -90,7 +90,7 @@ enum OpenMarketAPIRouter {
         self.header.forEach {
             urlRequest.setValue($1, forHTTPHeaderField: $0)
         }
-
+        
         urlRequest.httpBody = body
         
         return urlRequest

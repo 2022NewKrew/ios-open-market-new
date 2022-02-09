@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol OpenMarketProductCellType {
+protocol OpenMarketProductCellType: UICollectionViewCell {
     var thumbnailImageView: UIImageView! { get set }
     var productNameLabel: UILabel! { get set }
     var stockLabel: UILabel! { get set }
@@ -20,7 +20,7 @@ protocol OpenMarketProductCellType {
 
 extension OpenMarketProductCellType {
     func configure(of product: OpenMarketProduct) {
-        self.productNameLabel.text = product.name ?? Constants.unknwon
+        self.productNameLabel.text = product.name ?? ListConstants.unknwon
         self.stockLabel.text = "잔여수량 : \(product.stock ?? 0)"
         let stock = product.stock ?? 0
         if stock == 0 {
@@ -30,7 +30,7 @@ extension OpenMarketProductCellType {
         
         guard let price = product.price else {
             self.notDiscountedPriceLabel.isHidden = true
-            self.sellingPriceLabel.text = Constants.unknwon
+            self.sellingPriceLabel.text = ListConstants.unknwon
             return
         }
         

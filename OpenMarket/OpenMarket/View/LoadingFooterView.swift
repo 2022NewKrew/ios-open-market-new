@@ -9,10 +9,4 @@ import UIKit
 
 class LoadingFooterView: UICollectionReusableView {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-    
 }

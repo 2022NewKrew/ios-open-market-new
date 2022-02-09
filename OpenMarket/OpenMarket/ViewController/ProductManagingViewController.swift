@@ -44,12 +44,12 @@ class ProductManagingViewController: UIViewController {
     private let picker = UIImagePickerController()
     private let emptyImageAlertController: UIAlertController = {
         let alert = UIAlertController(
-            title: Constants.emptyImageAlertTitle,
-            message: Constants.emptyImageAlertMessage,
+            title: ManagingConstants.emptyImageAlertTitle,
+            message: ManagingConstants.emptyImageAlertMessage,
             preferredStyle: .alert
         )
         let okAction = UIAlertAction(
-            title: Constants.okActionTitle,
+            title: ManagingConstants.okActionTitle,
             style: .default
         )
         alert.addAction(okAction)
@@ -57,12 +57,12 @@ class ProductManagingViewController: UIViewController {
     }()
     private let fullImageAlertController: UIAlertController = {
         let alert = UIAlertController(
-            title: Constants.fullImageAlertTitle,
+            title: ManagingConstants.fullImageAlertTitle,
             message: nil,
             preferredStyle: .alert
         )
         let okAction = UIAlertAction(
-            title: Constants.okActionTitle,
+            title: ManagingConstants.okActionTitle,
             style: .default
         )
         alert.addAction(okAction)
@@ -131,14 +131,14 @@ class ProductManagingViewController: UIViewController {
         self.stockTextField.keyboardType = .numberPad
         self.descriptionTextView.keyboardType = .default
         
-        self.descriptionTextView.text = Constants.productDescriptionTextViewPlaceholder
+        self.descriptionTextView.text = ManagingConstants.productDescriptionTextViewPlaceholder
         self.descriptionTextView.textColor = .lightGray
         
         switch self.kind {
         case .registeration:
-            self.title = Constants.productRegisterationTitle
+            self.title = ManagingConstants.productRegisterationTitle
         case .modification(let product):
-            self.title = Constants.productModificationTitle
+            self.title = ManagingConstants.productModificationTitle
             self.addImageButton.isHidden = true
             guard let imageInfos = product.images else {
                 return
@@ -156,6 +156,7 @@ class ProductManagingViewController: UIViewController {
             self.stockTextField.text = String(product.stock)
             self.descriptionTextView.text = product.description
             self.descriptionTextView.textColor = .black
+            self.currencySegementedControl.selectedSegmentIndex = product.currency == .krw ? 0 : 1
         }
     }
     
@@ -273,7 +274,7 @@ class ProductManagingViewController: UIViewController {
     
     @discardableResult
     private func validateTextView(textview: UITextView) -> Bool {
-        guard let text = textview.text, text.isNotEmtpy, text != Constants.productDescriptionTextViewPlaceholder else {
+        guard let text = textview.text, text.isNotEmtpy, text != ManagingConstants.productDescriptionTextViewPlaceholder else {
             textview.textColor = UIColor.systemOrange
             return false
         }
@@ -409,20 +410,20 @@ class ProductManagingViewController: UIViewController {
               }
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let updateAction = UIAlertAction(
-            title: Constants.updateActionTitle,
+            title: ManagingConstants.updateActionTitle,
             style: .default
         ) { _ in
             self.imageManagingType = .update(index: index)
             self.present(self.picker, animated: true)
         }
         let deleteAction = UIAlertAction(
-            title: Constants.deleteActionTitle,
+            title: ManagingConstants.deleteActionTitle,
             style: .destructive
         ) { _ in
             self.deleteImage(at: index)
         }
         let cancelAction = UIAlertAction(
-            title: Constants.cancelActionTitle,
+            title: ManagingConstants.cancelActionTitle,
             style: .cancel
         )
         alert.addAction(updateAction)
@@ -559,7 +560,7 @@ extension ProductManagingViewController: UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.text == Constants.productDescriptionTextViewPlaceholder {
+        if textView.text == ManagingConstants.productDescriptionTextViewPlaceholder {
             textView.text = nil
             textView.textColor = .black
         }
@@ -567,7 +568,7 @@ extension ProductManagingViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = Constants.productDescriptionTextViewPlaceholder
+            textView.text = ManagingConstants.productDescriptionTextViewPlaceholder
         }
         self.validateTextView(textview: textView)
     }

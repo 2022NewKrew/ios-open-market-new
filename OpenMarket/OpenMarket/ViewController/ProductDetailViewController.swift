@@ -46,7 +46,7 @@ class ProductDetailViewController: UIViewController {
             return
         }
         let rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: Constants.manageButtonSystemImageName),
+            image: UIImage(systemName: ManagingConstants.manageButtonSystemImageName),
             style: .plain,
             target: self,
             action: #selector(self.showAlert)
@@ -57,19 +57,19 @@ class ProductDetailViewController: UIViewController {
     @objc func showAlert(_ sender: UIButton) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let updateAction = UIAlertAction(
-            title: Constants.updateActionTitle,
+            title: ManagingConstants.updateActionTitle,
             style: .default
         ) { _ in
-            self.performSegue(withIdentifier: Constants.modifySegueIdentifier, sender: nil)
+            self.performSegue(withIdentifier: ManagingConstants.modifySegueIdentifier, sender: nil)
         }
         let deleteAction = UIAlertAction(
-            title: Constants.deleteActionTitle,
+            title: ManagingConstants.deleteActionTitle,
             style: .destructive
         ) { _ in
             
         }
         let cancelAction = UIAlertAction(
-            title: Constants.cancelActionTitle,
+            title: ManagingConstants.cancelActionTitle,
             style: .cancel
         )
         alert.addAction(updateAction)
