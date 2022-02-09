@@ -15,23 +15,23 @@ protocol ProductCell: UICollectionViewCell {
     var productDiscountedPrice: UILabel! { get }
     var productStock: UILabel! { get }
 
-    func updateCell(product: Product?, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell)
-    func setImage(product: Product, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell)
+    func updateCell(product: Product?, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell, completion: @escaping (ProductCell) -> Void)
+    func setImage(product: Product, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell, completion: @escaping (ProductCell) -> Void)
     func setPrice(product: Product)
     func setStock(product: Product)
 }
 
 extension ProductCell {
-    func updateCell(product: Product?, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell) {
+    func updateCell(product: Product?, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell, completion: @escaping (ProductCell) -> Void) {
         guard let product = product else { return }
 
         self.productName.text = product.name
-        self.setImage(product: product, indexPath: indexPath, collectionView: collectionView, cell: cell)
         self.setPrice(product: product)
         self.setStock(product: product)
+        self.setImage(product: product, indexPath: indexPath, collectionView: collectionView, cell: cell, completion: completion)
     }
 
-    func setImage(product: Product, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell) {
+    func setImage(product: Product, indexPath: IndexPath, collectionView: UICollectionView, cell: ProductCell, completion: @escaping (ProductCell) -> Void) {
         self.productCellViewModel.productThumbnailImage(
             thumbnailUrl: product.thumbnail,
             indexPath: indexPath,
@@ -44,6 +44,7 @@ extension ProductCell {
 
             DispatchQueue.main.async {
                 self.productThumbnail.image = self.productCellViewModel.productThumbnailImage
+                completion(self)
             }
         }
     }

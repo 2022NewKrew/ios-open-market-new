@@ -77,11 +77,11 @@ extension ProductListViewController {
         let layout = UICollectionViewCompositionalLayout {
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
 
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.15))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
             let section = NSCollectionLayoutSection(group: group)
@@ -149,7 +149,10 @@ extension ProductListViewController: UICollectionViewDataSource {
         }
 
         let product = products[indexPath.row]
-        productCell.updateCell(product: product, indexPath: indexPath, collectionView: collectionView, cell: productCell)
+        productCell.updateCell(product: product, indexPath: indexPath, collectionView: collectionView, cell: productCell) { [weak self] cell in
+            cell.contentView.setNeedsLayout()
+            cell.contentView.layoutIfNeeded()
+        }
 
         return productCell
     }

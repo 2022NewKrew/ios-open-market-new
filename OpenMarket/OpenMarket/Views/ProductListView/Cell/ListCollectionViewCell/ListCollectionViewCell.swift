@@ -50,7 +50,8 @@ class ListCollectionViewCell: UICollectionViewCell, ProductCell {
             self.listProductStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(10)),
             self.listProductStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: CGFloat(-20)),
             self.listProductStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            self.listProductStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            self.listProductStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            self.productThumbnail.heightAnchor.constraint(equalToConstant: CGFloat(100))
         ])
     }
 }
