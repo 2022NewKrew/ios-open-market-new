@@ -10,7 +10,7 @@ import Foundation
 struct OpenMarketProductPostParam: Codable {
     var name: String
     var descriptions: String
-    var price: Float
+    var price: Int
     var currency: OpenMarketProduct.Currency
     var discountedPrice: Float = 0.0
     var stock: Int = 0

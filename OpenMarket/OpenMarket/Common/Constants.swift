@@ -32,4 +32,7 @@ enum Constants {
     static let deleteActionTitle = "삭제"
     static let cancelActionTitle = "취소"
     static let fullImageAlertTitle = "더이상 이미지를 추가할 수 없습니다."
+    static let modifySegueIdentifier = "modify"
+    static let detailSegueIdentifier = "detail"
+    static let manageButtonSystemImageName = "square.and.arrow.up"
 }

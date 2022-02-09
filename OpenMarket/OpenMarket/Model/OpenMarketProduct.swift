@@ -21,9 +21,10 @@ struct OpenMarketProduct: Codable, Equatable {
     var createdAt: String?
     var issuedAt: String?
     var images: [ProductImage]?
+    var vendor: Vendor?
     
     enum CodingKeys: String, CodingKey {
-        case id, name, description, currency, price, stock, images
+        case id, name, description, currency, price, stock, images, vendor
         case vendorId = "vendor_id"
         case thumbnailURLString = "thumbnail"
         case bargainPrice = "bargain_price"
@@ -61,6 +62,12 @@ struct OpenMarketProduct: Codable, Equatable {
             case thumbnailURLString = "thumbnail_url"
             case issuedAt = "issued_at"
         }
+    }
+    
+    mutating func setDetailInfo(description: String?, images: [ProductImage]?, vendor: Vendor?) {
+        self.description = description
+        self.images = images
+        self.vendor = vendor
     }
 }
 

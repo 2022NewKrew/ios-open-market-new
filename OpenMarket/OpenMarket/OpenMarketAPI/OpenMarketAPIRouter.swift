@@ -10,10 +10,12 @@ enum OpenMarketAPIRouter {
     case getOpenMarketProductList(pageNumber: Int, itemsPerPage: Int)
     case getDetailOpenMarketProduct(productId: Int)
     case postOpenMarektProduct(boundary: String, identifier: String, body: Data)
+    case patchOpenMarketProduct(prodcutId: Int, identifier: String, body: Data)
     
     var path: String {
         switch self {
-        case .getDetailOpenMarketProduct(let productId): return APIConstants.productsEndPoint + "/" + String(productId)
+        case .getDetailOpenMarketProduct(let productId), .patchOpenMarketProduct(let productId, _, _):
+            return APIConstants.productsEndPoint + "/" + String(productId)
         default: return APIConstants.productsEndPoint
         }
     }
@@ -36,8 +38,12 @@ enum OpenMarketAPIRouter {
         switch self {
         case .postOpenMarektProduct(let boundary, let identifier, _):
             return [
-                HTTPHeaderField.contentType.rawValue : ContentType.multiPartForm(boundary: boundary).value
-                ,APIConstants.identifier : identifier
+                HTTPHeaderField.contentType.rawValue : ContentType.multiPartForm(boundary: boundary).value,
+                APIConstants.identifier : identifier
+            ]
+        case .patchOpenMarketProduct(_, let identifier, _):
+            return [
+                APIConstants.identifier : identifier
             ]
         default:
             return [:]
@@ -46,7 +52,7 @@ enum OpenMarketAPIRouter {
     
     var body: Data? {
         switch self {
-        case .postOpenMarektProduct(_, _, let data):
+        case .postOpenMarektProduct(_, _, let data), .patchOpenMarketProduct(_, _, let data):
             return data
         default:
             return nil
@@ -61,6 +67,7 @@ enum OpenMarketAPIRouter {
         switch self {
         case  .getOpenMarketProductList, .getDetailOpenMarketProduct: return .get
         case .postOpenMarektProduct: return .post
+        case .patchOpenMarketProduct: return .patch
         }
     }
     

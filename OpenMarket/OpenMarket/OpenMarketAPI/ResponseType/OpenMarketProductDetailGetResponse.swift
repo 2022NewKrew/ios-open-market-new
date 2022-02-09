@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct OpenMarketProductDetailGetResponse: Decodable, Equatable {
+struct OpenMarketProductDetailGetResponse: Decodable {
     var id: Int?
     var vendorId: Int?
     var name: String?

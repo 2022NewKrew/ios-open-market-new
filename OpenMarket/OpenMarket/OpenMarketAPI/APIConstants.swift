@@ -14,6 +14,7 @@ struct APIConstants {
     static let productId = "product_id"
     static let identifier = "identifier"
     static let vendorIdentifier = "aa848b00-7217-11ec-abfa-0933567519e0"
+    static let vendorIntId = 36
     static let vendorPassword = "Jq_xu-7-N_5#!*ET"
     static let params = "params"
     static let images = "images"

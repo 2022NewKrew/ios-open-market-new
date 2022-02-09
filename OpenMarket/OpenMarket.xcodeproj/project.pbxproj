@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C23859EE27B26AD400D3EA2C /* OpenMarketProductPatchParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23859ED27B26AD400D3EA2C /* OpenMarketProductPatchParam.swift */; };
+		C23859F027B2716300D3EA2C /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23859EF27B2716300D3EA2C /* ProductDetailViewController.swift */; };
 		C260BF8B27A7ADB200DEFE8F /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C260BF8A27A7ADB200DEFE8F /* ImageLoader.swift */; };
 		C260BF8E27A7C7AF00DEFE8F /* LoadingFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C260BF8C27A7C7AF00DEFE8F /* LoadingFooterView.swift */; };
 		C260BF8F27A7C7AF00DEFE8F /* LoadingFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C260BF8D27A7C7AF00DEFE8F /* LoadingFooterView.xib */; };
@@ -15,7 +17,7 @@
 		C260BF9527A91AD600DEFE8F /* OpenMarketProductCellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C260BF9427A91AD600DEFE8F /* OpenMarketProductCellType.swift */; };
 		C260BF9827ABADE800DEFE8F /* OpenMarketProductPostResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C260BF9727ABADE800DEFE8F /* OpenMarketProductPostResponse.swift */; };
 		C260BF9B27ABB30B00DEFE8F /* OpenMarketProductPostParm.swift in Sources */ = {isa = PBXBuildFile; fileRef = C260BF9A27ABB30B00DEFE8F /* OpenMarketProductPostParm.swift */; };
-		C260BF9D27ABD52600DEFE8F /* ProductRegisterationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C260BF9C27ABD52600DEFE8F /* ProductRegisterationViewController.swift */; };
+		C260BF9D27ABD52600DEFE8F /* ProductManagingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C260BF9C27ABD52600DEFE8F /* ProductManagingViewController.swift */; };
 		C2C959B2279F861E00F87F67 /* OpenMarketProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C959B1279F861E00F87F67 /* OpenMarketProduct.swift */; };
 		C2C959B8279F944100F87F67 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C959B7279F944100F87F67 /* APIConstants.swift */; };
 		C2C959BC279FAAE700F87F67 /* OpenMarketAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C959BB279FAAE700F87F67 /* OpenMarketAPIManager.swift */; };
@@ -55,6 +57,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C23859ED27B26AD400D3EA2C /* OpenMarketProductPatchParam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketProductPatchParam.swift; sourceTree = "<group>"; };
+		C23859EF27B2716300D3EA2C /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
 		C260BF8A27A7ADB200DEFE8F /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		C260BF8C27A7C7AF00DEFE8F /* LoadingFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingFooterView.swift; sourceTree = "<group>"; };
 		C260BF8D27A7C7AF00DEFE8F /* LoadingFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingFooterView.xib; sourceTree = "<group>"; };
@@ -63,7 +67,7 @@
 		C260BF9427A91AD600DEFE8F /* OpenMarketProductCellType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketProductCellType.swift; sourceTree = "<group>"; };
 		C260BF9727ABADE800DEFE8F /* OpenMarketProductPostResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketProductPostResponse.swift; sourceTree = "<group>"; };
 		C260BF9A27ABB30B00DEFE8F /* OpenMarketProductPostParm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketProductPostParm.swift; sourceTree = "<group>"; };
-		C260BF9C27ABD52600DEFE8F /* ProductRegisterationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductRegisterationViewController.swift; sourceTree = "<group>"; };
+		C260BF9C27ABD52600DEFE8F /* ProductManagingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductManagingViewController.swift; sourceTree = "<group>"; };
 		C2C959B1279F861E00F87F67 /* OpenMarketProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketProduct.swift; sourceTree = "<group>"; };
 		C2C959B7279F944100F87F67 /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		C2C959BB279FAAE700F87F67 /* OpenMarketAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketAPIManager.swift; sourceTree = "<group>"; };
@@ -131,12 +135,13 @@
 			path = ResponseType;
 			sourceTree = "<group>";
 		};
-		C260BF9927ABB2F700DEFE8F /* RequestType */ = {
+		C260BF9927ABB2F700DEFE8F /* RequestBodyType */ = {
 			isa = PBXGroup;
 			children = (
 				C260BF9A27ABB30B00DEFE8F /* OpenMarketProductPostParm.swift */,
+				C23859ED27B26AD400D3EA2C /* OpenMarketProductPatchParam.swift */,
 			);
-			path = RequestType;
+			path = RequestBodyType;
 			sourceTree = "<group>";
 		};
 		C2C95973279E5FF500F87F67 /* Model */ = {
@@ -152,7 +157,7 @@
 		C2C959B6279F943400F87F67 /* OpenMarketAPI */ = {
 			isa = PBXGroup;
 			children = (
-				C260BF9927ABB2F700DEFE8F /* RequestType */,
+				C260BF9927ABB2F700DEFE8F /* RequestBodyType */,
 				C260BF9627AB96D000DEFE8F /* ResponseType */,
 				C2C959B7279F944100F87F67 /* APIConstants.swift */,
 				C2C959BB279FAAE700F87F67 /* OpenMarketAPIManager.swift */,
@@ -210,7 +215,8 @@
 			isa = PBXGroup;
 			children = (
 				C2C95A3F27A1493100F87F67 /* ProductListViewController.swift */,
-				C260BF9C27ABD52600DEFE8F /* ProductRegisterationViewController.swift */,
+				C260BF9C27ABD52600DEFE8F /* ProductManagingViewController.swift */,
+				C23859EF27B2716300D3EA2C /* ProductDetailViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -377,11 +383,13 @@
 				C2C959BE279FAF9A00F87F67 /* Vendor.swift in Sources */,
 				C2C959BC279FAAE700F87F67 /* OpenMarketAPIManager.swift in Sources */,
 				C2C95A3B27A1432900F87F67 /* Constants.swift in Sources */,
+				C23859EE27B26AD400D3EA2C /* OpenMarketProductPatchParam.swift in Sources */,
 				C2ED841C27B1FA1200614761 /* ProductImageContainer.swift in Sources */,
 				C2C959B8279F944100F87F67 /* APIConstants.swift in Sources */,
 				C260BF9827ABADE800DEFE8F /* OpenMarketProductPostResponse.swift in Sources */,
 				C2C959CD279FE20600F87F67 /* OpenMarketAPIRouter.swift in Sources */,
 				C260BF9527A91AD600DEFE8F /* OpenMarketProductCellType.swift in Sources */,
+				C23859F027B2716300D3EA2C /* ProductDetailViewController.swift in Sources */,
 				C260BF8E27A7C7AF00DEFE8F /* LoadingFooterView.swift in Sources */,
 				C2C95A3027A1339F00F87F67 /* OpenMarketProductListCell.swift in Sources */,
 				C2ED841627AD1E4700614761 /* UIImage+Extension.swift in Sources */,
@@ -392,7 +400,7 @@
 				C2C95A3827A13DF100F87F67 /* String+Extension.swift in Sources */,
 				C260BF8B27A7ADB200DEFE8F /* ImageLoader.swift in Sources */,
 				C70FB0FD25BEF61C00C9924E /* SceneDelegate.swift in Sources */,
-				C260BF9D27ABD52600DEFE8F /* ProductRegisterationViewController.swift in Sources */,
+				C260BF9D27ABD52600DEFE8F /* ProductManagingViewController.swift in Sources */,
 				C2ED841827B0E2BE00614761 /* UIView+Extension.swift in Sources */,
 				C2ED841A27B1016100614761 /* ProductInfoTextField.swift in Sources */,
 				C2C959CF279FE97000F87F67 /* OpenMarketAPIError.swift in Sources */,

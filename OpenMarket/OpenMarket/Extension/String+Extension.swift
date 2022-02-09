@@ -21,4 +21,19 @@ extension String {
     var isNotEmtpy: Bool {
         return !self.isEmpty
     }
+    
+    init?(_ value: Float?) {
+        guard let floatValue = value else {
+            return nil
+        }
+        let intValue = Int(floatValue)
+        self = "\(intValue)"
+    }
+    
+    init?(_ value: Int?) {
+        guard let value = value else {
+            return nil
+        }
+        self = "\(value)"
+    }
 }

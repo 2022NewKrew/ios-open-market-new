@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProductRegisterationViewController: UIViewController {
+class ProductManagingViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var addImageButton: UIButton!
     @IBOutlet weak var firstImageView: UIImageView!
@@ -23,9 +23,9 @@ class ProductRegisterationViewController: UIViewController {
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var keyboardHeightConstraint: NSLayoutConstraint!
     
-    enum Kind {
+    enum Kind: Equatable {
         case registeration
-        case modification
+        case modification(product: OpenMarketProduct)
     }
     
     enum CurrecncySegmentedControlValue: Int {
@@ -39,7 +39,7 @@ class ProductRegisterationViewController: UIViewController {
         case delete(index: Int)
     }
     
-    private var kind: Kind = .registeration
+    var kind: Kind = .registeration
     private let apiManager = OpenMarketAPIManager()
     private let picker = UIImagePickerController()
     private let emptyImageAlertController: UIAlertController = {
@@ -125,14 +125,6 @@ class ProductRegisterationViewController: UIViewController {
     }
     
     private func setupUI() {
-        switch self.kind {
-        case .registeration:
-            self.title = Constants.productRegisterationTitle
-        case .modification:
-            self.title = Constants.productModificationTitle
-            self.addImageButton.isHidden = true
-        }
-        
         self.productNameTextField.keyboardType = .default
         self.priceTextField.keyboardType = .numberPad
         self.discountedPriceTextField.keyboardType = .numberPad
@@ -141,10 +133,34 @@ class ProductRegisterationViewController: UIViewController {
         
         self.descriptionTextView.text = Constants.productDescriptionTextViewPlaceholder
         self.descriptionTextView.textColor = .lightGray
+        
+        switch self.kind {
+        case .registeration:
+            self.title = Constants.productRegisterationTitle
+        case .modification(let product):
+            self.title = Constants.productModificationTitle
+            self.addImageButton.isHidden = true
+            guard let imageInfos = product.images else {
+                return
+            }
+            let imageURLs = imageInfos.map{ $0.urlString }
+            imageURLs.enumerated().forEach { (i,urlString) in
+                ImageLoader.loadImage(urlString: urlString) { image in
+                    self.imageViews[i].isHidden = false
+                    self.imageViews[i].image = image
+                }
+            }
+            self.productNameTextField.text = product.name
+            self.priceTextField.text = String(product.price)
+            self.discountedPriceTextField.text = String(product.discountedPrice)
+            self.stockTextField.text = String(product.stock)
+            self.descriptionTextView.text = product.description
+            self.descriptionTextView.textColor = .black
+        }
     }
     
     private func addGestureRecognizerForImageViews() {
-        if self.kind == .modification {
+        guard self.kind == .registeration else {
             return
         }
         self.imageViews.forEach { imageView in
@@ -211,6 +227,10 @@ class ProductRegisterationViewController: UIViewController {
     }
     
     private func validateImages() -> Bool {
+        if self.kind != .registeration {
+            return true
+        }
+        
         if self.images.isEmpty {
             self.present(self.emptyImageAlertController, animated: true)
             return false
@@ -260,18 +280,23 @@ class ProductRegisterationViewController: UIViewController {
         return true
     }
     
-    private func createOpenMarketProductParam() -> OpenMarketProductPostParam? {
-        let selectedCurrencyIndex = self.currencySegementedControl.selectedSegmentIndex
-        let currency: OpenMarketProduct.Currency = selectedCurrencyIndex == CurrecncySegmentedControlValue.krw.rawValue ? .krw : .usd
-        
-        guard let productName = self.productNameTextField.text,
-              let description = self.descriptionTextView.text,
-              let priceText = self.priceTextField.text, let price = Float(priceText),
-              let discountedPriceText = self.discountedPriceTextField.text, let discountedPrice = Float(discountedPriceText),
-              let stockText = self.stockTextField.text, let stock = Int(stockText) else {
-                  return nil
-              }
-        
+    private func validateUserInput() -> Bool {
+        var isValidate = true
+        self.textFields.forEach { textField in
+            if !self.validateTextField(textField: textField) {
+                isValidate = false
+            }
+        }
+        if !self.validateTextView(textview: self.descriptionTextView) {
+            isValidate = false
+        }
+        if !self.validateImages() {
+            isValidate = false
+        }
+        return isValidate
+    }
+    
+    private func createOpenMarketProductParam(productName: String, description: String, price: Int, currency: OpenMarketProduct.Currency, discountedPrice: Float, stock: Int) -> OpenMarketProductPostParam {
         let openMarketProductPostParam = OpenMarketProductPostParam(
             name: productName,
             descriptions: description,
@@ -281,8 +306,21 @@ class ProductRegisterationViewController: UIViewController {
             stock: stock,
             secret: APIConstants.vendorPassword
         )
-        
         return openMarketProductPostParam
+    }
+    
+    private func createOpenMarketProductPatchParam(productName: String, description: String, price: Int, currency: OpenMarketProduct.Currency, discountedPrice: Float, stock: Int, thumbnailId: Int) -> OpenMarketProductPatchParam {
+        let openMarketProductPatchParam = OpenMarketProductPatchParam(
+            name: productName,
+            descriptions: description,
+            price: price,
+            currency: currency,
+            discountedPrice: discountedPrice,
+            stock: stock,
+            secret: APIConstants.vendorPassword,
+            thumbnailId: thumbnailId
+        )
+        return openMarketProductPatchParam
     }
     
     private func findImageViewIndex(target: UIImageView) -> Int? {
@@ -320,12 +358,55 @@ class ProductRegisterationViewController: UIViewController {
         }
     }
     
+    private func postOpenMarketProduct(productName: String, description: String, price: Int, currency: OpenMarketProduct.Currency, discountedPrice: Float, stock: Int, completion: @escaping (Result<OpenMarketProudctPostOrPatchResponse, Error>) -> Void) {
+        let param = self.createOpenMarketProductParam(
+            productName: productName,
+            description: description,
+            price: price,
+            currency: currency,
+            discountedPrice: discountedPrice,
+            stock: stock
+        )
+        
+        self.apiManager.postOpenMarketProduct(
+            identifier: APIConstants.vendorIdentifier,
+            params: param,
+            images: self.images.images
+        ) { result in
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
+    }
+    
+    private func patchOpenMarketProduct(productName: String, description: String, price: Int, currency: OpenMarketProduct.Currency, discountedPrice: Float, stock: Int, productId: Int, thumbnailId: Int, completion: @escaping (Result<OpenMarketProudctPostOrPatchResponse, Error>) -> Void) {
+        let param = self.createOpenMarketProductPatchParam(
+            productName: productName,
+            description: description,
+            price: price,
+            currency: currency,
+            discountedPrice: discountedPrice,
+            stock: stock,
+            thumbnailId: thumbnailId
+        )
+        
+        self.apiManager.patchOpenMarketProduct(
+            identifier: APIConstants.vendorIdentifier,
+            productId: productId,
+            params: param
+        ) { result in
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
+    }
+    
     @objc func showImageManagingMenu(sender: UITapGestureRecognizer) {
         let target = sender.view
         guard let imageView = target as? UIImageView,
               let index = self.findImageViewIndex(target: imageView) else {
-            return
-        }
+                  return
+              }
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let updateAction = UIAlertAction(
             title: Constants.updateActionTitle,
@@ -387,42 +468,69 @@ class ProductRegisterationViewController: UIViewController {
         self.present(self.picker, animated: true)
     }
     
-    @IBAction func postOrPutProduct(_ sender: Any) {
+    @IBAction func done(_ sender: Any) {
         self.view.endEditing(true)
-        var isValidate = true
-        self.textFields.forEach { textField in
-            if !self.validateTextField(textField: textField) {
-                isValidate = false
-            }
-        }
-        if !self.validateTextView(textview: self.descriptionTextView) {
-            isValidate = false
-        }
-        if !self.validateImages() {
-            isValidate = false
-        }
-        if !isValidate {
+        guard self.validateUserInput() else {
             return
         }
-
-        guard let param = self.createOpenMarketProductParam() else {
-            return
-        }
-        self.apiManager.postOpenMarketProduct(
-            identifier: APIConstants.vendorIdentifier,
-            params: param,
-            images: self.images.images) { result in
-                DispatchQueue.main.async {
+        
+        let selectedCurrencyIndex = self.currencySegementedControl.selectedSegmentIndex
+        let currency: OpenMarketProduct.Currency = selectedCurrencyIndex == CurrecncySegmentedControlValue.krw.rawValue ? .krw : .usd
+        
+        guard let productName = self.productNameTextField.text,
+              let description = self.descriptionTextView.text,
+              let priceText = self.priceTextField.text, let price = Int(priceText),
+              let discountedPriceText = self.discountedPriceTextField.text, let discountedPrice = Float(discountedPriceText),
+              let stockText = self.stockTextField.text, let stock = Int(stockText) else {
+                  return
+              }
+        
+        switch self.kind {
+        case .registeration:
+            self.postOpenMarketProduct(
+                productName: productName,
+                description: description,
+                price: price,
+                currency: currency,
+                discountedPrice: discountedPrice,
+                stock: stock
+            ) { result in
+                if let _ = try? result.get() {
                     self.navigationController?.popViewController(animated: true)
                 }
             }
+        case .modification(let product):
+            guard let productId = product.id,
+                  let imageInfos = product.images,
+                  let thumbnailURLString = product.thumbnailURLString,
+                  let thumbnailId = imageInfos.filter({
+                      $0.thumbnailURLString == thumbnailURLString
+                  }).first?.id else {
+                      return
+                  }
+            self.patchOpenMarketProduct(
+                productName: productName,
+                description: description,
+                price: price, currency: currency,
+                discountedPrice: discountedPrice,
+                stock: stock,
+                productId: productId,
+                thumbnailId: thumbnailId
+            ) { result in
+                if let _ = try? result.get() {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+            
+        }
     }
+    
     @IBAction func cancel(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
 }
 
-extension ProductRegisterationViewController: UITextFieldDelegate {
+extension ProductManagingViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         UIView.animate(withDuration: 0.25) {
             switch textField {
@@ -445,7 +553,7 @@ extension ProductRegisterationViewController: UITextFieldDelegate {
     }
 }
 
-extension ProductRegisterationViewController: UITextViewDelegate {
+extension ProductManagingViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         self.scrollToMakeTextViewCursorVisible(in: textView)
     }
@@ -465,13 +573,12 @@ extension ProductRegisterationViewController: UITextViewDelegate {
     }
 }
 
-extension ProductRegisterationViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension ProductManagingViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
             self.picker.dismiss(animated: true)
             return
         }
-        
         switch self.imageManagingType {
         case .add:
             self.addNewImage(image: image)

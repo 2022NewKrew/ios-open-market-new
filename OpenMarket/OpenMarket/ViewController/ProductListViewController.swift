@@ -13,6 +13,7 @@ class ProductListViewController: UIViewController {
     
     private let apiManager = OpenMarketAPIManager()
     private var products: [OpenMarketProduct?] = []
+    private var recentlySelectedIndex: Int?
     private var isLoading = false
     private var loadingView: LoadingFooterView?
     private var totalCount: Int = 0
@@ -41,6 +42,14 @@ class ProductListViewController: UIViewController {
             return
         }
         flowLayout.invalidateLayout()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let destination = segue.destination as? ProductDetailViewController,
+              let index = self.recentlySelectedIndex else {
+            return
+        }
+        destination.product = self.products[index]
     }
     
     private func setup() {
@@ -231,5 +240,31 @@ extension ProductListViewController: UICollectionViewDataSource, UICollectionVie
                 bottom: Constants.openMarketPrdouctCellTopBottomInset,
                 right: Constants.openMarketPrdouctCellLeadingTrailingInset
             )
+    }
+}
+
+extension ProductListViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.recentlySelectedIndex = indexPath.row
+        guard var product = self.products[indexPath.row],
+              let productId = product.id else {
+                  return
+        }
+        self.apiManager.getOpenMarketProductDetail(
+            productId: productId
+        ) { result in
+                guard let detailInfo = try? result.get() else {
+                    return
+                }
+                product.setDetailInfo(
+                    description: detailInfo.description,
+                    images: detailInfo.images,
+                    vendor: detailInfo.vendors
+                )
+                self.products[indexPath.row] = product
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: Constants.detailSegueIdentifier, sender: nil)
+                }
+            }
     }
 }
