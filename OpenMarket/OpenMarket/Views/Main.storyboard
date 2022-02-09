@@ -73,6 +73,7 @@
                         <barButtonItem key="rightBarButtonItem" title="addProductButton" image="plus" catalog="system" id="5dz-z4-EG4">
                             <connections>
                                 <action selector="pressAddProductButton:" destination="Npz-X9-3De" id="JA4-Mx-2ks"/>
+                                <segue destination="kQk-vz-ntW" kind="show" identifier="moveProductAddIdentifier" id="7qH-ul-JML"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -81,7 +82,7 @@
                         <outlet property="pagingLoadingUI" destination="K13-zX-OTx" id="tgc-aS-5WF"/>
                         <outlet property="productListCollectionView" destination="R7k-BP-r2b" id="wbl-gX-w3j"/>
                         <outlet property="productSegmentedControl" destination="pIz-nS-wBh" id="DWY-NM-H81"/>
-                        <segue destination="kQk-vz-ntW" kind="show" identifier="moveProductIdentifier" id="n3Z-5a-a4F"/>
+                        <segue destination="kQk-vz-ntW" kind="show" identifier="moveProductEditIdentifier" id="n3Z-5a-a4F"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jpN-rM-LsM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -121,6 +122,9 @@
             <point key="canvasLocation" x="-926" y="265"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="7qH-ul-JML"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">

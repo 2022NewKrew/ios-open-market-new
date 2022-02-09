@@ -24,6 +24,7 @@
 		6E10223927ABE13300359BD0 /* ListProductStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10223827ABE13300359BD0 /* ListProductStackView.swift */; };
 		6E307D5F27B01A0E006ABA91 /* ProductListSegmentValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E307D5E27B01A0E006ABA91 /* ProductListSegmentValue.swift */; };
 		6E307D6727B26B6A006ABA91 /* ProductCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E307D6627B26B6A006ABA91 /* ProductCellViewModel.swift */; };
+		6E307D6927B3B613006ABA91 /* ProductPriceSegmentValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E307D6827B3B613006ABA91 /* ProductPriceSegmentValue.swift */; };
 		6EDC38D9279E9389000BC3D9 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDC38D8279E9389000BC3D9 /* Constant.swift */; };
 		6EDC38DD279EBAC2000BC3D9 /* RepositoryInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDC38DC279EBAC2000BC3D9 /* RepositoryInjection.swift */; };
 		6EDC38E2279EBBC7000BC3D9 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDC38E1279EBBC7000BC3D9 /* Product.swift */; };
@@ -74,6 +75,7 @@
 		6E10223827ABE13300359BD0 /* ListProductStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListProductStackView.swift; sourceTree = "<group>"; };
 		6E307D5E27B01A0E006ABA91 /* ProductListSegmentValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListSegmentValue.swift; sourceTree = "<group>"; };
 		6E307D6627B26B6A006ABA91 /* ProductCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCellViewModel.swift; sourceTree = "<group>"; };
+		6E307D6827B3B613006ABA91 /* ProductPriceSegmentValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPriceSegmentValue.swift; sourceTree = "<group>"; };
 		6EDC38D8279E9389000BC3D9 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		6EDC38DC279EBAC2000BC3D9 /* RepositoryInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryInjection.swift; sourceTree = "<group>"; };
 		6EDC38E1279EBBC7000BC3D9 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				6E10220C27AA34F300359BD0 /* ProductViewController.swift */,
+				6E307D6827B3B613006ABA91 /* ProductPriceSegmentValue.swift */,
 			);
 			path = ProductView;
 			sourceTree = "<group>";
@@ -411,6 +414,7 @@
 				C70FB0FB25BEF61C00C9924E /* AppDelegate.swift in Sources */,
 				6E10222727AA8A1B00359BD0 /* ProductCell.swift in Sources */,
 				6E10223027ABDB6300359BD0 /* BaseStackView.swift in Sources */,
+				6E307D6927B3B613006ABA91 /* ProductPriceSegmentValue.swift in Sources */,
 				6E10222B27ABA60700359BD0 /* GridCollectionViewCell.swift in Sources */,
 				6EDC38E4279EC006000BC3D9 /* ProductList.swift in Sources */,
 				6E10223527ABE10F00359BD0 /* ListPriceStackView.swift in Sources */,

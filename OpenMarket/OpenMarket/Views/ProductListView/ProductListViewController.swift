@@ -27,7 +27,7 @@ class ProductListViewController: UIViewController {
     }
 
     @IBAction func pressAddProductButton(_ sender: UIBarButtonItem) {
-        self.performSegue(withIdentifier: Constant.productSegue, sender: self)
+        self.performSegue(withIdentifier: Constant.productAddSegue, sender: self)
     }
 
     @IBAction func changeSegmentedControl(_ sender: UISegmentedControl) {
@@ -68,6 +68,20 @@ class ProductListViewController: UIViewController {
         self.productListCollectionView.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: GridCollectionViewCell.self))
         self.productListCollectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.productListCollectionView.collectionViewLayout = self.createListCompositionLayout()
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationViewController = segue.destination as? ProductViewController
+        switch segue.identifier {
+        case Constant.productAddSegue:
+            destinationViewController?.navigationTitle = "상품등록"
+        case Constant.productEditSegue:
+            destinationViewController?.navigationTitle = "상품수정"
+        case .none:
+            break
+        case .some(_):
+            break
+        }
     }
 }
 
@@ -113,7 +127,7 @@ extension ProductListViewController {
 // MARK - Delegate
 extension ProductListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.performSegue(withIdentifier: Constant.productSegue, sender: self)
+        self.performSegue(withIdentifier: Constant.productEditSegue, sender: self)
     }
 }
 
