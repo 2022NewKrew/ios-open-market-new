@@ -17,4 +17,8 @@ struct OpenMarketAPI {
     func getDetailOfProduct(productId: Int) {
         connector.getData(from: "api/products/\(productId)", type: Product.self)
     }
+    
+    func addProduct(data: inout [String: String], images: inout [Data]) {
+        connector.postData(to: "api/products/", data: &data, images: &images)
+    }
 }

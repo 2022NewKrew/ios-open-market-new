@@ -148,5 +148,51 @@ class ProductEditView: UIStackView {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
         imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
+        // nested.. 
+        if let data = image.pngData() {
+            let scale = Double.init(data.count / 1048576)
+            if scale > 1 {
+                if let newImage = resizeImage(scale: scale, image: image) {
+                    imageView.image = newImage
+                    imageData.append(newImage.pngData()!)
+                    return
+                }
+            }
+            imageData.append(data)
+        }
     }
+    
+    func resizeImage(scale: Double, image: UIImage) -> UIImage? {
+        let size = image.size
+        let newSize = CGSize(width: size.width / scale, height: size.height / scale)
+        let rect = CGRect(origin: .zero, size: newSize)
+
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+    
+    func saveProduct() {
+        var data: [String: String] = [:]
+        data["name"] = productName.text
+        data["descriptions"] = productDetail.text
+        data["price"] = productPrice.text
+        data["currency"] = productCurrency.selectedSegmentIndex == 0 ? "KRW" : "USD"
+        data["discounted_price"] = productDiscountPrice.text
+        data["stock"] = productStock.text
+//        var data = """
+//        {
+//            "name": "\(productName.text)"
+//            "descriptions": "\(productDetail.text)"
+//            "price" = "\(productPrice.text)"
+//            "currency" = "\(productCurrency.selectedSegmentIndex == 0 ? "KRW" : "USD")"
+//            "discounted_price" = "\(productDiscountPrice.text)"
+//            "stock" = "\(productStock.text)"
+//            "price" = "\(productPrice.text)"
+//        """
+        OpenMarketAPI.shared.addProduct(data: &data, images: &imageData)
+    }
+
 }

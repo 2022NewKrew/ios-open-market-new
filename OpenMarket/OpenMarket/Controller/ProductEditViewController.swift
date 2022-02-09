@@ -11,8 +11,18 @@ class ProductEditViewController: UIViewController {
         editView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         view.backgroundColor = .systemBackground
         navigationController?.title = "상품등록"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: nil)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: nil)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelAdding))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(addProduct))
+    }
+    
+    @objc
+    func addProduct() {
+        editView.saveProduct()
+    }
+    
+    @objc
+    func cancelAdding() {
+        navigationController?.dismiss(animated: true, completion: nil)
     }
 }
 
