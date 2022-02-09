@@ -85,11 +85,11 @@ class ProductGridCell: UICollectionViewCell {
         productThumbnail.image = UIImage(data: thumbnailData)
     }
     
-    private func setPriceLabel(_ currency: String, _ price: Double, _ discountedPrice: Double) {
+    private func setPriceLabel(_ currency: String, _ price: Int, _ discountedPrice: Int) {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         guard let formattedPrice = numberFormatter.string(from: NSNumber(value: price)) else { return }
-        guard let formatteddiscountedPrice = numberFormatter.string(from: NSNumber(value: discountedPrice)) else { return }
+        guard let formatteddiscountedPrice = numberFormatter.string(from: NSNumber(value: price-discountedPrice)) else { return }
         
         productPrice.textColor = .systemGray
         productPrice.numberOfLines = 0

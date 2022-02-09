@@ -12,9 +12,9 @@ private enum Section: Hashable {
 
 class ViewController: UIViewController {
     
-    let networkController = NetworkConnector()
-//    var productList: ProductList? = nil
+    let networkConnector = NetworkConnector()
     var products: [Product] = []
+    var selectedProduct: ProductDetail?
     var isLoading: Bool = false
     
     @IBOutlet weak var segmentControl: UISegmentedControl!
@@ -33,63 +33,18 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         makeListView()
         makeGridView()
-        setSegmentControl()
+        setControls()
         setSnapshot()
         fetchProductListData(pageNumber, itemsPerPage)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
 }
 
 extension ViewController {
-    func fetchProductListData(_ pageNumber: Int, _ itemsPerPage: Int) {
-        self.isLoading = true
-        self.networkController.requestGET(path: "api/products?page_no=\(pageNumber)&items_per_page=\(itemsPerPage)", type: ProductList.self) {
-            result in
-            switch result {
-            case .success(let data):
-                self.setProductData(with: data)
-                self.appendDatasToSnapshot(products: data.products)
-                self.loadingLabel.isHidden = true
-                self.pageNumber += 1
-                self.isLoading = false
-            case .failure(let error):
-                print(error.description)
-            }
-            print("finished...")
-        }
-    }
-}
-
-extension ViewController {
-    private func setProductData(with data: ProductList) {
-//        productList = data
-        products.append(contentsOf: data.products)
+    func setControls() {
+        setSegmentControl()
+        setNavigationBarItem()
     }
     
-    private func makeListView() {
-        configureListHierarchy()
-        configureListDataSource()
-        arrangeCollectionView(collectionListView)
-    }
-    
-    private func makeGridView() {
-        configureGridHierarchy()
-        configureGridDataSource()
-    }
-    
-    private func arrangeCollectionView(_ targetView: UICollectionView) {
-        targetView.translatesAutoresizingMaskIntoConstraints = false
-        targetView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        targetView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        targetView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-        targetView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-    }
-}
-
-extension ViewController {
     func setSegmentControl() {
         segmentControl.selectedSegmentIndex = 0
         collectionListView.isHidden = false
@@ -110,6 +65,76 @@ extension ViewController {
             collectionListView.isHidden = false
             collectionGridView.isHidden = true
         }
+    }
+    
+    func setNavigationBarItem() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(moveAddProduct))
+    }
+    
+    @objc
+    func moveAddProduct() {
+        let addProductPage = ProductFormViewController(prod: nil)
+        addProductPage.delegate = self
+        self.navigationController?.pushViewController(addProductPage, animated: true)
+    }
+}
+
+extension ViewController {
+    func fetchProductListData(_ pageNumber: Int, _ itemsPerPage: Int) {
+        self.isLoading = true
+        self.networkConnector.requestGET(path: "api/products?page_no=\(pageNumber)&items_per_page=\(itemsPerPage)", type: ProductList.self) {
+            result in
+            switch result {
+            case .success(let data):
+                self.setProductData(with: data)
+                self.appendDatasToSnapshot(products: data.products)
+                self.loadingLabel.isHidden = true
+                self.pageNumber += 1
+                self.isLoading = false
+            case .failure(let error):
+                print(error.description)
+            }
+            print("finished...")
+        }
+    }
+    
+    func moveFormPageWithDetailData(_ productId: Int){
+        self.networkConnector.requestGET(path: "api/products/\(productId)", type: ProductDetail.self) {
+            result in
+            switch result {
+            case .success(let data):
+                let productEditingView = ProductFormViewController(prod: data)
+                productEditingView.delegate = self
+                self.navigationController?.pushViewController(productEditingView, animated: true)
+            case .failure(let error):
+                print(error.description)
+            }
+        }
+    }
+}
+
+extension ViewController {
+    private func setProductData(with data: ProductList) {
+        products.append(contentsOf: data.products)
+    }
+    
+    private func makeListView() {
+        configureListHierarchy()
+        configureListDataSource()
+        arrangeCollectionView(collectionListView)
+    }
+    
+    private func makeGridView() {
+        configureGridHierarchy()
+        configureGridDataSource()
+    }
+    
+    private func arrangeCollectionView(_ targetView: UICollectionView) {
+        targetView.translatesAutoresizingMaskIntoConstraints = false
+        targetView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        targetView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        targetView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        targetView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
     }
 }
 
@@ -192,14 +217,22 @@ extension ViewController {
         gridDataSource.apply(snapshot, animatingDifferences: true)
         listDataSource.apply(snapshot, animatingDifferences: true)
     }
+    
+    func resetDataSource() {
+        snapshot = .init()
+        products = []
+        setSnapshot()
+        pageNumber = 1
+        fetchProductListData(pageNumber, itemsPerPage)
+    }
 }
 
 extension ViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath)
         collectionListView.deselectItem(at: indexPath, animated: true)
         collectionGridView.deselectItem(at: indexPath, animated: true)
-        print(indexPath)
-        print(products[indexPath.row])
+        moveFormPageWithDetailData(products[indexPath.row].id)
     }
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
