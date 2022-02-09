@@ -6,5 +6,8 @@
 //
 
 struct Constant {
-    
+    static let productSegue = "moveProductIdentifier"
+    static let soldOutText = "품절"
+    static let remainingQuantityText = "잔여수량"
+    static let itemsPerPage = 30
 }
