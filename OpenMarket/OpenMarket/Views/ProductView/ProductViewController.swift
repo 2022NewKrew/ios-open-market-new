@@ -9,6 +9,15 @@ import UIKit
 
 class ProductViewController: UIViewController {
     var navigationTitle: String?
+    private var registrationImageViewCount = 0
+    private lazy var registrationImageViewArray = [
+        registrationImageView1,
+        registrationImageView2,
+        registrationImageView3,
+        registrationImageView4,
+        registrationImageView5
+    ]
+
     private lazy var registrationImageView1: UIImageView = self.createRegistrationImageView()
     private lazy var registrationImageView2: UIImageView = self.createRegistrationImageView()
     private lazy var registrationImageView3: UIImageView = self.createRegistrationImageView()
@@ -37,7 +46,7 @@ class ProductViewController: UIViewController {
         stackView.axis = .horizontal
         stackView.distribution = .fill
         stackView.spacing = CGFloat(10)
-        stackView.alignment = .leading
+        stackView.alignment = .trailing
         return stackView
     }()
     private lazy var registrationImageScrollView: UIScrollView = {
@@ -130,7 +139,7 @@ class ProductViewController: UIViewController {
     }
 
     @objc func pressAddImageButton(_ sender: UIButton) {
-        // add image
+        self.showImagePickerControlActionSheet()
     }
 
     @objc func changeProductPriceSegmentControl(_ sender: UISegmentedControl) {
@@ -171,7 +180,10 @@ class ProductViewController: UIViewController {
         textField.keyboardType = .default
         return textField
     }
+}
 
+// MARK - bindConstraints
+extension ProductViewController {
     private func bindAllConstraints() {
         self.view.layer.cornerRadius = CGFloat(12.0)
         self.view.layer.borderColor = UIColor.gray.cgColor
@@ -237,5 +249,53 @@ class ProductViewController: UIViewController {
             self.productDescriptionTextView.topAnchor.constraint(equalTo: self.productTextFiledStackView.bottomAnchor, constant: 16),
             self.productDescriptionTextView.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor, constant: -16)
        ])
+    }
+}
+
+// MARK - UIImagePickerController
+extension ProductViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func showImagePickerControlActionSheet() {
+        let photoLibraryAction = UIAlertAction(title: "사진 선택하기", style: .default) { (action) in
+            self.showImagePickerController(sourceType: .photoLibrary)
+        }
+        let cameraAction = UIAlertAction(title: "사진 촬영하기", style: .default) { (action) in
+            self.showImagePickerController(sourceType: .camera)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(photoLibraryAction)
+        actionSheet.addAction(cameraAction)
+        actionSheet.addAction(cancelAction)
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+
+    func showImagePickerController(sourceType: UIImagePickerController.SourceType) {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        imagePickerController.sourceType = sourceType
+        self.present(imagePickerController, animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard self.registrationImageViewCount < 5 else {
+            print("이미지 개수 초과")
+            return
+        }
+
+        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            self.registerImage(image: editedImage)
+        } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.registerImage(image: originalImage)
+        }
+
+        dismiss(animated: true, completion: nil)
+    }
+
+    func registerImage(image: UIImage) {
+        self.registrationImageViewArray[self.registrationImageViewCount].image = image
+        self.registrationImageViewArray[self.registrationImageViewCount].isHidden = false
+        self.registrationImageViewCount += 1
     }
 }
