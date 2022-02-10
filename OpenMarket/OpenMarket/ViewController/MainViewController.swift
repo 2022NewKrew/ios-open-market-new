@@ -21,7 +21,7 @@ class MainViewController: UIViewController {
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 0
-        layout.itemSize = CGSize(width: view.bounds.width, height: 75)
+        layout.itemSize = CGSize(width: view.bounds.width, height: 100)
         return layout
     }()
     
@@ -36,11 +36,28 @@ class MainViewController: UIViewController {
         return layout
     }()
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchProducts(pageNo: currentPage, itemsPerPage: itemsPerPage)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        products = []
+        currentPage = 1
+    }
+    
+    @IBAction func addAction(_ sender: Any) {
+        guard let productEditViewController = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(withIdentifier: "ProductEditVC") as? ProductEditViewController else { return }
+        productEditViewController.modalPresentationStyle = .fullScreen
+        productEditViewController.setMode(mode: .add)
+        present(productEditViewController, animated: true, completion: nil)
     }
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
@@ -48,18 +65,18 @@ class MainViewController: UIViewController {
         case 0:
             collectionViewState = .list
             collectionView.reloadData()
-            collectionView.setCollectionViewLayout(listFlowLayout, animated: true)
+            collectionView.setCollectionViewLayout(listFlowLayout, animated: false)
         case 1:
             collectionViewState = .grid
             collectionView.reloadData()
-            collectionView.setCollectionViewLayout(gridFlowLayout, animated: true)
+            collectionView.setCollectionViewLayout(gridFlowLayout, animated: false)
         default:
             break
         }
         
     }
     
-    func configureCollectionView(){
+    func configureCollectionView() {
         collectionView.register(UINib(nibName: Constant.listcellNib, bundle: .main),
                                 forCellWithReuseIdentifier: Constant.listCellIdentifier)
         collectionView.register(UINib(nibName: Constant.gridCellNib, bundle: .main),
@@ -123,6 +140,15 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         products.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let productEditViewController = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(withIdentifier: "ProductEditVC") as? ProductEditViewController else { return }
+        productEditViewController.modalPresentationStyle = .fullScreen
+        productEditViewController.setMode(mode: .edit)
+        productEditViewController.productId = products[indexPath.row].id
+        present(productEditViewController, animated: true, completion: nil)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
