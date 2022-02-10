@@ -144,7 +144,7 @@ class ProductViewController: UIViewController {
         self.navigationItem.title = self.navigationTitle
         self.navigationItem.leftBarButtonItem = self.cancelButton
         self.navigationItem.rightBarButtonItem = self.registerButton
-        self.setTextFieldDelegate()
+        self.setTextFieldAndTextViewDelegate()
         self.bindAllConstraints()
         self.setViewModel()
     }
@@ -170,17 +170,32 @@ class ProductViewController: UIViewController {
 
     @objc func pressRegisterButton(_ sender: UIBarButtonItem) {
         guard self.registrationImageViewCount > 0 else {
+            self.showAlert(title: "이미지를 하나 이상 등록하세요", message: nil)
             print("이미지를 하나 이상 등록하세요")
             return
         }
 
+        guard let productName = self.productNameTextField.text,
+            let productDescription = self.productDescriptionTextView.text,
+            let productOriginPriceText = self.productOriginPriceTextField.text,
+            let productOriginPrice = Double(productOriginPriceText),
+            let productDiscountedPriceText = self.productDiscountedPriceTextField.text,
+            let productDiscountedPrice = Double(productDiscountedPriceText),
+            let productStockText = self.productStockTextField.text,
+            let productStock = Int(productStockText)
+        else {
+            self.showAlert(title: "입력란을 전부 채워주세요", message: nil)
+            print("입력란을 전부 채워주세요")
+            return
+        }
+
         let postProduct = PostProduct(
-            name: self.productNameTextField.text ?? "name",
-            descriptions: self.productDescriptionTextView.text ?? "descriptions",
-            price: Double(self.productOriginPriceTextField.text ?? "0.0") ?? 0.0,
+            name: productName,
+            descriptions: productDescription,
+            price: productOriginPrice,
             currency: self.productPriceSegmentControl.selectedSegmentIndex == ProductPriceSegmentValue.krw.rawValue ? "KRW" : "USD",
-            discountedPrice: Double(self.productDiscountedPriceTextField.text ?? "0.0") ?? 0.0,
-            stock: Int(self.productStockTextField.text ?? "0") ?? 0,
+            discountedPrice: productDiscountedPrice,
+            stock: productStock,
             secret: Constant.secret
         )
 
@@ -213,11 +228,12 @@ class ProductViewController: UIViewController {
         return textField
     }
 
-    private func setTextFieldDelegate() {
+    private func setTextFieldAndTextViewDelegate() {
         self.productNameTextField.delegate = self
         self.productOriginPriceTextField.delegate = self
         self.productDiscountedPriceTextField.delegate = self
         self.productStockTextField.delegate = self
+        self.productDescriptionTextView.delegate = self
     }
 
     private func setViewModel() {
@@ -230,11 +246,35 @@ class ProductViewController: UIViewController {
             }
         }
     }
+
+    private func showAlert(title: String, message: String?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let confirm = UIAlertAction(title: "확인", style: .default, handler: nil)
+        alert.addAction(confirm)
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
-// MARL - UITextFieldDelegate
+// MARK - UITextFieldDelegate
 extension ProductViewController: UITextFieldDelegate {
 
+}
+
+// MARK - UITextViewDelegate
+extension ProductViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == Constant.productDescriptionTextViewPlaceholder {
+            textView.text = nil
+            textView.textColor = .black
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = Constant.productDescriptionTextViewPlaceholder
+            textView.textColor = .systemGray4
+        }
+    }
 }
 
 // MARK - bindConstraints
