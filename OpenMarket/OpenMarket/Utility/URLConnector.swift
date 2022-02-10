@@ -44,7 +44,7 @@ struct URLConnector {
     }
     
     func postData(to url: String, data: inout [String: String],
-                  images: inout [Data], name: String) {
+                  images: inout [Data]) {
         guard let targetURL = URL(string: baseURL + url) else { return }
         data["secret"] = secret
         var request = URLRequest(url: targetURL)
@@ -111,7 +111,7 @@ struct URLConnector {
             if let data = data {
                 print(String.init(data: data, encoding: .utf8)!)
                 guard let parsedData = Decoder.shared.decodeJSONData(type: Product.self, from: data) else { return }
-                NotificationCenter.default.post(name: Notification.Name("DeleteResponse"), object: nil, userInfo: ["data": parsedData])
+                NotificationCenter.default.post(name: Notification.Name("PatchResponse"), object: nil, userInfo: ["data": parsedData])
             }
             
         }

@@ -23,11 +23,11 @@ class ProductDetailView: UIStackView {
         return label
     }()
     
-    let productDescription: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.numberOfLines = 0
-        return label
+    let productDescription: UITextView = {
+        let textView = UITextView()
+        textView.font = UIFont.preferredFont(forTextStyle: .body)
+        textView.isEditable = false
+        return textView
     }()
     
     lazy var productPriceAndStockView: UIStackView = {
