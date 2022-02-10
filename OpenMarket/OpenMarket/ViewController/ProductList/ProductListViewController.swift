@@ -65,6 +65,11 @@ class ProductListViewController: UIViewController {
         fetchProductList()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchProductList()
+    }
+    
     // MARK: - Setup View
     private func setupCollectionView() {
         view.addSubview(collectionView)
@@ -94,7 +99,8 @@ class ProductListViewController: UIViewController {
     // MARK: - Method
     @objc
     func addPostButton() {
-        print(#function)
+        let postProductViewController: PostProductViewController = PostProductViewController()
+        navigationController?.pushViewController(postProductViewController, animated: true)
     }
     
     @objc
@@ -115,7 +121,7 @@ class ProductListViewController: UIViewController {
     
     func fetchProductList() {
         indicatorView.startAnimating()
-        ProductListLoader().getProductList(pageNumber: 1, itemsPerPage: 200) { result in
+        ProductListLoader().getProductList(pageNumber: 1, itemsPerPage: 20) { result in
             self.productListImageCache.removeAllObjects()
             switch result {
             case .success(let productList):
