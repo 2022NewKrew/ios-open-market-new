@@ -369,7 +369,7 @@ class ProductManagingViewController: UIViewController {
             stock: stock
         )
         
-        self.apiManager.postOpenMarketProduct(
+        self.apiManager.createOpenMarketProduct(
             identifier: APIConstants.vendorIdentifier,
             params: param,
             images: self.images.images
@@ -391,7 +391,7 @@ class ProductManagingViewController: UIViewController {
             thumbnailId: thumbnailId
         )
         
-        self.apiManager.patchOpenMarketProduct(
+        self.apiManager.updateOpenMarketProduct(
             identifier: APIConstants.vendorIdentifier,
             productId: productId,
             params: param
@@ -497,6 +497,10 @@ class ProductManagingViewController: UIViewController {
                 stock: stock
             ) { result in
                 if let _ = try? result.get() {
+                    NotificationCenter.default.post(
+                        name: Notification.Name(OpenMarektProductManagigConstants.createNewProductNotificationName),
+                        object: nil
+                    )
                     self.navigationController?.popViewController(animated: true)
                 }
             }
@@ -518,7 +522,20 @@ class ProductManagingViewController: UIViewController {
                 productId: productId,
                 thumbnailId: thumbnailId
             ) { result in
-                if let _ = try? result.get() {
+                if let response = try? result.get(),
+                   let price = response.price {
+                    var product = product
+                    product.name = response.name
+                    product.discountedPrice = response.discountedPrice
+                    product.price = Float(price)
+                    product.stock = response.stock
+                    product.currency = response.currency
+                    let userInfo = [ManagingConstants.didUpdateProduct : product]
+                    NotificationCenter.default.post(
+                        name: Notification.Name(OpenMarektProductManagigConstants.updateNewProductNotificationName),
+                        object: nil,
+                        userInfo: userInfo
+                    )
                     self.navigationController?.popViewController(animated: true)
                 }
             }

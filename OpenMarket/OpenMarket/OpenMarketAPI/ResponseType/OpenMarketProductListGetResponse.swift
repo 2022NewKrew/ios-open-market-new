@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OpenMarketProudctListResponse: Decodable, Equatable {
+struct OpenMarketProductListResponse: Decodable, Equatable {
     var pageNumber: Int?
     var itemsPerPage: Int?
     var totalCount: Int?

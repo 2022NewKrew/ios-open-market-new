@@ -9,8 +9,8 @@ import Foundation
 enum OpenMarketAPIRouter {
     case getOpenMarketProductList(pageNumber: Int, itemsPerPage: Int)
     case getDetailOpenMarketProduct(productId: Int)
-    case postOpenMarektProduct(boundary: String, identifier: String, body: Data)
-    case patchOpenMarketProduct(prodcutId: Int, identifier: String, body: Data)
+    case postOpenMarektProduct(boundary: String, identifier: String, body: Data?)
+    case patchOpenMarketProduct(prodcutId: Int, identifier: String, body: Data?)
     
     var path: String {
         switch self {

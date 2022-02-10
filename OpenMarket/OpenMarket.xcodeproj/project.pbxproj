@@ -28,7 +28,6 @@
 		C2C959D7279FEF0100F87F67 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C959D6279FEF0100F87F67 /* ModelTests.swift */; };
 		C2C959DF279FEF3500F87F67 /* OpenMarketAPIMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C959C8279FD41100F87F67 /* OpenMarketAPIMock.swift */; };
 		C2C959E127A021A100F87F67 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C959E027A021A100F87F67 /* MockURLProtocol.swift */; };
-		C2C959E327A041D300F87F67 /* OpenMarketProductResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C959E227A041D300F87F67 /* OpenMarketProductResponse.swift */; };
 		C2C95A3027A1339F00F87F67 /* OpenMarketProductListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C95A2E27A1339F00F87F67 /* OpenMarketProductListCell.swift */; };
 		C2C95A3127A1339F00F87F67 /* OpenMarketProductListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2C95A2F27A1339F00F87F67 /* OpenMarketProductListCell.xib */; };
 		C2C95A3827A13DF100F87F67 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C95A3727A13DF100F87F67 /* String+Extension.swift */; };
@@ -79,7 +78,6 @@
 		C2C959D4279FEF0100F87F67 /* ModelTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ModelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2C959D6279FEF0100F87F67 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 		C2C959E027A021A100F87F67 /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
-		C2C959E227A041D300F87F67 /* OpenMarketProductResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketProductResponse.swift; sourceTree = "<group>"; };
 		C2C95A2E27A1339F00F87F67 /* OpenMarketProductListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMarketProductListCell.swift; sourceTree = "<group>"; };
 		C2C95A2F27A1339F00F87F67 /* OpenMarketProductListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpenMarketProductListCell.xib; sourceTree = "<group>"; };
 		C2C95A3727A13DF100F87F67 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
@@ -128,7 +126,6 @@
 		C260BF9627AB96D000DEFE8F /* ResponseType */ = {
 			isa = PBXGroup;
 			children = (
-				C2C959E227A041D300F87F67 /* OpenMarketProductResponse.swift */,
 				C2C959C0279FB00700F87F67 /* OpenMarketProductListGetResponse.swift */,
 				C260BF9727ABADE800DEFE8F /* OpenMarketProductPostResponse.swift */,
 			);
@@ -406,7 +403,6 @@
 				C2C959CF279FE97000F87F67 /* OpenMarketAPIError.swift in Sources */,
 				C2C959C1279FB00700F87F67 /* OpenMarketProductListGetResponse.swift in Sources */,
 				C2ED841427AD130500614761 /* Data+Extension.swift in Sources */,
-				C2C959E327A041D300F87F67 /* OpenMarketProductResponse.swift in Sources */,
 				C260BF9B27ABB30B00DEFE8F /* OpenMarketProductPostParm.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -41,6 +41,9 @@ enum OpenMarektProductManagigConstants {
     static let fullImageAlertTitle = "더이상 이미지를 추가할 수 없습니다."
     static let manageButtonSystemImageName = "square.and.arrow.up"
     static let modifySegueIdentifier = "modify"
+    static let createNewProductNotificationName = "createNewProduct"
+    static let updateNewProductNotificationName = "updateNewProduct"
+    static let didUpdateProduct = "didUpdateProduct"
 }
 
 enum OpenMarketProductDetailConstants {

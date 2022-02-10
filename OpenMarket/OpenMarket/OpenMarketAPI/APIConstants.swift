@@ -38,7 +38,7 @@ enum ContentType {
     }
 }
 
-enum MultipartFromDataConstants {
+enum MultipartFormDataConstants {
     case boundaryPrefix(boundary: String, isLast: Bool = false)
     case contentDispositionOfText(name: String)
     case contentDispositionOfFile(name: String, fileName: String)

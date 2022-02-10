@@ -10,7 +10,7 @@ import Foundation
 struct OpenMarketProductResponse: Decodable, Equatable {
     var id: Int?
     var vendorId: Int?
-    var vendorName: String?
+    var name: String?
     var description: String?
     var thumbnailImageUrl: String?
     var currency: OpenMarketProduct.Currency?
@@ -26,7 +26,6 @@ struct OpenMarketProductResponse: Decodable, Equatable {
     enum CodingKeys: String, CodingKey {
         case id, description, currency, price, stock, images
         case vendorId = "vendor_id"
-        case vendorName = "name"
         case thumbnailImageUrl = "thumbnail"
         case bargainPrice = "bargain_price"
         case discountedPrice = "discounted_price"

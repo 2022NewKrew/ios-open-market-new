@@ -41,6 +41,7 @@ class ProductDetailViewController: UIViewController {
         }
         self.title = productName
     }
+    
     private func setupRightBarManageButtonItem() {
         guard let vendorId = self.product?.vendorId, vendorId == APIConstants.vendorIntId else {
             return

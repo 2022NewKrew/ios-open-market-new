@@ -12,11 +12,9 @@ struct OpenMarketAPIManager {
         self.urlSession = urlSession
     }
     
-    var decoder: JSONDecoder = JSONDecoder()
-    var encoder: JSONEncoder = JSONEncoder()
     var urlSession: URLSession
     
-    func getOpenMarketProductList(pageNumber: Int, itemsPerPage: Int, completion: @escaping (Result<OpenMarketProudctListResponse, Error>) -> Void) {
+    func getOpenMarketProductList(pageNumber: Int, itemsPerPage: Int, completion: @escaping (Result<OpenMarketProductListResponse, Error>) -> Void) {
         guard let request = OpenMarketAPIRouter
                 .getOpenMarketProductList(pageNumber: pageNumber, itemsPerPage: itemsPerPage)
                 .asURLRequest() else {
@@ -25,7 +23,7 @@ struct OpenMarketAPIManager {
                 }
         
         let task = self.urlSession.dataTask(with: request, completionHandler: { data, response, error in
-            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProudctListResponse.self, response: response, data: data, error: error)
+            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProductListResponse.self, response: response, data: data, error: error)
             completion(result)
         })
         task.resume()
@@ -46,7 +44,7 @@ struct OpenMarketAPIManager {
         task.resume()
     }
     
-    func postOpenMarketProduct(identifier: String, params: OpenMarketProductPostParam, images: [UIImage], completion: @escaping (Result<OpenMarketProductResponse, Error>) -> Void) {
+    func createOpenMarketProduct(identifier: String, params: OpenMarketProductPostParam, images: [UIImage], completion: @escaping (Result<OpenMarketProductResponse, Error>) -> Void) {
         let boundary = self.generateBoundaryString()
         let body = self.createOpenMarketProductPostBody(boundary: boundary, params: params, images: images)
         
@@ -68,7 +66,7 @@ struct OpenMarketAPIManager {
         task.resume()
     }
     
-    func patchOpenMarketProduct(identifier: String, productId: Int, params: OpenMarketProductPatchParam, completion: @escaping(Result<OpenMarketProductResponse, Error>) -> Void) {
+    func updateOpenMarketProduct(identifier: String, productId: Int, params: OpenMarketProductPatchParam, completion: @escaping(Result<OpenMarketProductResponse, Error>) -> Void) {
         guard let body = self.createOpenMarketProductPatchBody(params: params) else {
             completion(.failure(OpenMarketAPIError.failEncoding))
             return
@@ -102,7 +100,7 @@ struct OpenMarketAPIManager {
             guard let data = data else {
                 return .failure(OpenMarketAPIError.noData)
             }
-            
+            let decoder = JSONDecoder()
             guard let response = try? decoder.decode(responseType.self, from: data) else {
                 return .failure(OpenMarketAPIError.failDecoding)
             }
@@ -120,16 +118,17 @@ struct OpenMarketAPIManager {
         return "Boundary-\(UUID().uuidString)"
     }
     
-    private func createOpenMarketProductPostBody(boundary: String, params: OpenMarketProductPostParam, images: [UIImage]) -> Data {
+    private func createOpenMarketProductPostBody(boundary: String, params: OpenMarketProductPostParam, images: [UIImage]) -> Data? {
         var body = Data()
-        body.append(MultipartFromDataConstants.boundaryPrefix(boundary: boundary).value)
-        
+        body.append(MultipartFormDataConstants.boundaryPrefix(boundary: boundary).value)
         let encoder = JSONEncoder()
-        let paramData = try! encoder.encode(params)
+        guard let paramData = try? encoder.encode(params) else {
+            return nil
+        }
         
-        body.append(MultipartFromDataConstants.contentDispositionOfText(name: APIConstants.params).value)
+        body.append(MultipartFormDataConstants.contentDispositionOfText(name: APIConstants.params).value)
         body.append(paramData)
-        body.append(MultipartFromDataConstants.lineBreak.value)
+        body.append(MultipartFormDataConstants.lineBreak.value)
         
         var imageDatas = [Data]()
         for image in images {
@@ -140,19 +139,20 @@ struct OpenMarketAPIManager {
         
         for (index,imageData) in imageDatas.enumerated() {
             let fileName = "image\(index).jpg"
-            body.append(MultipartFromDataConstants.boundaryPrefix(boundary: boundary).value)
-            body.append(MultipartFromDataConstants.contentDispositionOfFile(name: APIConstants.images, fileName: fileName).value)
-            body.append(MultipartFromDataConstants.contentTypeOfFile().value)
+            body.append(MultipartFormDataConstants.boundaryPrefix(boundary: boundary).value)
+            body.append(MultipartFormDataConstants.contentDispositionOfFile(name: APIConstants.images, fileName: fileName).value)
+            body.append(MultipartFormDataConstants.contentTypeOfFile().value)
             body.append(imageData)
-            body.append(MultipartFromDataConstants.lineBreak.value)
+            body.append(MultipartFormDataConstants.lineBreak.value)
         }
         
-        body.append(MultipartFromDataConstants.boundaryPrefix(boundary: boundary, isLast: true).value)
+        body.append(MultipartFormDataConstants.boundaryPrefix(boundary: boundary, isLast: true).value)
         return body
     }
     
     private func createOpenMarketProductPatchBody(params: OpenMarketProductPatchParam) -> Data? {
-        let data = try? self.encoder.encode(params)
+        let encoder = JSONEncoder()
+        let data = try? encoder.encode(params)
         return data
     }
 }

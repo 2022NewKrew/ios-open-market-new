@@ -22,17 +22,12 @@ class ProductListViewController: UIViewController {
         case grid
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.products = []
-        self.fetchData(at: 0) {
-            self.collectionView.reloadData()
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
+        self.fetchData(at: 0) {
+            self.collectionView.reloadData()
+        }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -55,6 +50,7 @@ class ProductListViewController: UIViewController {
         self.registerViews()
         self.setupDelegate()
         self.addTargets()
+        self.addObservers()
     }
     
     private func registerViews() {
@@ -104,8 +100,41 @@ class ProductListViewController: UIViewController {
         )
     }
     
+    private func addObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didCreateNewProduct),
+            name: Notification.Name(OpenMarektProductManagigConstants.createNewProductNotificationName),
+            object: nil)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didUpdateProduct),
+            name: Notification.Name(OpenMarektProductManagigConstants.updateNewProductNotificationName),
+            object: nil)
+    }
+    
     @objc func segmentedControlValueDidChange(_ segmentedControl: UISegmentedControl) {
         self.collectionView.reloadData()
+    }
+    
+    @objc func didCreateNewProduct(_ notification: Notification) {
+        let now = self.collectionView.contentOffset
+        self.collectionView.setContentOffset(CGPoint(x: now.x, y: 0.0), animated: true)
+        self.products = []
+        self.fetchData(at: 0) {
+            self.collectionView.reloadData()
+        }
+    }
+    
+    @objc func didUpdateProduct(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: Any],
+              let newValue = userInfo[OpenMarektProductManagigConstants.didUpdateProduct] as? OpenMarketProduct,
+              let index = self.recentlySelectedIndex else {
+            return
+        }
+        self.products[index] = newValue
+        self.collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
     }
 }
 
