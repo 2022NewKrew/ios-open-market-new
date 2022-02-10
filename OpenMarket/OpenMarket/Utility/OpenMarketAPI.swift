@@ -35,4 +35,8 @@ struct OpenMarketAPI {
     func deleteProduct(productId: Int, secret: String) {
         connector.deleteData(to: "api/products/\(productId)/\(secret)")
     }
+    
+    func updateProduct(productId: Int, data: inout [String: String]) {
+        connector.patchData(to: "api/products/\(productId)", data: &data)
+    }
 }
