@@ -191,10 +191,75 @@ class APIManager {
         
         return url
     }
+    
+    func productSecretURLRequest(with productId: Int) -> URLRequest {
+        guard let url = URL(string: apiHost + "api/products/\(productId)/secret") else {fatalError()}
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue(vendorId, forHTTPHeaderField: "identifier")
+        return urlRequest
+    }
+    
+    func fetchProductSecretKey(productId: Int, completion: @escaping(Result<String,Error>) -> Void) {
+        let parameters: [String: String] = ["secret": secretKey]
+        var data: Data?
+        do {
+            data = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        } catch {
+            print(error)
+        }
+        var urlRequest = productSecretURLRequest(with: productId)
+        urlRequest.httpBody = data
+        
+        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode), let data = data else {
+                completion(.failure(APIError.responseError))
+                return
+            }
+            guard let secret = String(data: data, encoding: .utf8) else { return }
+            completion(.success(secret))
+        }
+        
+        task.resume()
+    }
+    
+    func productDeleteUrlRequest(productId: Int, secretKey: String) -> URLRequest {
+        guard let url = URL(string: apiHost + "api/products/\(productId)/\(secretKey)") else { fatalError()}
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "DELETE"
+        urlRequest.setValue(vendorId, forHTTPHeaderField: "identifier")
+        return urlRequest
+    }
+    
+    func deleteProduct(productId: Int, secretKey: String,
+                       completion: @escaping(Result<Bool,Error>) -> Void) {
+        let urlRequest = productDeleteUrlRequest(productId: productId, secretKey: secretKey)
+        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                completion(.failure(APIError.responseError))
+                return
+            }
+            completion(.success(true))
+        }
+        
+        task.resume()
+    }
                            
     enum APIError: Error {
         case noData
         case responseError
+        case dataParsingError
         
         var localizedDescription: String {
             switch self {
@@ -202,6 +267,8 @@ class APIManager {
                 return "Data is empty"
             case .responseError:
                 return "Response Error occured!"
+            case .dataParsingError:
+                return "failed to parse Data"
             }
         }
     }
