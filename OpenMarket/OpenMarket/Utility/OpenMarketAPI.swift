@@ -21,4 +21,10 @@ struct OpenMarketAPI {
     func addProduct(data: inout [String: String], images: inout [Data]) {
         connector.postData(to: "api/products/", data: &data, images: &images)
     }
+    
+    func getProductSecret(productId: Int) {
+        var tempData: [String: String] = [:]
+        var tempImage: [Data] = []
+        connector.postData(to: "api/products/\(productId)/secret", data: &tempData, images: &tempImage)
+    }
 }
