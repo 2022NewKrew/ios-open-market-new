@@ -36,13 +36,13 @@ class OpenMarketProductGirdCell: UICollectionViewCell, OpenMarketProductCellType
     private static func calculateStackViewHeight() -> CGFloat {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.text = Constants.unknwon
+        label.text = ListConstants.unknwon
         label.sizeToFit()
         return label.frame.height * 2.0 + Self.priceStackViewSpacing
     }
     
     static func cellForWidth(safeAreaWidth: CGFloat) -> CGFloat {
-        let width =  (safeAreaWidth - Constants.openMarketPrdouctCellLeadingTrailingInset * 2.0 - Constants.openMarketProductGridCellMinimumInterItemSpacing) / 2.0
+        let width =  (safeAreaWidth - ListConstants.openMarketPrdouctCellLeadingTrailingInset * 2.0 - ListConstants.openMarketProductGridCellMinimumInterItemSpacing) / 2.0
         return width
     }
     
@@ -51,7 +51,7 @@ class OpenMarketProductGirdCell: UICollectionViewCell, OpenMarketProductCellType
         
         let nameLabel = UILabel()
         nameLabel.font = UIFont.preferredFont(forTextStyle: .title1)
-        nameLabel.text = Constants.unknwon
+        nameLabel.text = ListConstants.unknwon
         nameLabel.sizeToFit()
         let nameLabelHeight = nameLabel.frame.height
         
@@ -59,7 +59,7 @@ class OpenMarketProductGirdCell: UICollectionViewCell, OpenMarketProductCellType
         
         let stockLabel = UILabel()
         stockLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        stockLabel.text = Constants.unknwon
+        stockLabel.text = ListConstants.unknwon
         stockLabel.sizeToFit()
         let stockLabelHeight = stockLabel.frame.height
         
@@ -70,7 +70,7 @@ class OpenMarketProductGirdCell: UICollectionViewCell, OpenMarketProductCellType
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.thumbnailImageView.image = UIImage(named: Constants.loadingImageName)
+        self.thumbnailImageView.image = UIImage(named: ListConstants.loadingImageName)
         self.notDiscountedPriceLabel.isHidden = false
         self.stockLabel.textColor = .systemGray
     }

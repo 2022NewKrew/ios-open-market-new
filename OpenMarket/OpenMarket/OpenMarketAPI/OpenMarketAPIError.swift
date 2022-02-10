@@ -14,5 +14,6 @@ enum OpenMarketAPIError: LocalizedError {
     case serverError
     case noData
     case failDecoding
+    case failEncoding
     case unknown
 }

@@ -10,9 +10,9 @@ import UIKit
 class ProductListViewController: UIViewController {
     @IBOutlet weak var layoutSegmentedControl: UISegmentedControl!
     @IBOutlet weak var collectionView: UICollectionView!
-    
     private let apiManager = OpenMarketAPIManager()
     private var products: [OpenMarketProduct?] = []
+    private var recentlySelectedIndex: Int?
     private var isLoading = false
     private var loadingView: LoadingFooterView?
     private var totalCount: Int = 0
@@ -26,9 +26,7 @@ class ProductListViewController: UIViewController {
         super.viewDidLoad()
         self.setup()
         self.fetchData(at: 0) {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
+            self.collectionView.reloadData()
         }
     }
     
@@ -40,28 +38,37 @@ class ProductListViewController: UIViewController {
         flowLayout.invalidateLayout()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let destination = segue.destination as? ProductDetailViewController,
+              let index = self.recentlySelectedIndex else {
+                  return
+              }
+        destination.product = self.products[index]
+    }
+    
     private func setup() {
         self.registerViews()
         self.setupDelegate()
         self.addTargets()
+        self.addObservers()
     }
     
     private func registerViews() {
-        let listCellNibFile = UINib(nibName: Constants.openMarketProcutListCellNibFileName, bundle: nil)
-        self.collectionView.register(listCellNibFile, forCellWithReuseIdentifier: Constants.openMarketProductListCellReuseIdentifier)
+        let listCellNibFile = UINib(nibName: ListConstants.openMarketProcutListCellNibFileName, bundle: nil)
+        self.collectionView.register(listCellNibFile, forCellWithReuseIdentifier: ListConstants.openMarketProductListCellReuseIdentifier)
         
-        let gridCellNibFile = UINib(nibName: Constants.openMarketProductGridCellNibFileName, bundle: nil)
-        self.collectionView.register(gridCellNibFile, forCellWithReuseIdentifier: Constants.openMarketProductGridCellReuseIdentifier)
+        let gridCellNibFile = UINib(nibName: ListConstants.openMarketProductGridCellNibFileName, bundle: nil)
+        self.collectionView.register(gridCellNibFile, forCellWithReuseIdentifier: ListConstants.openMarketProductGridCellReuseIdentifier)
         
-        let loadingReusableView = UINib(nibName: Constants.openMarketProcutFooterViewFileName, bundle: nil)
-        self.collectionView.register(loadingReusableView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: Constants.openMarketProductFooterViewIdentifier)
+        let loadingReusableView = UINib(nibName: ListConstants.openMarketProcutFooterViewFileName, bundle: nil)
+        self.collectionView.register(loadingReusableView, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: ListConstants.openMarketProductFooterViewIdentifier)
     }
     
     private func fetchData(at index: Int, completion: @escaping () -> Void) {
-        let page = Int(ceil(Float(index + 1) / Float(Constants.itemsPerPage)))
+        let page = Int(ceil(Float(index + 1) / Float(ListConstants.itemsPerPage)))
         apiManager.getOpenMarketProductList(
             pageNumber: page,
-            itemsPerPage: Constants.itemsPerPage
+            itemsPerPage: ListConstants.itemsPerPage
         ) { [weak self] result in
             let data = try? result.get()
             guard let products = data?.products,
@@ -71,7 +78,7 @@ class ProductListViewController: UIViewController {
             self?.totalCount = totalCount
             self?.products.append(contentsOf: products)
             products.enumerated().forEach { index, product in
-                let index = (page - 1) * Constants.itemsPerPage + index
+                let index = (page - 1) * ListConstants.itemsPerPage + index
                 self?.products[index] = product
             }
             DispatchQueue.main.async {
@@ -93,54 +100,132 @@ class ProductListViewController: UIViewController {
         )
     }
     
+    private func addObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didCreateNewProduct),
+            name: Notification.Name(OpenMarektProductManagigConstants.createNewProductNotificationName),
+            object: nil)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didUpdateProduct),
+            name: Notification.Name(OpenMarektProductManagigConstants.updateNewProductNotificationName),
+            object: nil)
+    }
+    
     @objc func segmentedControlValueDidChange(_ segmentedControl: UISegmentedControl) {
         self.collectionView.reloadData()
     }
+    
+    @objc func didCreateNewProduct(_ notification: Notification) {
+        let now = self.collectionView.contentOffset
+        self.collectionView.setContentOffset(CGPoint(x: now.x, y: 0.0), animated: true)
+        self.products = []
+        self.fetchData(at: 0) {
+            self.collectionView.reloadData()
+        }
+    }
+    
+    @objc func didUpdateProduct(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: Any],
+              let newValue = userInfo[OpenMarektProductManagigConstants.didUpdateProduct] as? OpenMarketProduct,
+              let index = self.recentlySelectedIndex else {
+            return
+        }
+        self.products[index] = newValue
+        self.collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+    }
 }
 
-extension ProductListViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension ProductListViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return products.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        var currentCell: OpenMarketProductCellType?
         switch layoutSegmentedControl.selectedSegmentIndex {
         case SegmentedControlValue.list.rawValue:
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: Constants.openMarketProductListCellReuseIdentifier,
+                withReuseIdentifier: ListConstants.openMarketProductListCellReuseIdentifier,
                 for: indexPath) as? OpenMarketProductListCell else {
                     return UICollectionViewCell()
                 }
-            if let product = self.products[indexPath.row] {
-                cell.configure(of: product)
-                ImageLoader.loadImage(urlString: product.thumbnailURLString) { image in
-                    if indexPath == collectionView.indexPath(for: cell) {
-                        cell.thumbnailImageView.image = image
-                    }
-                }
-            }
-            return cell
-            
+            currentCell = cell
         case SegmentedControlValue.grid.rawValue:
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: Constants.openMarketProductGridCellReuseIdentifier,
+                withReuseIdentifier: ListConstants.openMarketProductGridCellReuseIdentifier,
                 for: indexPath) as? OpenMarketProductGirdCell else {
                     return UICollectionViewCell()
                 }
-            if let product = self.products[indexPath.row] {
-                cell.configure(of: product)
-                ImageLoader.loadImage(urlString: product.thumbnailURLString) { image in
-                    if indexPath == collectionView.indexPath(for: cell) {
-                        cell.thumbnailImageView.image = image
-                    }
-                }
-            }
-            return cell
+            currentCell = cell
         default:
             break
         }
         
-        return UICollectionViewCell()
+        guard let currentCell = currentCell else {
+            return UICollectionViewCell()
+        }
+        
+        if let product = self.products[indexPath.row] {
+            currentCell.configure(of: product)
+            ImageLoader.loadImage(urlString: product.thumbnailURLString) { image in
+                if indexPath == collectionView.indexPath(for: currentCell) {
+                    currentCell.thumbnailImageView.image = image
+                }
+            }
+        }
+        return currentCell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionFooter,
+              let loadingFooterView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ListConstants.openMarketProductFooterViewIdentifier, for: indexPath) as? LoadingFooterView else{
+                  return UICollectionReusableView()
+                  
+              }
+        loadingFooterView.backgroundColor = .clear
+        self.loadingView = loadingFooterView
+        return loadingFooterView
+    }
+}
+
+extension ProductListViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.recentlySelectedIndex = indexPath.row
+        guard var product = self.products[indexPath.row],
+              let productId = product.id else {
+                  return
+              }
+        self.apiManager.getOpenMarketProductDetail(
+            productId: productId
+        ) { result in
+            guard let detailInfo = try? result.get() else {
+                return
+            }
+            product.setDetailInfo(
+                description: detailInfo.description,
+                images: detailInfo.images,
+                vendor: detailInfo.vendor
+            )
+            self.products[indexPath.row] = product
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: DetailConstnts.detailSegueIdentifier, sender: nil)
+            }
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionView.elementKindSectionFooter && self.isLoading {
+            self.loadingView?.activityIndicator.startAnimating()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionView.elementKindSectionFooter {
+            self.loadingView?.activityIndicator.stopAnimating()
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -155,7 +240,9 @@ extension ProductListViewController: UICollectionViewDataSource, UICollectionVie
             }
         }
     }
-    
+}
+
+extension ProductListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let safeAreaWidth = self.view.safeAreaLayoutGuide.layoutFrame.width
         
@@ -177,56 +264,33 @@ extension ProductListViewController: UICollectionViewDataSource, UICollectionVie
         if self.isLoading || self.products.count == self.totalCount {
             return .zero
         }
-        return CGSize(width: self.collectionView.bounds.size.width, height: Constants.loadingFooterViewHeight)
+        return CGSize(width: self.collectionView.bounds.size.width, height: ListConstants.loadingFooterViewHeight)
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionFooter,
-              let loadingFooterView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Constants.openMarketProductFooterViewIdentifier, for: indexPath) as? LoadingFooterView else{
-                  return UICollectionReusableView()
-                  
-              }
-        loadingFooterView.backgroundColor = .clear
-        self.loadingView = loadingFooterView
-        return loadingFooterView
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
-        if elementKind == UICollectionView.elementKindSectionFooter && self.isLoading {
-            self.loadingView?.activityIndicator.startAnimating()
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
-        if elementKind == UICollectionView.elementKindSectionFooter {
-            self.loadingView?.activityIndicator.stopAnimating()
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        switch layoutSegmentedControl.selectedSegmentIndex {
+        case SegmentedControlValue.grid.rawValue:
+            return ListConstants.openMarketProductGridCellMinimumInterLineSpacing
+        default:
+            return 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         switch layoutSegmentedControl.selectedSegmentIndex {
         case SegmentedControlValue.grid.rawValue:
-            return Constants.openMarketProductGridCellMinimumInterItemSpacing
-        default:
-            return 0
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        switch layoutSegmentedControl.selectedSegmentIndex {
-        case SegmentedControlValue.grid.rawValue:
-            return Constants.openMarketProductGridCellMinimumInterLineSpacing
+            return ListConstants.openMarketProductGridCellMinimumInterItemSpacing
         default:
             return 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            return UIEdgeInsets(
-                top: Constants.openMarketPrdouctCellTopBottomInset,
-                left: Constants.openMarketPrdouctCellLeadingTrailingInset,
-                bottom: Constants.openMarketPrdouctCellTopBottomInset,
-                right: Constants.openMarketPrdouctCellLeadingTrailingInset
-            )
+        return UIEdgeInsets(
+            top: ListConstants.openMarketPrdouctCellTopBottomInset,
+            left: ListConstants.openMarketPrdouctCellLeadingTrailingInset,
+            bottom: ListConstants.openMarketPrdouctCellTopBottomInset,
+            right: ListConstants.openMarketPrdouctCellLeadingTrailingInset
+        )
     }
 }

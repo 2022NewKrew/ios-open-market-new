@@ -29,25 +29,25 @@ class OpenMarketProductListCell: UICollectionViewCell, OpenMarketProductCellType
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.thumbnailImageView.image = UIImage(named: Constants.loadingImageName)
+        self.thumbnailImageView.image = UIImage(named: ListConstants.loadingImageName)
         self.notDiscountedPriceLabel.isHidden = false
         self.stockLabel.textColor = .systemGray
     }
     
     static func cellForWidth(safeAreaWidth: CGFloat) -> CGFloat {
-        let width =  safeAreaWidth - Constants.openMarketPrdouctCellLeadingTrailingInset * 2.0
+        let width =  safeAreaWidth - ListConstants.openMarketPrdouctCellLeadingTrailingInset * 2.0
         return width
     }
     
     static func cellForHeight(safeAreaWidth: CGFloat) -> CGFloat {
         let nameLabel = UILabel()
         nameLabel.font = UIFont.preferredFont(forTextStyle: .title1)
-        nameLabel.text = Constants.unknwon
+        nameLabel.text = ListConstants.unknwon
         nameLabel.sizeToFit()
         
         let priceLabel = UILabel()
         priceLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        priceLabel.text = Constants.unknwon
+        priceLabel.text = ListConstants.unknwon
         priceLabel.sizeToFit()
         
         let labelHeight = nameLabel.frame.height + priceLabel.frame.height + Self.topBottomSpacing * 2.0 + Self.labelSpacing

@@ -8,7 +8,7 @@
 import UIKit
 
 struct ImageLoader {
-    static func loadImage(urlString: String?, completion: @escaping  (UIImage) -> ()) {
+    static func loadImage(urlString: String?, completion: @escaping (UIImage) -> ()) {
         guard let urlString = urlString,
               let url = URL(string: urlString) else {
                   return

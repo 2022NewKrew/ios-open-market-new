@@ -86,7 +86,7 @@ enum OpenMarketAPIMock {
             """.utf8
     )
     
-    static let expectedOpenMarketProductListGetResponse = OpenMarketProudctListGetResponse(
+    static let expectedOpenMarketProductListGetResponse = OpenMarketProductListResponse(
         pageNumber: 1,
         itemsPerPage: 2,
         totalCount: 777,
@@ -129,7 +129,7 @@ enum OpenMarketAPIMock {
         hasPrev: false
     )
     
-    static let expectedOpenMarketProductDetailGetResponse = OpenMarketProductDetailGetResponse(
+    static let expectedOpenMarketProductDetailGetResponse = OpenMarketProductResponse(
         id: 300,
         vendorId: 3,
         name: "99999Test Product",
