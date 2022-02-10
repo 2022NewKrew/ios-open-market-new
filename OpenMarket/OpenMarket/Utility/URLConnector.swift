@@ -42,7 +42,8 @@ struct URLConnector {
         task.resume()
     }
     
-    func postData(to url: String, data: inout [String: String], images: inout [Data]) {
+    func postData(to url: String, data: inout [String: String],
+                  images: inout [Data], name: String) {
         guard let targetURL = URL(string: baseURL + url) else { return }
         let boundary = "Boundary-\(UUID().uuidString)"
         data["secret"] = secret
@@ -60,6 +61,27 @@ struct URLConnector {
             if let data = data {
                 guard let parsedData = Decoder.shared.decodeJSONData(type: Product.self, from: data) else { return }
                 NotificationCenter.default.post(name: Notification.Name("PostResponse"), object: nil, userInfo: ["data": parsedData])
+            }
+            
+        }
+        task.resume()
+    }
+    
+    func deleteData(to url: String) {
+        guard let targetURL = URL(string: baseURL + url) else { return }
+        var request = URLRequest(url: targetURL)
+        print(baseURL + url)
+        request.addValue(identifier, forHTTPHeaderField: "identifier")
+        request.httpMethod = "DELETE"
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
+            if let error = error {
+                print(error)
+                return
+            }
+            if let data = data {
+                print(String.init(data: data, encoding: .utf8)!)
+                guard let parsedData = Decoder.shared.decodeJSONData(type: Product.self, from: data) else { return }
+                NotificationCenter.default.post(name: Notification.Name("DeleteResponse"), object: nil, userInfo: ["data": parsedData])
             }
             
         }

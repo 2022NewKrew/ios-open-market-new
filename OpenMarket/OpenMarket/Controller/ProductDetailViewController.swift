@@ -32,7 +32,7 @@ class ProductDetailViewController: UIViewController {
     func editOrDelete() {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let edit = UIAlertAction(title: "edit", style: .default, handler: editAction(_:))
-        let delete = UIAlertAction(title: "delete", style: .destructive, handler: nil)
+        let delete = UIAlertAction(title: "delete", style: .destructive, handler: deleteAction(_:))
         let cancel = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
         actionSheet.addAction(edit)
         actionSheet.addAction(delete)
@@ -44,5 +44,18 @@ class ProductDetailViewController: UIViewController {
     func editAction(_ action: UIAlertAction) {
         let editViewController = ProductEditViewController(data: self.data)
         navigationController?.pushViewController(editViewController, animated: true)
+    }
+    
+    @objc
+    func deleteAction(_ action: UIAlertAction) {
+        let deleteAlert = UIAlertController(title: "암호", message: "상품 암호를 입력해주세요", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ok", style: .default, handler: { action in
+            OpenMarketAPI.shared.deleteProduct(productId: self.data.id, secret: deleteAlert.textFields?[0].text ?? "")
+        })
+        let cancel = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
+        deleteAlert.addTextField(configurationHandler: nil)
+        deleteAlert.addAction(ok)
+        deleteAlert.addAction(cancel)
+        self.present(deleteAlert, animated: true, completion: nil)
     }
 }
