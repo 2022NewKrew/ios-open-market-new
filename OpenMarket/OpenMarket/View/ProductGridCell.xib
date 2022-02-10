@@ -18,7 +18,7 @@
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="9ka-wx-Qit">
                     <rect key="frame" x="10" y="10" width="180" height="202"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vGt-On-Js6">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vGt-On-Js6">
                             <rect key="frame" x="40" y="0.0" width="100" height="100"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="vGt-On-Js6" secondAttribute="height" multiplier="1:1" priority="999" id="13h-wa-6VM"/>

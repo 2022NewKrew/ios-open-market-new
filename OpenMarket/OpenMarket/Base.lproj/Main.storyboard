@@ -92,7 +92,7 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8U7-Oq-8UM" userLabel="ContentView">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="377"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="523"/>
                                         <subviews>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Ndd-IM-nQN">
                                                 <rect key="frame" x="20" y="10" width="374" height="133"/>
@@ -188,8 +188,11 @@
                                                 </subviews>
                                             </stackView>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="b5N-Cd-b1G">
-                                                <rect key="frame" x="20" y="323" width="374" height="54"/>
+                                                <rect key="frame" x="20" y="323" width="374" height="200"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="Tt5-Jr-dpJ"/>
+                                                </constraints>
                                                 <string key="text" base64-UTF8="YES">
 CiA
 </string>

@@ -56,7 +56,7 @@ class MainViewController: UIViewController {
         guard let productEditViewController = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(withIdentifier: "ProductEditVC") as? ProductEditViewController else { return }
         productEditViewController.modalPresentationStyle = .fullScreen
-        productEditViewController.mode = ProductEditViewController.AddMode(productEditViewController)
+        productEditViewController.setMode(mode: .add)
         present(productEditViewController, animated: true, completion: nil)
     }
     
@@ -76,7 +76,7 @@ class MainViewController: UIViewController {
         
     }
     
-    func configureCollectionView(){
+    func configureCollectionView() {
         collectionView.register(UINib(nibName: Constant.listcellNib, bundle: .main),
                                 forCellWithReuseIdentifier: Constant.listCellIdentifier)
         collectionView.register(UINib(nibName: Constant.gridCellNib, bundle: .main),
@@ -146,7 +146,7 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         guard let productEditViewController = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(withIdentifier: "ProductEditVC") as? ProductEditViewController else { return }
         productEditViewController.modalPresentationStyle = .fullScreen
-        productEditViewController.mode = ProductEditViewController.EditMode(productEditViewController)
+        productEditViewController.setMode(mode: .edit)
         productEditViewController.productId = products[indexPath.row].id
         present(productEditViewController, animated: true, completion: nil)
     }
