@@ -11,9 +11,10 @@ class ProductAddView: ProductEditableView {
         if let data = image.pngData() {
             let scale = Double.init(data.count / (1048576/5))
             if scale > 1 {
-                if let newImage = image.resizeImage(scale: scale) {
+                if let newImage = image.resizeImage(scale: scale),
+                    let data = newImage.pngData() {
                     imageView.image = newImage
-                    imageData.append(newImage.pngData()!)
+                    imageData.append(data)
                     return
                 }
             }

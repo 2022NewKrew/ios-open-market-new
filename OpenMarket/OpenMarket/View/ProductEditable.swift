@@ -110,23 +110,12 @@ class ProductEditableView: UIStackView, ProductEditable {
         self.alignment = .center
         self.distribution = .fill
         self.spacing = 10
-        self.addArrangedSubview(imageScrollView)
-        self.addArrangedSubview(productName)
-        self.addArrangedSubview(productPriceView)
-        self.addArrangedSubview(productDiscountPrice)
-        self.addArrangedSubview(productStock)
-        self.addArrangedSubview(productDetail)
+        self.addArrangedSubviews([imageScrollView, productName,
+                                  productPriceView, productDiscountPrice,
+                                  productStock, productDetail])
         
         setupScrollView()
-        
-        addImageButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
-        productName.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        productPriceView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        productPrice.trailingAnchor.constraint(equalTo: productCurrency.leadingAnchor, constant: -5).isActive = true
-        productDiscountPrice.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        productStock.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        productDetail.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        
+        setupComponents()
     }
     
     required init(coder: NSCoder) {
@@ -144,8 +133,19 @@ class ProductEditableView: UIStackView, ProductEditable {
         imageScrollView.addSubview(containerView)
         containerView.constraintsToFit(imageScrollView.contentLayoutGuide)
         containerView.heightAnchor.constraint(equalTo: imageScrollView.frameLayoutGuide.heightAnchor).isActive = true
+        
         imageScrollView.addSubview(imageContentView)
         imageContentView.constraintsToFit(containerView)
+    }
+    
+    func setupComponents() {
+        addImageButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
+        productName.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        productPriceView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        productPrice.trailingAnchor.constraint(equalTo: productCurrency.leadingAnchor, constant: -5).isActive = true
+        productDiscountPrice.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        productStock.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        productDetail.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
     }
 
 }

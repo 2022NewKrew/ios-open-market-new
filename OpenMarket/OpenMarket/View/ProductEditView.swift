@@ -20,12 +20,13 @@ class ProductEditView: ProductEditableView {
         if let images = data.images {
             for image in images {
                 let imageView = UIImageView()
-                let imageData: Data = try! Data(contentsOf: image.thumbnailUrl)
-                imageView.image = UIImage(data: imageData)
-                imageContentView.addArrangedSubview(imageView)
-                imageView.translatesAutoresizingMaskIntoConstraints = false
-                imageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
-                imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
+                if let imageData: Data = try? Data(contentsOf: image.thumbnailUrl) {
+                    imageView.image = UIImage(data: imageData)
+                    imageContentView.addArrangedSubview(imageView)
+                    imageView.translatesAutoresizingMaskIntoConstraints = false
+                    imageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.3).isActive = true
+                    imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
+                }
             }
         }
     }
