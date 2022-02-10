@@ -20,4 +20,14 @@ struct JSONConverter {
             return nil
         }
     }
+
+    static func encode<T: Codable>(_ model: T) -> Data? {
+        let encoder: JSONEncoder = JSONEncoder()
+         do {
+             let response = try encoder.encode(model)
+             return response
+         } catch {
+             return nil
+         }
+     }
 }

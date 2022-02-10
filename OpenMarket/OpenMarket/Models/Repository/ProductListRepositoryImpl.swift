@@ -19,8 +19,4 @@ struct ProductListRepositoryImpl: ProductListRepository {
 
         self.networkManager.get(url: url, completion: completion)
     }
-
-    func image(url: URL, completion: @escaping (Data) -> Void) {
-        self.networkManager.image(url: url, completion: completion)
-    }
 }

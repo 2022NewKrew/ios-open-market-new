@@ -6,7 +6,7 @@
 
 import UIKit
 
-class ProductListViewController: UIViewController {
+class ProductListViewController: UIViewController, ModifyDelegate {
 
     @IBOutlet weak var productListCollectionView: UICollectionView!
     @IBOutlet weak var initLoadingUI: UIActivityIndicatorView!
@@ -15,6 +15,8 @@ class ProductListViewController: UIViewController {
 
     private let productListViewModel = ProductListViewModel()
     private var products: [Product]?
+    private var selectedProduct: Product?
+    private var moveController: ProductController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,8 +28,14 @@ class ProductListViewController: UIViewController {
         }
     }
 
+    func modify() {
+        print("ok")
+        self.productListViewModel.productListReset()
+        self.productListViewModel.productList()
+    }
+
     @IBAction func pressAddProductButton(_ sender: UIBarButtonItem) {
-        self.performSegue(withIdentifier: Constant.productSegue, sender: self)
+        self.performSegue(withIdentifier: Constant.productAddSegue, sender: self)
     }
 
     @IBAction func changeSegmentedControl(_ sender: UISegmentedControl) {
@@ -68,6 +76,26 @@ class ProductListViewController: UIViewController {
         self.productListCollectionView.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: GridCollectionViewCell.self))
         self.productListCollectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.productListCollectionView.collectionViewLayout = self.createListCompositionLayout()
+        self.productListCollectionView.reloadData()
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case Constant.productAddSegue:
+            let destinationViewController = segue.destination as? ProductEditViewController
+            destinationViewController?.navigationTitle = "상품등록"
+            self.moveController = destinationViewController
+        case Constant.productDetailSegue:
+            let destinationViewController = segue.destination as? ProductDeatilViewController
+            destinationViewController?.product = self.selectedProduct
+            self.moveController = destinationViewController
+        case .none:
+            break
+        case .some(_):
+            break
+        }
+
+        self.moveController?.delegate = self
     }
 }
 
@@ -113,7 +141,8 @@ extension ProductListViewController {
 // MARK - Delegate
 extension ProductListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.performSegue(withIdentifier: Constant.productSegue, sender: self)
+        self.selectedProduct = self.products?[indexPath.row]
+        self.performSegue(withIdentifier: Constant.productDetailSegue, sender: self)
     }
 }
 
