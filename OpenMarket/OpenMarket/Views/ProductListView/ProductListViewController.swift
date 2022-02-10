@@ -6,7 +6,7 @@
 
 import UIKit
 
-class ProductListViewController: UIViewController {
+class ProductListViewController: UIViewController, ModifyDelegate {
 
     @IBOutlet weak var productListCollectionView: UICollectionView!
     @IBOutlet weak var initLoadingUI: UIActivityIndicatorView!
@@ -15,6 +15,7 @@ class ProductListViewController: UIViewController {
 
     private let productListViewModel = ProductListViewModel()
     private var products: [Product]?
+    private var productViewController: ProductViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,11 @@ class ProductListViewController: UIViewController {
         DispatchQueue.main.async {
             self.initLoadingUI.startAnimating()
         }
+    }
+
+    func modify() {
+        self.productListViewModel.productListReset()
+        self.productListViewModel.productList()
     }
 
     @IBAction func pressAddProductButton(_ sender: UIBarButtonItem) {
@@ -68,10 +74,14 @@ class ProductListViewController: UIViewController {
         self.productListCollectionView.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: GridCollectionViewCell.self))
         self.productListCollectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.productListCollectionView.collectionViewLayout = self.createListCompositionLayout()
+        self.productListCollectionView.reloadData()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationViewController = segue.destination as? ProductViewController
+        self.productViewController = destinationViewController
+        self.productViewController?.delegate = self
+
         switch segue.identifier {
         case Constant.productAddSegue:
             destinationViewController?.navigationTitle = "상품등록"

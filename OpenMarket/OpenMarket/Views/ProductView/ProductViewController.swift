@@ -7,8 +7,17 @@
 
 import UIKit
 
+protocol ModifyDelegate: AnyObject {
+    func modify()
+}
+
 class ProductViewController: UIViewController {
+
     var navigationTitle: String?
+    var product: Product?
+    var postProduct: PostProduct?
+    weak var delegate: ModifyDelegate?
+    private var productViewModel = ProductViewModel()
     private var registrationImageViewCount = 0
     private lazy var registrationImageViewArray = [
         registrationImageView1,
@@ -28,8 +37,8 @@ class ProductViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .systemBlue
         button.backgroundColor = .systemGray5
-        button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.heightAnchor.constraint(equalTo: button.widthAnchor).isActive = true
+        button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.addTarget(self, action: #selector(self.pressAddImageButton(_:)), for: .touchUpInside)
         return button
     }()
@@ -135,7 +144,9 @@ class ProductViewController: UIViewController {
         self.navigationItem.title = self.navigationTitle
         self.navigationItem.leftBarButtonItem = self.cancelButton
         self.navigationItem.rightBarButtonItem = self.registerButton
+        self.setTextFieldDelegate()
         self.bindAllConstraints()
+        self.setViewModel()
     }
 
     @objc func pressAddImageButton(_ sender: UIButton) {
@@ -158,8 +169,29 @@ class ProductViewController: UIViewController {
     }
 
     @objc func pressRegisterButton(_ sender: UIBarButtonItem) {
-        // add or update product
-        print(#function)
+        guard self.registrationImageViewCount > 0 else {
+            print("이미지를 하나 이상 등록하세요")
+            return
+        }
+
+        let postProduct = PostProduct(
+            name: self.productNameTextField.text ?? "name",
+            descriptions: self.productDescriptionTextView.text ?? "descriptions",
+            price: Double(self.productOriginPriceTextField.text ?? "0.0") ?? 0.0,
+            currency: self.productPriceSegmentControl.selectedSegmentIndex == ProductPriceSegmentValue.krw.rawValue ? "KRW" : "USD",
+            discountedPrice: Double(self.productDiscountedPriceTextField.text ?? "0.0") ?? 0.0,
+            stock: Int(self.productStockTextField.text ?? "0") ?? 0,
+            secret: Constant.secret
+        )
+
+        let productImages: [UIImage?] = self.registrationImageViewArray.enumerated()
+            .filter { (index: Int, element: UIImageView) -> Bool in
+                index < self.registrationImageViewCount
+            }
+            .map { (_: Int, element: UIImageView) -> UIImage? in
+                element.image
+            }
+        self.productViewModel.addProduct(postProduct: postProduct, productImages: productImages)
     }
 
     private func createRegistrationImageView() -> UIImageView {
@@ -180,6 +212,29 @@ class ProductViewController: UIViewController {
         textField.keyboardType = .default
         return textField
     }
+
+    private func setTextFieldDelegate() {
+        self.productNameTextField.delegate = self
+        self.productOriginPriceTextField.delegate = self
+        self.productDiscountedPriceTextField.delegate = self
+        self.productStockTextField.delegate = self
+    }
+
+    private func setViewModel() {
+        self.productViewModel.addedProduct = { [weak self] in
+            guard let self = self else { return }
+
+            self.delegate?.modify()
+            DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
+}
+
+// MARL - UITextFieldDelegate
+extension ProductViewController: UITextFieldDelegate {
+
 }
 
 // MARK - bindConstraints

@@ -16,4 +16,6 @@ struct Constant {
     static let productDiscountedPriceTextFieldPlaceholder = "할인가격"
     static let productStockTextFieldPlaceholder = "재고수량"
     static let productDescriptionTextViewPlaceholder = "상품에 대해 설명해주세요."
+    static let identifier = "a16de1ff-7217-11ec-abfa-d7e4ab0f3a0b"
+    static let secret = "_8rLkXbV2s47Z4Xz"
 }

@@ -5,6 +5,8 @@
 //  Created by 이승주 on 2022/01/25.
 //
 
+import UIKit
+
 struct ProductRepositoryImpl: ProductRepository {
 
     private let networkManager = NetworkManager()
@@ -22,8 +24,13 @@ struct ProductRepositoryImpl: ProductRepository {
 
     }
 
-    func addProduct() {
+    func addProduct(postProduct: PostProduct, productImages: [UIImage?], completion: @escaping (Result<Product?, NetworkError>) -> Void) {
+        guard let url = OpenMarketURL.addProduct.url else {
+            completion(.failure(.invalidURL))
+            return
+        }
 
+        self.networkManager.post(url: url, postProduct: postProduct, productImages: productImages, completion: completion)
     }
 
     func updateProduct() {

@@ -39,4 +39,9 @@ class ProductListViewModel {
             }
         }
     }
+
+    func productListReset() {
+        self.products = []
+        self.pageNumber = 0
+    }
 }

@@ -10,14 +10,14 @@ import XCTest
 
 class OpenMarketTests: XCTestCase {
 
-    let projectListRepository = RepositoryInjection.injectProductListRepository()
-    let projectRepository = RepositoryInjection.injectProductRepository()
+    let productListRepository = RepositoryInjection.injectProductListRepository()
+    let productRepository = RepositoryInjection.injectProductRepository()
 
     func test_상품리스트_받아오기_성공() {
         let pageNumber = 1
         let itemPerPage = 10
 
-        self.projectListRepository.productList(pageNumber: pageNumber, itemsPerPage: itemPerPage) { result in
+        self.productListRepository.productList(pageNumber: pageNumber, itemsPerPage: itemPerPage) { [weak self] result in
             switch result {
             case .success(let productList):
                 var result = true
@@ -35,7 +35,7 @@ class OpenMarketTests: XCTestCase {
     func test_상품_받아오기_성공() {
         let productId = 522
 
-        self.projectRepository.product(productId: productId) { result in
+        self.productRepository.product(productId: productId) { [weak self] result in
             switch result {
             case .success(let product):
                 var result = true
@@ -45,6 +45,34 @@ class OpenMarketTests: XCTestCase {
                 XCTAssertEqual(result, true)
             case .failure(let error):
                 XCTFail("상품리스트 받아오기: 네트워크에러")
+            }
+        }
+        sleep(3)
+    }
+
+    func test_상품등록_성공() {
+        let postProduct = PostProduct(
+            name: "좋은 상품",
+            descriptions: "넘 좋아요",
+            price: 100,
+            currency: "KRW",
+            discountedPrice: 90,
+            stock: 10,
+            secret: Constant.secret
+        )
+        let image = UIImage(systemName: "pencil")
+        let images = [image, image]
+
+        self.productRepository.addProduct(postProduct: postProduct, productImages: images) { [weak self] result in
+            switch result {
+            case .success(let product):
+                var result = true
+                if product == nil {
+                    result = false
+                }
+                XCTAssertEqual(result, true)
+            case .failure(let error):
+                XCTFail("상품등록: 네트워크에러")
             }
         }
         sleep(3)
