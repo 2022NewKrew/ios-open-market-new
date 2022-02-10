@@ -11,11 +11,11 @@ struct OpenMarketAPI {
     }
     
     func getProductList(numberOfPage: Int, itemsPerPage: Int) {
-        connector.getData(from: "api/products?page_no=\(numberOfPage)&items_per_page=\(itemsPerPage)", type: Products.self)
+        connector.getData(from: "api/products?page_no=\(numberOfPage)&items_per_page=\(itemsPerPage)", type: Products.self, name: "ProductList")
     }
     
     func getDetailOfProduct(productId: Int) {
-        connector.getData(from: "api/products/\(productId)", type: Product.self)
+        connector.getData(from: "api/products/\(productId)", type: Product.self, name: "ProductDetail")
     }
     
     func addProduct(data: inout [String: String], images: inout [Data]) {

@@ -41,7 +41,8 @@ class ViewController: UIViewController {
     // MARK: - Override function
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData(_:)), name: Notification.Name("LoadData"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData(_:)), name: Notification.Name("ProductList"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadDetailData(_:)), name: Notification.Name("ProductDetail"), object: nil)
         setupNavigationBar()
         setupTableView()
         setupCollectionView()
@@ -52,7 +53,7 @@ class ViewController: UIViewController {
     // MARK: - objc function
     @objc
     func reloadData(_ notification: NSNotification) {
-        let loadedData = notification.userInfo?["data"] as! Products
+        let loadedData = notification.userInfo?["Products"] as! Products
         products += loadedData.pages
         hasNextPage = loadedData.hasNext
         let indexPaths = (products.count - loadedData.pages.count ..< products.count)
@@ -60,6 +61,16 @@ class ViewController: UIViewController {
         DispatchQueue.main.async {
             self.listView.insertRows(at: indexPaths, with: .left)
             self.gridView.insertItems(at: indexPaths)
+            self.activityIndicator.stopAnimating()
+        }
+    }
+    
+    @objc
+    func loadDetailData(_ notification: NSNotification) {
+        let loadedData = notification.userInfo?["Product"] as! Product
+        DispatchQueue.main.async {
+            let editViewController = ProductEditViewController(data: loadedData)
+            self.navigationController?.pushViewController(editViewController, animated: true)
             self.activityIndicator.stopAnimating()
         }
     }
@@ -135,8 +146,8 @@ extension ViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let editViewController = ProductEditViewController(data: products[indexPath.row])
-        navigationController?.pushViewController(editViewController, animated: true)
+        activityIndicator.startAnimating()
+        OpenMarketAPI.shared.getDetailOfProduct(productId: products[indexPath.row].id)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
