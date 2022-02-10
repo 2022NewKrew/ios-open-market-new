@@ -41,7 +41,8 @@ class ViewController: UIViewController {
     // MARK: - Override function
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData(_:)), name: Notification.Name("LoadData"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData(_:)), name: Notification.Name("ProductList"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadDetailData(_:)), name: Notification.Name("ProductDetail"), object: nil)
         setupNavigationBar()
         setupTableView()
         setupCollectionView()
@@ -52,7 +53,7 @@ class ViewController: UIViewController {
     // MARK: - objc function
     @objc
     func reloadData(_ notification: NSNotification) {
-        let loadedData = notification.userInfo?["data"] as! Products
+        let loadedData = notification.userInfo?["Products"] as! Products
         products += loadedData.pages
         hasNextPage = loadedData.hasNext
         let indexPaths = (products.count - loadedData.pages.count ..< products.count)
@@ -60,6 +61,16 @@ class ViewController: UIViewController {
         DispatchQueue.main.async {
             self.listView.insertRows(at: indexPaths, with: .left)
             self.gridView.insertItems(at: indexPaths)
+            self.activityIndicator.stopAnimating()
+        }
+    }
+    
+    @objc
+    func loadDetailData(_ notification: NSNotification) {
+        let loadedData = notification.userInfo?["Product"] as! Product
+        DispatchQueue.main.async {
+            let editViewController = ProductEditViewController(data: loadedData)
+            self.navigationController?.pushViewController(editViewController, animated: true)
             self.activityIndicator.stopAnimating()
         }
     }
@@ -81,7 +92,7 @@ class ViewController: UIViewController {
     //MARK: - function
     func setupNavigationBar() {
         navigationItem.titleView = listOrGrid
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: nil)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: #selector(addProduct))
     }
     
     func setupTableView() {
@@ -90,12 +101,7 @@ class ViewController: UIViewController {
         listView.delegate = self
         listView.dataSource = self
         listView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
-        NSLayoutConstraint.activate([
-            listView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            listView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            listView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            listView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        ])
+        listView.constraintsToFit(view.safeAreaLayoutGuide)
     }
     
     func setupCollectionView() {
@@ -118,6 +124,12 @@ class ViewController: UIViewController {
         view.bringSubviewToFront(activityIndicator)
         activityIndicator.startAnimating()
     }
+    
+    @objc
+    func addProduct() {
+        let addViewController = ProductAddViewController()
+        navigationController?.pushViewController(addViewController, animated: true)
+    }
 }
 
 // MARK: - TableView
@@ -131,6 +143,12 @@ extension ViewController: UITableViewDelegate {
             OpenMarketAPI.shared.getProductList(numberOfPage: currentPage, itemsPerPage: itemsPerPage)
             self.activityIndicator.startAnimating()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        activityIndicator.startAnimating()
+        OpenMarketAPI.shared.getDetailOfProduct(productId: products[indexPath.row].id)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
