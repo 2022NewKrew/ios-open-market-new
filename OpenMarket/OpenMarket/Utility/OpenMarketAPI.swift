@@ -19,6 +19,22 @@ struct OpenMarketAPI {
     }
     
     func addProduct(data: inout [String: String], images: inout [Data]) {
-        connector.postData(to: "api/products/", data: &data, images: &images)
+        connector.postData(to: "api/products/",
+                           data: &data, images: &images)
+    }
+    
+    func getProductSecret(productId: Int) {
+        var tempData: [String: String] = [:]
+        var tempImage: [Data] = []
+        connector.postData(to: "api/products/\(productId)/secret",
+                           data: &tempData, images: &tempImage)
+    }
+    
+    func deleteProduct(productId: Int, secret: String) {
+        connector.deleteData(to: "api/products/\(productId)/\(secret)")
+    }
+    
+    func updateProduct(productId: Int, data: inout [String: String]) {
+        connector.patchData(to: "api/products/\(productId)", data: &data)
     }
 }

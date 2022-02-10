@@ -38,7 +38,7 @@ class ProductEditViewController: UIViewController, KeyboardSizeControllable {
     
     @objc
     func addProduct() {
-//        editView.saveProduct()
+        (innerView as? ProductEditView)?.updateProduct()
         navigationController?.popViewController(animated: true)
     }
     
