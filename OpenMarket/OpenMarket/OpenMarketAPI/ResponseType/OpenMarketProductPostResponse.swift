@@ -24,7 +24,7 @@ struct OpenMarketProductResponse: Decodable, Equatable {
     var issusedAt: String?
     
     enum CodingKeys: String, CodingKey {
-        case id, description, currency, price, stock, images
+        case id, description, currency, price, stock, images, name
         case vendorId = "vendor_id"
         case thumbnailImageUrl = "thumbnail"
         case bargainPrice = "bargain_price"
