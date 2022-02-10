@@ -429,7 +429,7 @@ extension ProductEditViewController: UIImagePickerControllerDelegate, UINavigati
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard self.registrationImageViewCount < 5 else {
-            print("이미지 개수 초과")
+            self.showAlert(title: "등록 가능한 이미지개수를 초과했습니다", message: nil)
             return
         }
 
