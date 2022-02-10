@@ -34,7 +34,6 @@ struct URLConnector {
                 return
             }
             if let data = data {
-                print(String.init(data: data, encoding: .utf8)!)
                 guard let parsedData = Decoder.shared.decodeJSONData(type: type, from: data) else { return }
                 NotificationCenter.default.post(name: Notification.Name(name), object: nil, userInfo: ["\(type)": parsedData])
             }
@@ -59,7 +58,6 @@ struct URLConnector {
                 return
             }
             if let data = data {
-                print(String.init(data: data, encoding: .utf8)!)
                 guard let parsedData = Decoder.shared.decodeJSONData(type: Product.self, from: data) else { return }
                 NotificationCenter.default.post(name: Notification.Name("PostResponse"), object: nil, userInfo: ["data": parsedData])
             }
