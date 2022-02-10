@@ -178,7 +178,7 @@ extension ProductListViewController: UICollectionViewDelegate {
             product.setDetailInfo(
                 description: detailInfo.description,
                 images: detailInfo.images,
-                vendor: detailInfo.vendors
+                vendor: detailInfo.vendor
             )
             self.products[indexPath.row] = product
             DispatchQueue.main.async {

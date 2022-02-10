@@ -16,7 +16,7 @@ struct OpenMarketAPIManager {
     var encoder: JSONEncoder = JSONEncoder()
     var urlSession: URLSession
     
-    func getOpenMarketProductList(pageNumber: Int, itemsPerPage: Int, completion: @escaping (Result<OpenMarketProudctListGetResponse, Error>) -> Void) {
+    func getOpenMarketProductList(pageNumber: Int, itemsPerPage: Int, completion: @escaping (Result<OpenMarketProudctListResponse, Error>) -> Void) {
         guard let request = OpenMarketAPIRouter
                 .getOpenMarketProductList(pageNumber: pageNumber, itemsPerPage: itemsPerPage)
                 .asURLRequest() else {
@@ -25,13 +25,13 @@ struct OpenMarketAPIManager {
                 }
         
         let task = self.urlSession.dataTask(with: request, completionHandler: { data, response, error in
-            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProudctListGetResponse.self, response: response, data: data, error: error)
+            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProudctListResponse.self, response: response, data: data, error: error)
             completion(result)
         })
         task.resume()
     }
     
-    func getOpenMarketProductDetail(productId: Int, completion: @escaping (Result<OpenMarketProductDetailGetResponse, Error>) -> Void) {
+    func getOpenMarketProductDetail(productId: Int, completion: @escaping (Result<OpenMarketProductResponse, Error>) -> Void) {
         guard let request = OpenMarketAPIRouter
                 .getDetailOpenMarketProduct(productId: productId)
                 .asURLRequest() else {
@@ -40,13 +40,13 @@ struct OpenMarketAPIManager {
                 }
         
         let task = self.urlSession.dataTask(with: request, completionHandler: { data, response, error in
-            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProductDetailGetResponse.self, response: response, data: data, error: error)
+            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProductResponse.self, response: response, data: data, error: error)
             completion(result)
         })
         task.resume()
     }
     
-    func postOpenMarketProduct(identifier: String, params: OpenMarketProductPostParam, images: [UIImage], completion: @escaping (Result<OpenMarketProudctPostOrPatchResponse, Error>) -> Void) {
+    func postOpenMarketProduct(identifier: String, params: OpenMarketProductPostParam, images: [UIImage], completion: @escaping (Result<OpenMarketProductResponse, Error>) -> Void) {
         let boundary = self.generateBoundaryString()
         let body = self.createOpenMarketProductPostBody(boundary: boundary, params: params, images: images)
         
@@ -62,13 +62,13 @@ struct OpenMarketAPIManager {
                 completion(.failure(error))
                 return
             }
-            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProudctPostOrPatchResponse.self, response: response, data: data, error: error)
+            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProductResponse.self, response: response, data: data, error: error)
             completion(result)
         }
         task.resume()
     }
     
-    func patchOpenMarketProduct(identifier: String, productId: Int, params: OpenMarketProductPatchParam, completion: @escaping(Result<OpenMarketProudctPostOrPatchResponse, Error>) -> Void) {
+    func patchOpenMarketProduct(identifier: String, productId: Int, params: OpenMarketProductPatchParam, completion: @escaping(Result<OpenMarketProductResponse, Error>) -> Void) {
         guard let body = self.createOpenMarketProductPatchBody(params: params) else {
             completion(.failure(OpenMarketAPIError.failEncoding))
             return
@@ -82,7 +82,7 @@ struct OpenMarketAPIManager {
                 }
         
         let task = self.urlSession.dataTask(with: request) { data, response, error in
-            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProudctPostOrPatchResponse.self, response: response, data: data, error: error)
+            let result = self.handleOpenMarketAPIResponse(responseType: OpenMarketProductResponse.self, response: response, data: data, error: error)
             completion(result)
         }
         task.resume()

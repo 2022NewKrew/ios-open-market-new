@@ -359,7 +359,7 @@ class ProductManagingViewController: UIViewController {
         }
     }
     
-    private func postOpenMarketProduct(productName: String, description: String, price: Int, currency: OpenMarketProduct.Currency, discountedPrice: Float, stock: Int, completion: @escaping (Result<OpenMarketProudctPostOrPatchResponse, Error>) -> Void) {
+    private func postOpenMarketProduct(productName: String, description: String, price: Int, currency: OpenMarketProduct.Currency, discountedPrice: Float, stock: Int, completion: @escaping (Result<OpenMarketProductResponse, Error>) -> Void) {
         let param = self.createOpenMarketProductParam(
             productName: productName,
             description: description,
@@ -380,7 +380,7 @@ class ProductManagingViewController: UIViewController {
         }
     }
     
-    private func patchOpenMarketProduct(productName: String, description: String, price: Int, currency: OpenMarketProduct.Currency, discountedPrice: Float, stock: Int, productId: Int, thumbnailId: Int, completion: @escaping (Result<OpenMarketProudctPostOrPatchResponse, Error>) -> Void) {
+    private func patchOpenMarketProduct(productName: String, description: String, price: Int, currency: OpenMarketProduct.Currency, discountedPrice: Float, stock: Int, productId: Int, thumbnailId: Int, completion: @escaping (Result<OpenMarketProductResponse, Error>) -> Void) {
         let param = self.createOpenMarketProductPatchParam(
             productName: productName,
             description: description,
