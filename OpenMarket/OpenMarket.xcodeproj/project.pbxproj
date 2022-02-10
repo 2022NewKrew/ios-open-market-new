@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C203721227A2875A0034BB64 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = C203721127A2875A0034BB64 /* ImageCache.swift */; };
 		C230D64B27B4C9B0001AB7D0 /* ProductEditViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C230D64A27B4C9B0001AB7D0 /* ProductEditViewController+Delegate.swift */; };
+		C230D64D27B4CBE8001AB7D0 /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C230D64C27B4CBE8001AB7D0 /* ProductDetailViewController.swift */; };
 		C24DD60427AB8699000C1933 /* ProductGridCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C24DD60327AB8699000C1933 /* ProductGridCell.xib */; };
 		C24DD60627AB897A000C1933 /* ProductGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24DD60527AB897A000C1933 /* ProductGridCell.swift */; };
 		C2A6DCAF279E9CF200455282 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A6DCAE279E9CF200455282 /* Product.swift */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		C203721127A2875A0034BB64 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		C230D64A27B4C9B0001AB7D0 /* ProductEditViewController+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProductEditViewController+Delegate.swift"; sourceTree = "<group>"; };
+		C230D64C27B4CBE8001AB7D0 /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
 		C24DD60327AB8699000C1933 /* ProductGridCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProductGridCell.xib; sourceTree = "<group>"; };
 		C24DD60527AB897A000C1933 /* ProductGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductGridCell.swift; sourceTree = "<group>"; };
 		C2A6DCAE279E9CF200455282 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				C2F217D427B0EA690098C280 /* ProductEditViewController.swift */,
 				C230D64A27B4C9B0001AB7D0 /* ProductEditViewController+Delegate.swift */,
 				C2F217E227B3B8DB0098C280 /* ProductEditViewController+State.swift */,
+				C230D64C27B4CBE8001AB7D0 /* ProductDetailViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -249,6 +252,7 @@
 				C70FB0FB25BEF61C00C9924E /* AppDelegate.swift in Sources */,
 				C2F217DF27B389E20098C280 /* String+Extension.swift in Sources */,
 				C2A6DCB4279EA01C00455282 /* APIManager.swift in Sources */,
+				C230D64D27B4CBE8001AB7D0 /* ProductDetailViewController.swift in Sources */,
 				C2D5FBC0279F7E250072A70D /* JSONDecoder+Extension.swift in Sources */,
 				C2F217E127B3B4390098C280 /* ModeState.swift in Sources */,
 				C2F217DD27B24FEF0098C280 /* UIImage+Extension.swift in Sources */,

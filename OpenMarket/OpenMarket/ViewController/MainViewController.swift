@@ -143,12 +143,10 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let productEditViewController = UIStoryboard(name: "Main", bundle: nil)
-                .instantiateViewController(withIdentifier: "ProductEditVC") as? ProductEditViewController else { return }
-        productEditViewController.modalPresentationStyle = .fullScreen
-        productEditViewController.setMode(mode: .edit)
-        productEditViewController.productId = products[indexPath.row].id
-        present(productEditViewController, animated: true, completion: nil)
+        guard let productDetailViewController = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(withIdentifier: "ProductDetailVC") as? ProductDetailViewController else { return }
+        productDetailViewController.productId = products[indexPath.row].id
+        self.navigationController?.pushViewController(productDetailViewController, animated: true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
