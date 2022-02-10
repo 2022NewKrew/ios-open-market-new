@@ -8,7 +8,7 @@
 import UIKit
 
 class ProductCellViewModel {
-    private let repository: ProductListRepository = RepositoryInjection.injectProductListRepository()
+    private let repository: ProductRepository = RepositoryInjection.injectProductRepository()
     private let imageCache = NSCache<NSString, UIImage>()
     var updateImage: () -> Void = {}
 

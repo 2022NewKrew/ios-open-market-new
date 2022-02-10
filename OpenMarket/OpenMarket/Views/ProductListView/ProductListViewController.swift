@@ -15,7 +15,8 @@ class ProductListViewController: UIViewController, ModifyDelegate {
 
     private let productListViewModel = ProductListViewModel()
     private var products: [Product]?
-    private var productViewController: ProductViewController?
+    private var selectedProduct: Product?
+    private var moveController: ProductController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +29,7 @@ class ProductListViewController: UIViewController, ModifyDelegate {
     }
 
     func modify() {
+        print("ok")
         self.productListViewModel.productListReset()
         self.productListViewModel.productList()
     }
@@ -78,20 +80,22 @@ class ProductListViewController: UIViewController, ModifyDelegate {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationViewController = segue.destination as? ProductViewController
-        self.productViewController = destinationViewController
-        self.productViewController?.delegate = self
-
         switch segue.identifier {
         case Constant.productAddSegue:
+            let destinationViewController = segue.destination as? ProductEditViewController
             destinationViewController?.navigationTitle = "상품등록"
-        case Constant.productEditSegue:
-            destinationViewController?.navigationTitle = "상품수정"
+            self.moveController = destinationViewController
+        case Constant.productDetailSegue:
+            let destinationViewController = segue.destination as? ProductDeatilViewController
+            destinationViewController?.product = self.selectedProduct
+            self.moveController = destinationViewController
         case .none:
             break
         case .some(_):
             break
         }
+
+        self.moveController?.delegate = self
     }
 }
 
@@ -137,7 +141,8 @@ extension ProductListViewController {
 // MARK - Delegate
 extension ProductListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.performSegue(withIdentifier: Constant.productEditSegue, sender: self)
+        self.selectedProduct = self.products?[indexPath.row]
+        self.performSegue(withIdentifier: Constant.productDetailSegue, sender: self)
     }
 }
 

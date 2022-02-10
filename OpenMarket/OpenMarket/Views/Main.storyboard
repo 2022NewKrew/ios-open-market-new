@@ -82,17 +82,17 @@
                         <outlet property="pagingLoadingUI" destination="K13-zX-OTx" id="tgc-aS-5WF"/>
                         <outlet property="productListCollectionView" destination="R7k-BP-r2b" id="wbl-gX-w3j"/>
                         <outlet property="productSegmentedControl" destination="pIz-nS-wBh" id="DWY-NM-H81"/>
-                        <segue destination="kQk-vz-ntW" kind="show" identifier="moveProductEditIdentifier" id="n3Z-5a-a4F"/>
+                        <segue destination="pja-ox-qZI" kind="show" identifier="moveProductDetailIdentifier" id="Yx0-bj-Gdf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jpN-rM-LsM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-197" y="265"/>
         </scene>
-        <!--Product View Controller-->
+        <!--Product Edit View Controller-->
         <scene sceneID="bow-Ka-ntq">
             <objects>
-                <viewController id="kQk-vz-ntW" customClass="ProductViewController" customModule="OpenMarket" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="kQk-vz-ntW" customClass="ProductEditViewController" customModule="OpenMarket" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zFo-2Y-hlu">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -103,7 +103,26 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zEo-Pc-Gws" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="526" y="265"/>
+            <point key="canvasLocation" x="1680" y="265"/>
+        </scene>
+        <!--Product Deatil View Controller-->
+        <scene sceneID="fEV-C5-vfD">
+            <objects>
+                <viewController id="pja-ox-qZI" customClass="ProductDeatilViewController" customModule="OpenMarket" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="TCB-eS-oc6">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="BwB-kG-jiD"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="nIj-Kl-DE5"/>
+                    <connections>
+                        <segue destination="kQk-vz-ntW" kind="show" identifier="moveProductEditIdentifier" id="eRb-MF-2ki"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bri-y6-AU7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="733" y="612"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="lwC-fa-mnN">
@@ -123,7 +142,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="7qH-ul-JML"/>
+        <segue reference="eRb-MF-2ki"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="plus" catalog="system" width="128" height="113"/>

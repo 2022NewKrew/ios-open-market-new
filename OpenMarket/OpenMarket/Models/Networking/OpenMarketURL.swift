@@ -12,6 +12,7 @@ enum OpenMarketURL {
     case productList(pageNumber: Int, itemsPerPage: Int)
     case product(productId: Int)
     case addProduct
+    case updateProduct(productId: Int)
 
     var url: URL? {
         switch self {
@@ -21,6 +22,8 @@ enum OpenMarketURL {
             return URL(string: "\(OpenMarketURL.baseURL)/api/products/\(productId)")
         case .addProduct:
             return URL(string: "\(OpenMarketURL.baseURL)/api/products")
+        case .updateProduct(let productId):
+            return URL(string: "\(OpenMarketURL.baseURL)/api/products/\(productId)")
         }
     }
 }

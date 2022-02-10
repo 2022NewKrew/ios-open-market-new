@@ -11,6 +11,7 @@ protocol ProductRepository {
     func product(productId: Int, completion: @escaping (Result<Product?, NetworkError>) -> Void)
     func productSecret()
     func addProduct(postProduct: PostProduct, productImages: [UIImage?], completion: @escaping (Result<Product?, NetworkError>) -> Void)
-    func updateProduct()
+    func updateProduct(productId: Int, postProduct: PostProduct, productImages: [UIImage?], completion: @escaping (Result<Product?, NetworkError>) -> Void)
     func deleteProduct()
+    func image(url: URL, completion: @escaping (Data) -> Void)
 }

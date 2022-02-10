@@ -12,7 +12,7 @@
 		6E1021DB27A024FA00359BD0 /* ProductRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1021DA27A024FA00359BD0 /* ProductRepository.swift */; };
 		6E1021DD27A0254200359BD0 /* ProductListRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1021DC27A0254200359BD0 /* ProductListRepositoryImpl.swift */; };
 		6E1021DF27A0254E00359BD0 /* ProductRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1021DE27A0254E00359BD0 /* ProductRepositoryImpl.swift */; };
-		6E10220D27AA34F300359BD0 /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10220C27AA34F300359BD0 /* ProductViewController.swift */; };
+		6E10220D27AA34F300359BD0 /* ProductEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10220C27AA34F300359BD0 /* ProductEditViewController.swift */; };
 		6E10222427AA85E700359BD0 /* ListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10222227AA85E700359BD0 /* ListCollectionViewCell.swift */; };
 		6E10222727AA8A1B00359BD0 /* ProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10222627AA8A1B00359BD0 /* ProductCell.swift */; };
 		6E10222B27ABA60700359BD0 /* GridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E10222A27ABA60700359BD0 /* GridCollectionViewCell.swift */; };
@@ -26,6 +26,7 @@
 		6E307D6727B26B6A006ABA91 /* ProductCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E307D6627B26B6A006ABA91 /* ProductCellViewModel.swift */; };
 		6E307D6927B3B613006ABA91 /* ProductPriceSegmentValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E307D6827B3B613006ABA91 /* ProductPriceSegmentValue.swift */; };
 		6E307D6B27B402F2006ABA91 /* PostProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E307D6A27B402F2006ABA91 /* PostProduct.swift */; };
+		6EA854D327B519FD0043524F /* ProductDeatilViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA854D227B519FD0043524F /* ProductDeatilViewController.swift */; };
 		6EDC38D9279E9389000BC3D9 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDC38D8279E9389000BC3D9 /* Constant.swift */; };
 		6EDC38DD279EBAC2000BC3D9 /* RepositoryInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDC38DC279EBAC2000BC3D9 /* RepositoryInjection.swift */; };
 		6EDC38E2279EBBC7000BC3D9 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDC38E1279EBBC7000BC3D9 /* Product.swift */; };
@@ -64,7 +65,7 @@
 		6E1021DA27A024FA00359BD0 /* ProductRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductRepository.swift; sourceTree = "<group>"; };
 		6E1021DC27A0254200359BD0 /* ProductListRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListRepositoryImpl.swift; sourceTree = "<group>"; };
 		6E1021DE27A0254E00359BD0 /* ProductRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductRepositoryImpl.swift; sourceTree = "<group>"; };
-		6E10220C27AA34F300359BD0 /* ProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
+		6E10220C27AA34F300359BD0 /* ProductEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductEditViewController.swift; sourceTree = "<group>"; };
 		6E10222227AA85E700359BD0 /* ListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionViewCell.swift; sourceTree = "<group>"; };
 		6E10222627AA8A1B00359BD0 /* ProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCell.swift; sourceTree = "<group>"; };
 		6E10222A27ABA60700359BD0 /* GridCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -78,6 +79,7 @@
 		6E307D6627B26B6A006ABA91 /* ProductCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCellViewModel.swift; sourceTree = "<group>"; };
 		6E307D6827B3B613006ABA91 /* ProductPriceSegmentValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPriceSegmentValue.swift; sourceTree = "<group>"; };
 		6E307D6A27B402F2006ABA91 /* PostProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostProduct.swift; sourceTree = "<group>"; };
+		6EA854D227B519FD0043524F /* ProductDeatilViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDeatilViewController.swift; sourceTree = "<group>"; };
 		6EDC38D8279E9389000BC3D9 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		6EDC38DC279EBAC2000BC3D9 /* RepositoryInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryInjection.swift; sourceTree = "<group>"; };
 		6EDC38E1279EBBC7000BC3D9 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
@@ -170,7 +172,8 @@
 		6E307D6127B0C245006ABA91 /* ProductView */ = {
 			isa = PBXGroup;
 			children = (
-				6E10220C27AA34F300359BD0 /* ProductViewController.swift */,
+				6EA854D227B519FD0043524F /* ProductDeatilViewController.swift */,
+				6E10220C27AA34F300359BD0 /* ProductEditViewController.swift */,
 				6E307D6827B3B613006ABA91 /* ProductPriceSegmentValue.swift */,
 			);
 			path = ProductView;
@@ -407,7 +410,7 @@
 				6E307D6727B26B6A006ABA91 /* ProductCellViewModel.swift in Sources */,
 				6E1021D927A024CF00359BD0 /* ProductListRepository.swift in Sources */,
 				6EDC38F8279F9021000BC3D9 /* NetworkError.swift in Sources */,
-				6E10220D27AA34F300359BD0 /* ProductViewController.swift in Sources */,
+				6E10220D27AA34F300359BD0 /* ProductEditViewController.swift in Sources */,
 				6E1021DD27A0254200359BD0 /* ProductListRepositoryImpl.swift in Sources */,
 				6EDC38E8279EC0A4000BC3D9 /* ProductListViewModel.swift in Sources */,
 				C70FB0FF25BEF61C00C9924E /* ProductListViewController.swift in Sources */,
@@ -433,6 +436,7 @@
 				6EDC38E6279EC021000BC3D9 /* ProductImage.swift in Sources */,
 				6EDC38EC279EC50D000BC3D9 /* Vendor.swift in Sources */,
 				6EDC38D9279E9389000BC3D9 /* Constant.swift in Sources */,
+				6EA854D327B519FD0043524F /* ProductDeatilViewController.swift in Sources */,
 				6EDC38EA279EC0B0000BC3D9 /* ProductViewModel.swift in Sources */,
 				6E10223927ABE13300359BD0 /* ListProductStackView.swift in Sources */,
 				6E307D6B27B402F2006ABA91 /* PostProduct.swift in Sources */,

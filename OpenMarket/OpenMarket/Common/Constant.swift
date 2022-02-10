@@ -7,6 +7,7 @@
 
 struct Constant {
     static let productAddSegue = "moveProductAddIdentifier"
+    static let productDetailSegue = "moveProductDetailIdentifier"
     static let productEditSegue = "moveProductEditIdentifier"
     static let soldOutText = "품절"
     static let remainingQuantityText = "잔여수량"

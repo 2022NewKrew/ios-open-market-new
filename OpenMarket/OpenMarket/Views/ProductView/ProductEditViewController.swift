@@ -1,5 +1,5 @@
 //
-//  ProductViewController.swift
+//  ProductEditViewController.swift
 //  OpenMarket
 //
 //  Created by 이승주 on 2022/02/02.
@@ -7,14 +7,19 @@
 
 import UIKit
 
+protocol ProductController: AnyObject {
+    var delegate: ModifyDelegate? { get set }
+}
+
 protocol ModifyDelegate: AnyObject {
     func modify()
 }
 
-class ProductViewController: UIViewController {
+class ProductEditViewController: UIViewController, ProductController {
 
     var navigationTitle: String?
     var product: Product?
+    var productImages: [UIImage?] = []
     var postProduct: PostProduct?
     weak var delegate: ModifyDelegate?
     private var productViewModel = ProductViewModel()
@@ -146,6 +151,7 @@ class ProductViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = self.registerButton
         self.setTextFieldAndTextViewDelegate()
         self.bindAllConstraints()
+        self.productViewModel.product(productId: self.product?.id)
         self.setViewModel()
     }
 
@@ -171,12 +177,12 @@ class ProductViewController: UIViewController {
     @objc func pressRegisterButton(_ sender: UIBarButtonItem) {
         guard self.registrationImageViewCount > 0 else {
             self.showAlert(title: "이미지를 하나 이상 등록하세요", message: nil)
-            print("이미지를 하나 이상 등록하세요")
             return
         }
 
         guard let productName = self.productNameTextField.text,
             let productDescription = self.productDescriptionTextView.text,
+            productDescription != Constant.productDescriptionTextViewPlaceholder,
             let productOriginPriceText = self.productOriginPriceTextField.text,
             let productOriginPrice = Double(productOriginPriceText),
             let productDiscountedPriceText = self.productDiscountedPriceTextField.text,
@@ -185,7 +191,6 @@ class ProductViewController: UIViewController {
             let productStock = Int(productStockText)
         else {
             self.showAlert(title: "입력란을 전부 채워주세요", message: nil)
-            print("입력란을 전부 채워주세요")
             return
         }
 
@@ -206,26 +211,67 @@ class ProductViewController: UIViewController {
             .map { (_: Int, element: UIImageView) -> UIImage? in
                 element.image
             }
-        self.productViewModel.addProduct(postProduct: postProduct, productImages: productImages)
+        if self.navigationTitle == "상품등록" {
+            self.productViewModel.addProduct(postProduct: postProduct, productImages: productImages)
+        } else {
+            guard let productId = self.product?.id else { return }
+            
+            self.productViewModel.updateProduct(productId: productId, postProduct: postProduct, productImages: productImages)
+        }
     }
 
-    private func createRegistrationImageView() -> UIImageView {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
-        imageView.image = UIImage(systemName: "pencil")
-        imageView.isHidden = true
-        return imageView
+    private func setViewModel() {
+        self.productViewModel.addedProduct = { [weak self] in
+            guard let self = self else { return }
+
+            DispatchQueue.main.async {
+                self.delegate?.modify()
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+
+        self.productViewModel.updateView = { [weak self] in
+            guard let self = self else { return }
+
+            self.product = self.productViewModel.product
+            DispatchQueue.main.async {
+                self.setProductInfo(product: self.product)
+            }
+        }
+
+        self.productViewModel.updateImage = { [weak self] in
+            guard let self = self else { return }
+
+            DispatchQueue.main.async {
+                let productImage = self.productViewModel.productImage
+                self.registrationImageViewArray[self.registrationImageViewCount].image = productImage
+                self.registrationImageViewArray[self.registrationImageViewCount].isHidden = false
+                self.registrationImageViewCount += 1
+            }
+        }
     }
 
-    private func createProductTextField(placeholer: String) -> UITextField {
-        let textField = UITextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = placeholer
-        textField.borderStyle = .roundedRect
-        textField.keyboardType = .default
-        return textField
+    private func setProductInfo(product: Product?) {
+        guard let product = product else { return }
+
+        self.addImageButton.isHidden = true
+        self.productNameTextField.text = product.name
+        self.productOriginPriceTextField.text = String(product.price)
+        self.productDiscountedPriceTextField.text = String(product.discountedPrice)
+        self.productStockTextField.text = String(product.stock)
+        self.productDescriptionTextView.text = product.description
+
+        if product.currency == "KRW" {
+            self.productPriceSegmentControl.selectedSegmentIndex = ProductPriceSegmentValue.krw.rawValue
+        } else {
+            self.productPriceSegmentControl.selectedSegmentIndex = ProductPriceSegmentValue.usd.rawValue
+        }
+
+        guard let productImages = product.images else { return }
+
+        for image in productImages {
+            self.productViewModel.productImage(url: image.url)
+        }
     }
 
     private func setTextFieldAndTextViewDelegate() {
@@ -234,17 +280,6 @@ class ProductViewController: UIViewController {
         self.productDiscountedPriceTextField.delegate = self
         self.productStockTextField.delegate = self
         self.productDescriptionTextView.delegate = self
-    }
-
-    private func setViewModel() {
-        self.productViewModel.addedProduct = { [weak self] in
-            guard let self = self else { return }
-
-            self.delegate?.modify()
-            DispatchQueue.main.async {
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
     }
 
     private func showAlert(title: String, message: String?) {
@@ -256,12 +291,12 @@ class ProductViewController: UIViewController {
 }
 
 // MARK - UITextFieldDelegate
-extension ProductViewController: UITextFieldDelegate {
+extension ProductEditViewController: UITextFieldDelegate {
 
 }
 
 // MARK - UITextViewDelegate
-extension ProductViewController: UITextViewDelegate {
+extension ProductEditViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == Constant.productDescriptionTextViewPlaceholder {
             textView.text = nil
@@ -277,8 +312,27 @@ extension ProductViewController: UITextViewDelegate {
     }
 }
 
+
 // MARK - bindConstraints
-extension ProductViewController {
+extension ProductEditViewController {
+    private func createRegistrationImageView() -> UIImageView {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
+        imageView.isHidden = true
+        return imageView
+    }
+
+    private func createProductTextField(placeholer: String) -> UITextField {
+        let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.placeholder = placeholer
+        textField.borderStyle = .roundedRect
+        textField.keyboardType = .default
+        return textField
+    }
+
     private func bindAllConstraints() {
         self.view.layer.cornerRadius = CGFloat(12.0)
         self.view.layer.borderColor = UIColor.gray.cgColor
@@ -348,7 +402,7 @@ extension ProductViewController {
 }
 
 // MARK - UIImagePickerController
-extension ProductViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension ProductEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func showImagePickerControlActionSheet() {
         let photoLibraryAction = UIAlertAction(title: "사진 선택하기", style: .default) { (action) in
             self.showImagePickerController(sourceType: .photoLibrary)

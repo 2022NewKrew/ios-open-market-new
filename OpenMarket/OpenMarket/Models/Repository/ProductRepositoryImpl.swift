@@ -33,11 +33,20 @@ struct ProductRepositoryImpl: ProductRepository {
         self.networkManager.post(url: url, postProduct: postProduct, productImages: productImages, completion: completion)
     }
 
-    func updateProduct() {
+    func updateProduct(productId: Int, postProduct: PostProduct, productImages: [UIImage?], completion: @escaping (Result<Product?, NetworkError>) -> Void) {
+        guard let url = OpenMarketURL.updateProduct(productId: productId).url else {
+            completion(.failure(.invalidURL))
+            return
+        }
 
+        self.networkManager.patch(url: url, postProduct: postProduct, productImages: productImages, completion: completion)
     }
 
     func deleteProduct() {
         
+    }
+
+    func image(url: URL, completion: @escaping (Data) -> Void) {
+        self.networkManager.image(url: url, completion: completion)
     }
 }

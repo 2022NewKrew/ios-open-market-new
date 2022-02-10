@@ -11,6 +11,13 @@ class ProductViewModel {
     private let repository: ProductRepository = RepositoryInjection.injectProductRepository()
     var updateView: () -> Void = {}
     var addedProduct: () -> Void = {}
+    var updateImage: () -> Void = {}
+
+    var productImage: UIImage? {
+        didSet {
+            self.updateImage()
+        }
+    }
 
     var product: Product? {
         didSet {
@@ -26,7 +33,9 @@ class ProductViewModel {
         }
     }
 
-    func product(productId: Int) {
+    func product(productId: Int?) {
+        guard let productId = productId else { return }
+
         self.repository.product(productId: productId) { [weak self] result in
             guard let self = self else { return }
 
@@ -49,6 +58,36 @@ class ProductViewModel {
             case .failure(let error):
                 self.successPostProduct = false
                 print(error.errorDescription)
+            }
+        }
+    }
+
+    func updateProduct(productId: Int, postProduct: PostProduct, productImages: [UIImage?]) {
+        self.repository.updateProduct(productId: productId, postProduct: postProduct, productImages: productImages) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .success(let product):
+                self.successPostProduct = true
+            case .failure(let error):
+                self.successPostProduct = false
+                print(error.errorDescription)
+            }
+        }
+    }
+
+    func productImage(url: String) {
+        guard let url = URL(string: url) else { return }
+
+        self.repository.image(url: url) { [weak self] data in
+            guard let self = self,
+              let productImage = UIImage(data: data)
+            else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                self.productImage = productImage
             }
         }
     }

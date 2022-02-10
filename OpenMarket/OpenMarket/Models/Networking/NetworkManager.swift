@@ -38,6 +38,19 @@ struct NetworkManager {
         self.sessionDataTastRequest(request: request, completion: completion)
     }
 
+    func patch<T: Decodable>(url: URL, postProduct: PostProduct, productImages: [UIImage?], completion: @escaping (Result<T?, NetworkError>) -> Void) {
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.patch.description
+
+        // Header
+        request.setValue(Constant.identifier, forHTTPHeaderField: "identifier")
+
+        // Body
+        request.httpBody = JSONConverter.encode(postProduct)
+
+        self.sessionDataTastRequest(request: request, completion: completion)
+    }
+
     @discardableResult 
     private func createBody(boundary: String, postProduct: PostProduct, productImages: [UIImage?]) -> Data? {
         guard let boundaryPrefix = "--\(boundary)\r\n".data(using: .utf8),
