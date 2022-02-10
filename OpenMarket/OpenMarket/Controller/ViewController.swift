@@ -69,8 +69,8 @@ class ViewController: UIViewController {
     func loadDetailData(_ notification: NSNotification) {
         let loadedData = notification.userInfo?["Product"] as! Product
         DispatchQueue.main.async {
-            let editViewController = ProductEditViewController(data: loadedData)
-            self.navigationController?.pushViewController(editViewController, animated: true)
+            let detailViewController = ProductDetailViewController(data: loadedData)
+            self.navigationController?.pushViewController(detailViewController, animated: true)
             self.activityIndicator.stopAnimating()
         }
     }
