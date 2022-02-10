@@ -69,6 +69,13 @@ class ProductAddViewController: UIViewController {
 extension ProductAddViewController: UIImagePickerControllerDelegate {
     @objc
     func presentAlbum(){
+        if addView.imageData.count >= 5 {
+            let okay = UIAlertAction(title: "확인", style: .default, handler: nil)
+            let alertController = UIAlertController(title: "오류", message: "이미지는 5개까지만 가능해요", preferredStyle: .alert)
+            alertController.addAction(okay)
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
         let pickerController = UIImagePickerController()
         pickerController.sourceType = .photoLibrary
         pickerController.delegate = self

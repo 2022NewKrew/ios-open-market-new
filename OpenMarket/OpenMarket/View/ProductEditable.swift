@@ -112,8 +112,7 @@ class ProductEditableView: UIStackView, ProductEditable {
         self.spacing = 10
         self.addArrangedSubviews([imageScrollView, productName,
                                   productPriceView, productDiscountPrice,
-                                  productStock, productDetail])
-        
+                                  productStock, productDetail])        
         setupScrollView()
         setupComponents()
     }
